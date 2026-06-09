@@ -1,0 +1,44 @@
+/* =====================================================================
+   PROACTIVE SUSTAINABLE BONDS — Motion layer
+   Tiny, calm motion: floating hero cards + a soft reveal as sections
+   enter the viewport. All of it is disabled under prefers-reduced-motion.
+   The reveal classes are added by JS (interactions.js), so if JS never
+   runs the content stays fully visible — motion is purely additive.
+   ===================================================================== */
+
+/* ---- Floating hero cards -------------------------------------------- */
+@keyframes psb-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+
+/* The two glass stat cards drift gently and out of phase with each other,
+   and the location badge counter-drifts — giving the hero quiet life. */
+.hero-visual .stat-card { animation: psb-float 7s ease-in-out infinite; will-change: transform; }
+.hero-visual .stat-card:last-of-type { animation-duration: 8.5s; animation-delay: -2.5s; }
+.hero-visual .badge-soft { animation: psb-float 9s ease-in-out infinite reverse; will-change: transform; }
+
+/* ---- Scroll reveal --------------------------------------------------- */
+/* Class added per element by JS just before observing; .psb-in flips on
+   intersection. Subtle upward fade — no horizontal motion (avoids scroll). */
+.psb-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.psb-reveal.psb-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Micro-interactions --------------------------------------------- */
+/* A touch more life on interactive surfaces (complements existing hovers). */
+.stat-card { transition: box-shadow 0.3s var(--ease-out, ease), transform 0.3s var(--ease-out, ease); }
+
+/* ---- Respect reduced-motion ----------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual .stat-card,
+  .hero-visual .stat-card:last-of-type,
+  .hero-visual .badge-soft { animation: none !important; }
+  .psb-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}

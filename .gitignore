@@ -1,0 +1,14 @@
+# dependencies & build output
+node_modules/
+dist/
+.astro/
+
+# os / logs / env
+.DS_Store
+*.log
+.env
+.env.production
+.env.*.local
+
+# original source assets (optimized copies live in public/img/ — not needed for the build)
+Headshots/

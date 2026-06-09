@@ -1,0 +1,114 @@
+/* =====================================================================
+   PROACTIVE SUSTAINABLE BONDS — Responsive layer
+   Collapses the desktop multi-column grids on tablet / phone.
+   Desktop layout is defined inline on the components; these rules only
+   take effect below the breakpoints, so the desktop look is unchanged.
+   React serializes inline grids as `grid-template-columns:<value>` with
+   no space after the colon, which is what the attribute selectors match.
+   ===================================================================== */
+
+/* Safety net: decorative, absolutely-positioned elements (hero cards,
+   gradients) can extend past the viewport edge. Clip horizontal overflow
+   without creating a scroll container (keeps the sticky header working). */
+main { overflow-x: clip; }
+
+/* --------------------- Theme-aware partner logos -------------------- */
+/* Light theme shows the dark/colour marks; dark theme shows white marks. */
+.logo-light { display: block; }
+.logo-dark { display: none; }
+[data-theme="dark"] .logo-light { display: none; }
+[data-theme="dark"] .logo-dark { display: block; }
+
+/* ------------------------------ Nav ---------------------------------- */
+/* Desktop: full link bar, no hamburger, no mobile panel. */
+.nav-burger { display: none; }
+.nav-mobile { display: none; }
+
+/* Mobile dropdown panel — overlaid (absolute) so opening it never shifts the
+   page flow (which would throw off in-page scroll targets). */
+.nav-mobile {
+  position: absolute;
+  top: calc(100% - 6px);
+  left: 22px;
+  right: 22px;
+  z-index: 60;
+  border-radius: var(--radius-2xl, 22px);
+  padding: 12px;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 18px 50px rgba(8, 25, 14, 0.16);
+  animation: psb-rise 0.24s ease-out both;
+}
+.nav-mobile a {
+  padding: 13px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--fg-1);
+  font-weight: 500;
+  font-size: var(--text-base);
+}
+.nav-mobile a:hover { background: var(--surface-2, rgba(0,0,0,0.04)); }
+.nav-mobile a[aria-current="page"] { background: var(--lime-100); color: var(--forest-600); }
+.nav-mobile-actions { display: flex; gap: 10px; margin-top: 10px; padding: 2px; }
+.nav-mobile-actions .btn { flex: 1; justify-content: center; }
+
+/* ------------------------------ Tablet ------------------------------ */
+@media (max-width: 900px) {
+  /* Hero: stack text over visual, hide the floating-card art (it relies on
+     negative offsets that don't translate to a narrow column). */
+  .hero-grid { grid-template-columns: 1fr !important; gap: 8px !important; }
+  .hero-visual { display: none !important; }
+
+  /* Nav: swap the center links + pill CTAs for a hamburger menu. */
+  .nav-links { display: none !important; }
+  .nav-burger { display: inline-flex !important; }
+  .nav-signin { display: none !important; }
+  .nav-actions > .btn-accent { display: none !important; }
+  .nav-mobile { display: flex !important; }
+
+  /* Footer: 1.6/1/1/1 → two columns. */
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 28px 36px !important; }
+
+  /* Asymmetric content blocks → single column. */
+  main [style*="grid-template-columns:1fr 1.3fr"],
+  main [style*="grid-template-columns:1fr 1.5fr 1fr"],
+  main [style*="grid-template-columns:1.4fr repeat(4, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Stat / icon grids → two-up. */
+  main [style*="grid-template-columns:repeat(4,1fr)"],
+  main [style*="grid-template-columns:repeat(3,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ------------------------------ Phone ------------------------------- */
+@media (max-width: 600px) {
+  /* Every remaining paired column → single column. */
+  main [style*="grid-template-columns:1fr 1fr"],
+  main [style*="grid-template-columns:repeat(2, 1fr)"],
+  main [style*="grid-template-columns:repeat(4,1fr)"],
+  main [style*="grid-template-columns:repeat(3,1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Comparison bar rows: shrink the fixed label column so the bar keeps room. */
+  main [style*="grid-template-columns:200px 1fr"] {
+    grid-template-columns: 84px 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Footer → single column. */
+  .footer-grid { grid-template-columns: 1fr !important; }
+
+  /* Hero CTAs wrap and go full-width so they never overflow. */
+  .hero-cta { flex-wrap: wrap; }
+  .hero-cta .btn { flex: 1 1 100%; justify-content: center; }
+
+  /* Hero mini-stats: let them wrap instead of forcing a wide row. */
+  .hero-stats { gap: 22px 30px !important; flex-wrap: wrap; }
+
+  /* Pull the giant desktop section spacing in a bit on phones. */
+  main > section { margin-top: 64px !important; }
+}

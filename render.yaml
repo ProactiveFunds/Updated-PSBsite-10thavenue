@@ -1,0 +1,12 @@
+# Render Blueprint — static site for the Astro build.
+# In Render: New + → "Blueprint" → connect this repo, and it reads this file.
+# (Or configure the same values manually as a "Static Site".)
+services:
+  - type: web
+    name: sustainablebonds
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
