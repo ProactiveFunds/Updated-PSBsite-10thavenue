@@ -1,0 +1,21 @@
+---
+import DigestLayout from '../../../layouts/DigestLayout.astro';
+import { posts } from '../../../data/blogPosts.js';
+const fmt = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+---
+<DigestLayout
+  title="Articles &amp; Letters"
+  kicker="The Digest"
+  dek="Field notes, research, and letters on Naturally Occurring Affordable Housing — from the people building it."
+  activeSlug="blog"
+>
+  <div class="digest-postlist">
+    {posts.map((p) => (
+      <a class="digest-post" href={`/digest/blog/${p.slug}`}>
+        <div class="digest-post-meta">{fmt(p.date)} · {p.author}</div>
+        <div class="digest-post-title">{p.title}</div>
+        {p.summary && <div class="digest-post-sum">{p.summary}</div>}
+      </a>
+    ))}
+  </div>
+</DigestLayout>

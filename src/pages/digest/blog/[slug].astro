@@ -1,0 +1,27 @@
+---
+import DigestLayout from '../../../layouts/DigestLayout.astro';
+import { posts } from '../../../data/blogPosts.js';
+import { marked } from 'marked';
+
+export function getStaticPaths() {
+  return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const fmt = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+const html = marked.parse(post.content || '', { gfm: true, breaks: false });
+---
+<DigestLayout
+  title={post.title}
+  pageTitle={post.title}
+  kicker={`${fmt(post.date)} · ${post.author}`}
+  dek={post.summary}
+  activeSlug="blog"
+>
+  <div class="digest-body" set:html={html}></div>
+
+  <hr class="digest-hr" />
+  <p style="font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-3)">
+    <a href="/digest/blog" style="color:var(--brand);text-decoration:none">← All articles &amp; letters</a>
+  </p>
+</DigestLayout>

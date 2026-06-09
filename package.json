@@ -12,6 +12,7 @@
     "@astrojs/react": "^4.2.0",
     "astro": "^5.7.0",
     "leaflet": "^1.9.4",
+    "marked": "^18.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }

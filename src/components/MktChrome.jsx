@@ -12,7 +12,7 @@ const NAV_LINKS = [
   { label: 'How it works', id: 'how-it-works' },
   { label: 'Assets', href: '/assets' },
   { label: 'About', href: '/about' },
-  { label: 'Insights', id: 'insights' },
+  { label: 'Digest', href: '/digest' },
 ];
 
 function ThemeToggle() {

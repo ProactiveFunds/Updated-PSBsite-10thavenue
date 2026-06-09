@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import '../styles/responsive.css';
+import '../styles/motion.css';
+import '../styles/digest.css';
+import DigestNav from '../components/DigestNav.jsx';
+import { MktFooter } from '../components/MktChrome.jsx';
+import { DIGEST_GROUPS } from '../data/digestNav.js';
+
+const { title, kicker, dek, byline, activeSlug, pageTitle } = Astro.props;
+const hasRail = Astro.slots.has('rail');
+const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'];
+let n = 0;
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={dek || 'The Sustainable Bonds Digest — research, letters, and field notes on Naturally Occurring Affordable Housing.'} />
+    <title>{pageTitle || title} — The Sustainable Bonds Digest</title>
+  </head>
+  <body>
+    <DigestNav client:load />
+
+    <header class="digest-wrap digest-masthead">
+      <div class="digest-masthead-top">
+        <h1>The <em>Sustainable Bonds</em> Digest</h1>
+        <div class="digest-issue">
+          <span>Research & Letters</span>
+          <span>Spring 2026</span>
+          <span>Proactive Sustainable Bonds</span>
+        </div>
+      </div>
+    </header>
+
+    <div class={'digest-grid' + (hasRail ? ' has-rail' : '')}>
+      <aside class="digest-nav" aria-label="In this digest">
+        <h2>In This Digest</h2>
+        {DIGEST_GROUPS.map((g) => (
+          <div class="dg-group">
+            <div class="dg-group-label">{g.label}</div>
+            {g.items.map((it) => { n += 1; const rom = ROMAN[n - 1] || ''; return (
+              <a class={'dg-item' + (it.slug === activeSlug ? ' active' : '')} href={`/digest/${it.slug}`}>
+                <span class="dg-rom">{rom}</span>
+                <span><span class="dg-t">{it.title}</span><span class="dg-read">{it.read}</span></span>
+              </a>
+            ); })}
+          </div>
+        ))}
+      </aside>
+
+      <article class="digest-article">
+        {kicker && <div class="digest-kicker">{kicker}</div>}
+        {byline && <div class="digest-byline" set:html={byline}></div>}
+        <h1 class="digest-title" set:html={title}></h1>
+        {dek && <p class="digest-dek" set:html={dek}></p>}
+        <hr class="digest-hr" />
+        <slot />
+      </article>
+
+      {hasRail && (
+        <aside class="digest-rail" aria-label="Sidebar">
+          <slot name="rail" />
+        </aside>
+      )}
+    </div>
+
+    <div class="digest-foot-note">
+      Informational only — not an offer to sell or a solicitation to buy any security. Securities are offered under Reg D Rule 506(c) to verified accredited investors and qualified institutions; any offer is made solely via the Private Placement Memorandum. Target returns are projected, not guaranteed; investing involves risk, including possible loss of principal.
+    </div>
+
+    <MktFooter client:load />
+  </body>
+</html>

@@ -1,0 +1,22 @@
+---
+import DigestLayout from '../../layouts/DigestLayout.astro';
+import { pages } from '../../data/digestPages.js';
+import { marked } from 'marked';
+
+export function getStaticPaths() {
+  return pages.map((p) => ({ params: { slug: p.slug }, props: { page: p } }));
+}
+
+const { page } = Astro.props;
+const html = marked.parse(page.content || '', { gfm: true });
+---
+<DigestLayout
+  title={page.title}
+  pageTitle={page.title}
+  kicker={page.kicker}
+  dek={page.dek}
+  byline={page.byline}
+  activeSlug={page.slug}
+>
+  <div class="digest-body" set:html={html}></div>
+</DigestLayout>
