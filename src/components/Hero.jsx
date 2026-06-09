@@ -42,7 +42,7 @@ function Hero({ onInvest }) {
             <button className="btn btn-ghost btn-lg">View our impact</button>
           </div>
           <div className="hero-stats" style={{ display: 'flex', gap: 38, marginTop: 40 }}>
-            {[['15%', 'annual interest', true], ['$26M', 'assets under management'], ['647', 'units across the portfolio']].map(([n, l, hl]) => (
+            {[['15%', 'annual interest', true], ['$26M', 'assets under management'], ['756', 'units across the portfolio']].map(([n, l, hl]) => (
               <div key={l}>
                 <div className="figure" style={{ fontSize: 'var(--text-2xl)', color: hl ? 'var(--brand)' : 'var(--fg-1)' }}>{n}</div>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', marginTop: 2 }}>{l}</div>
@@ -64,7 +64,7 @@ function Hero({ onInvest }) {
           </div>
           <div className="glass glass-strong lit stat-card rise" style={{ position: 'absolute', bottom: 26, right: -14, width: 220 }}>
             <span className="data-label">Communities</span>
-            <div className="stat-value" style={{ fontSize: 'var(--text-2xl)' }}>41</div>
+            <div className="stat-value" style={{ fontSize: 'var(--text-2xl)' }}>27</div>
             <div style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', marginTop: 4 }}>Affordable housing · third-party verified</div>
           </div>
         </div>
