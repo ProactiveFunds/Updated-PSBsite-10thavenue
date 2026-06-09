@@ -70,7 +70,7 @@ export default function AboutTeam() {
       <section className="team-section">
         <div className="team-head">
           <span className="eyebrow">Leadership</span>
-          <h2 className="editorial">Meet the team</h2>
+          <h2 className="editorial">The team that makes sure you are cared for.</h2>
           <p className="lead">Deep real-estate and capital-markets experience, pointed squarely at housing impact.</p>
         </div>
 
