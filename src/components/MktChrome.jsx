@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { label: 'Our Impact', id: 'impact' },
   { label: 'How it works', id: 'how-it-works' },
   { label: 'Assets', href: '/assets' },
-  { label: 'Team', href: '/about' },
+  { label: 'Team', href: '/team' },
   { label: 'Digest', href: '/digest' },
 ];
 
