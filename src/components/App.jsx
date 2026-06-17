@@ -4,6 +4,7 @@ import { Hero } from './Hero.jsx';
 import { HomeCalculator } from './HomeCalculator.jsx';
 import { Partners, BeforeAfter, ReturnComparison, SocialProof, Opportunities2, IntakeForm } from './HomeSections.jsx';
 import { InvestModal } from './Sections.jsx';
+import Testimonials from './Testimonials.jsx';
 import { initInteractions } from '../lib/interactions.js';
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         <Hero onInvest={open} />
         <HomeCalculator onStart={open} />
         <Partners />
+        <Testimonials />
         <BeforeAfter />
         <ReturnComparison onInvest={open} />
         <SocialProof />
