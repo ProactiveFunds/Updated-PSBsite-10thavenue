@@ -21,7 +21,6 @@ const STATUSES = [
   { id: 'accredited', label: 'Accredited investor', ok: true },
   { id: 'family',     label: 'Family office',       ok: true },
   { id: 'institutional', label: 'Institutional',    ok: true },
-  { id: 'government', label: 'Government',           ok: true },
   { id: 'retail',     label: 'Not yet accredited',  ok: false },
 ];
 const MARKS = [
