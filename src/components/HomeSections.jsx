@@ -286,22 +286,12 @@ function Opportunities2() {
 }
 
 /* ── Intake form ── */
+const TA_COUNTRIES = [['US','United States (+1)'],['CA','Canada (+1)'],['GB','United Kingdom (+44)'],['AU','Australia (+61)'],['IN','India (+91)'],['AE','United Arab Emirates (+971)'],['DE','Germany (+49)'],['FR','France (+33)'],['ES','Spain (+34)'],['IT','Italy (+39)'],['NL','Netherlands (+31)'],['IE','Ireland (+353)'],['NZ','New Zealand (+64)'],['SG','Singapore (+65)'],['HK','Hong Kong (+852)'],['ZA','South Africa (+27)'],['NG','Nigeria (+234)'],['KE','Kenya (+254)'],['MX','Mexico (+52)'],['BR','Brazil (+55)'],['AR','Argentina (+54)'],['JP','Japan (+81)'],['CN','China (+86)'],['KR','South Korea (+82)'],['SA','Saudi Arabia (+966)'],['PK','Pakistan (+92)'],['BD','Bangladesh (+880)'],['PH','Philippines (+63)'],['SE','Sweden (+46)'],['CH','Switzerland (+41)']];
+
 function IntakeForm() {
-  const [frameH, setFrameH] = useH(700);
-  useHE(() => {
-    const onMsg = (e) => {
-      const d = e.data;
-      let ht = null;
-      if (typeof d === 'number') ht = d;
-      else if (d && typeof d === 'object') {
-        ht = d.height || d.frameHeight || d.scrollHeight ||
-          (typeof d.type === 'string' && /height|resize|size/i.test(d.type) ? (d.height || d.value || (d.payload && d.payload.height)) : null);
-      }
-      if (ht && ht > 200 && ht < 5000) setFrameH(Math.ceil(ht));
-    };
-    window.addEventListener('message', onMsg);
-    return () => window.removeEventListener('message', onMsg);
-  }, []);
+  const [done, setDone] = useH(false);
+  const submitted = useHR(false);
+  const onSink = () => { if (submitted.current) setDone(true); };
   return (
     <section id="get-started" style={{ maxWidth: 1100, margin: '110px auto 0', padding: '0 22px', scrollMarginTop: 100 }}>
       <style>{`@media (max-width: 760px){.psb-intake-grid{grid-template-columns:1fr !important}}`}</style>
@@ -319,15 +309,68 @@ function IntakeForm() {
             </div>
           </div>
         </div>
-        <div style={{ background: 'var(--surface)', padding: 8 }}>
-          <iframe
-            src="https://tenthavenue.io/api/forms/webform/embed.html"
-            title="Request a conversation"
-            loading="lazy"
-            style={{ width: '100%', height: frameH, minHeight: 560, border: 0, display: 'block', background: 'var(--surface)', borderRadius: 'var(--radius-lg)' }}
-          ></iframe>
+        <div style={{ background: 'var(--surface)', padding: '40px 38px' }}>
+          {done ? (
+            <div style={{ height: '100%', display: 'grid', placeItems: 'center', textAlign: 'center' }}>
+              <div>
+                <div className="check-ring" style={{ width: 64, height: 64, margin: '0 auto' }}><span className="ripple" /><Ic name="check" size={32} stroke={2.6} /></div>
+                <h3 style={{ margin: '20px 0 6px', fontSize: 'var(--text-2xl)' }}>Thank you</h3>
+                <p style={{ margin: 0, color: 'var(--fg-2)', fontSize: 'var(--text-sm)' }}>We've received your details and will be in touch within one business day.</p>
+              </div>
+            </div>
+          ) : (
+            <form action="https://tenthavenue.io/api/forms/webform/submit" method="POST" className="ta-form" target="ta_sink" onSubmit={() => { submitted.current = true; }}>
+              <div style={{ position: 'absolute', left: -9999 }} aria-hidden="true"><label>Leave this field empty<input type="text" name="_hp" tabIndex={-1} autoComplete="off" /></label></div>
+              <div className="ta-row">
+                <div className="ta-form__field"><label className="ta-form__label" htmlFor="f_first">First name *</label><input id="f_first" type="text" name="first_name" required /></div>
+                <div className="ta-form__field"><label className="ta-form__label" htmlFor="f_last">Last name *</label><input id="f_last" type="text" name="last_name" required /></div>
+              </div>
+              <div className="ta-form__field"><label className="ta-form__label" htmlFor="f_email">Email *</label><input id="f_email" type="email" name="email" required /></div>
+              <div className="ta-form__field"><label className="ta-form__label" htmlFor="f_phone">Phone *</label>
+                <div className="ta-form__phone">
+                  <select name="phone__country" className="ta-form__phone-country" aria-label="Country code">{TA_COUNTRIES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+                  <input id="f_phone" type="tel" inputMode="tel" name="phone" placeholder="Phone number" required />
+                </div>
+              </div>
+              <div className="ta-form__field"><label className="ta-form__label" htmlFor="f_msg">How can we help?</label><textarea id="f_msg" name="message" rows={3}></textarea></div>
+              <div className="ta-form__field"><label className="ta-form__label" htmlFor="f_acc">Are you an Accredited Investor? *</label>
+                <select id="f_acc" name="field_9zklv" required defaultValue=""><option value="" disabled>Select one…</option><option value="Yes">Yes</option><option value="No">No</option><option value="Not sure">Not sure</option></select>
+                <small className="ta-form__helper">Accredited investors earn $200K+/year, have $1M+ net worth (excluding primary home), or hold a Series 7, 65, or 82 license.</small>
+              </div>
+              <label className="ta-form__check"><input type="checkbox" name="field_yapu2" /><span>I consent to receive marketing and promotional messages from Proactive Sustainable Bonds at the phone number provided. Frequency may vary; message &amp; data rates may apply. Text HELP for help, STOP to opt out. <a href="https://tenthavenue.io/legal/proactive/privacy" target="_blank" rel="noreferrer">Privacy</a> · <a href="https://tenthavenue.io/legal/proactive/terms" target="_blank" rel="noreferrer">SMS Terms</a></span></label>
+              <button type="submit" className="ta-form__submit">Request a conversation <Ic name="arrow-right" size={18} /></button>
+            </form>
+          )}
+          <iframe name="ta_sink" title="form submission" onLoad={onSink} style={{ display: 'none' }}></iframe>
         </div>
       </div>
+
+      <style>{`
+        .ta-form { display: grid; gap: 16px; font-family: inherit; }
+        .ta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .ta-form__field { display: grid; gap: 6px; }
+        .ta-form__label { font-size: var(--text-sm); font-weight: 600; color: var(--fg-2); }
+        .ta-form__helper { font-size: var(--text-xs); color: var(--fg-3); line-height: 1.45; }
+        .ta-form input[type=text], .ta-form input[type=email], .ta-form input[type=tel], .ta-form select, .ta-form textarea {
+          font: inherit; width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-md);
+          background: var(--surface); color: var(--fg-1); box-sizing: border-box; transition: border-color .15s var(--ease-out), box-shadow .15s var(--ease-out); }
+        .ta-form input:focus, .ta-form select:focus, .ta-form textarea:focus {
+          outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+        .ta-form input::placeholder, .ta-form textarea::placeholder { color: var(--fg-3); }
+        .ta-form textarea { resize: vertical; min-height: 78px; }
+        .ta-form__phone { display: flex; gap: 8px; }
+        .ta-form__phone-country { flex: 0 0 auto; max-width: 44%; }
+        .ta-form__phone input[type=tel] { flex: 1 1 auto; }
+        .ta-form__check { display: flex; align-items: flex-start; gap: 10px; font-size: var(--text-xs); color: var(--fg-2); line-height: 1.5; }
+        .ta-form__check input { margin-top: 2px; flex: none; accent-color: var(--accent); }
+        .ta-form a { color: var(--brand); }
+        .ta-form__submit { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: inherit; font-weight: 600;
+          font-size: var(--text-base); padding: 14px 18px; border: 0; border-radius: 999px; background: var(--accent); color: #fff; cursor: pointer; width: 100%;
+          transition: background .15s var(--ease-out), transform .1s var(--ease-out); }
+        .ta-form__submit:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+        .ta-form__submit:active { transform: scale(.98); }
+        @media (max-width: 560px) { .ta-row { grid-template-columns: 1fr; } }
+      `}</style>
     </section>
   );
 }
