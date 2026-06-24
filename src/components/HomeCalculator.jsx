@@ -52,7 +52,7 @@ function HomeCalculator({ onStart }) {
   ];
 
   return (
-    <section style={{ maxWidth: 1240, margin: '64px auto 0', padding: '0 22px' }}>
+    <section id="calculator" style={{ maxWidth: 1240, margin: '64px auto 0', padding: '0 22px', scrollMarginTop: 90 }}>
       <div style={{ textAlign: 'center', maxWidth: '80ch', margin: '0 auto 22px' }}>
         <span className="eyebrow">Model your investment</span>
         <h2 style={{ margin: '10px 0 0', fontSize: 'var(--text-2xl)', letterSpacing: '-0.02em', color: 'var(--fg-1)', fontWeight: 700 }}>See what your capital returns — before you commit.</h2>

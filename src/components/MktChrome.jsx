@@ -1,6 +1,7 @@
 import React from 'react';
 import { Ic } from './icons.jsx';
 import { PSB } from '../lib/interactions.js';
+import { goToCalculator } from '../lib/cta.js';
 // MktChrome.jsx — marketing nav + footer + theme toggle
 const { useState, useEffect } = React;
 
@@ -70,7 +71,7 @@ function MktNav({ onInvest }) {
         <div className="nav-actions" style={{ marginLeft: 'auto', display: 'flex', gap: 10, alignItems: 'center' }}>
           <ThemeToggle />
           <button className="btn btn-ghost btn-sm nav-signin">Sign in</button>
-          <button className="btn btn-accent btn-sm" onClick={onInvest}>Start investing</button>
+          <button className="btn btn-accent btn-sm" onClick={goToCalculator}>Start investing</button>
           <button className="btn btn-icon btn-glass nav-burger" aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                   aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>
             <Ic name={menuOpen ? 'x' : 'menu'} size={20} />
@@ -83,7 +84,7 @@ function MktNav({ onInvest }) {
           {NAV_LINKS.map(renderLink)}
           <div className="nav-mobile-actions">
             <button className="btn btn-ghost btn-sm" onClick={() => setMenuOpen(false)}>Sign in</button>
-            <button className="btn btn-accent btn-sm" onClick={() => { setMenuOpen(false); onInvest && onInvest(); }}>Start investing</button>
+            <button className="btn btn-accent btn-sm" onClick={() => { setMenuOpen(false); goToCalculator(); }}>Start investing</button>
           </div>
         </div>
       )}
@@ -107,7 +108,7 @@ function MktFooter() {
               Stable returns, rooted in real homes. Affordable housing, done responsibly.
             </p>
             <div style={{ display: 'flex', gap: 10, marginTop: 22 }}>
-              <button className="btn btn-accent btn-sm">Start investing</button>
+              <button className="btn btn-accent btn-sm" onClick={goToCalculator}>Start investing</button>
               <button className="btn btn-ghost btn-sm"><Ic name="mail" size={16} />Newsletter</button>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Ic } from './icons.jsx';
+import { goToCalculator } from '../lib/cta.js';
 // MktHero.jsx — homepage hero (Direction A) + impact band
 const { useState, useEffect } = React;
 
@@ -61,7 +62,7 @@ function Hero({ onInvest }) {
             America loses <strong style={{ color: 'var(--fg-1)', fontWeight: 600 }}>90,000 affordable homes</strong> a year. We finance the buildings that stop the bleeding — fixed income at <strong style={{ color: 'var(--brand)', fontWeight: 600 }}>15%</strong>, backed by real housing.
           </p>
           <div className="hero-cta" style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
-            <button className="btn btn-accent btn-lg" onClick={onInvest}>Explore opportunities <Ic name="arrow-right" size={18} /></button>
+            <button className="btn btn-accent btn-lg" onClick={goToCalculator}>Explore opportunities <Ic name="arrow-right" size={18} /></button>
             <button className="btn btn-ghost btn-lg">View our impact</button>
           </div>
           <div className="hero-stats" style={{ display: 'flex', gap: 38, marginTop: 40 }}>
