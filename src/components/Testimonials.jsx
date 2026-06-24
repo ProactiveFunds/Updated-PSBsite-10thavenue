@@ -1,11 +1,16 @@
 import React from 'react';
+import { Ic } from './icons.jsx';
 
 const { useEffect, useRef } = React;
 
 const VIDEOS = [
   { id: 'q-EmTAAp-2g', name: 'A resident’s story' },
   { id: '7xQiUeu2eY8', name: 'A resident’s story' },
+  { id: 'rrf1FLn-M3g', name: 'Jackie & Corey’s story' },
+  { id: 'a5psuKxi7Ow', name: 'Resident testimonials' },
 ];
+
+const YT_CHANNEL = 'https://www.youtube.com/@ProActiveSustainableBonds';
 
 export default function Testimonials() {
   const frames = useRef([]);
@@ -38,6 +43,9 @@ export default function Testimonials() {
         <span className="eyebrow">Real tenant testimonials</span>
         <h2 className="editorial" style={{ margin: '14px 0 0', letterSpacing: '-0.02em', lineHeight: 1.08, color: 'var(--forest-700)', fontWeight: 600 }}>The return that moves in.</h2>
         <p className="lead" style={{ margin: '14px auto 0', maxWidth: '34rem' }}>Behind every quarterly distribution is a door that opens — and a family that gets to stay. Hear it from the people who live it.</p>
+        <a className="yt-channel" href={YT_CHANNEL} target="_blank" rel="noreferrer">
+          <Ic name="youtube" size={20} style={{ color: '#FF0000' }} /> Visit our YouTube channel <Ic name="arrow-up-right" size={15} />
+        </a>
       </div>
       <div className="tvid-grid">
         {VIDEOS.map((v, i) => (
@@ -58,6 +66,8 @@ export default function Testimonials() {
       </p>
 
       <style>{`
+        .yt-channel { display: inline-flex; align-items: center; gap: 9px; margin-top: 22px; padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--fg-1); font-weight: 600; font-size: var(--text-sm); text-decoration: none; transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+        .yt-channel:hover { border-color: color-mix(in srgb, #FF0000 40%, var(--border)); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
         .tvid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .tvid { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-xl); background: #000; }
         .tvid iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
