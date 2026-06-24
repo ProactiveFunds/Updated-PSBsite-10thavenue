@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #0d2a17; }
+  .banner {
+    width: 1584px; height: 396px; position: relative; overflow: hidden;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif; color: #fff;
+    background: linear-gradient(118deg, #368a43 0%, #20682f 46%, #123a1f 80%, #0d2a17 100%);
+  }
+  .glow1 { position: absolute; top: -220px; left: 40%; width: 820px; height: 820px; transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(149,196,92,.30), transparent 60%); }
+  .glow2 { position: absolute; bottom: -300px; right: -160px; width: 820px; height: 820px;
+    background: radial-gradient(circle, rgba(54,138,67,.6), transparent 60%); }
+  .roofs { position: absolute; inset: 0; opacity: .05;
+    background-image: repeating-linear-gradient(135deg, #fff 0 2px, transparent 2px 52px),
+                      repeating-linear-gradient(45deg, #fff 0 2px, transparent 2px 52px); }
+
+  .pad { position: absolute; inset: 0; padding: 30px 60px 26px; display: flex; flex-direction: column; }
+
+  .topbar { display: flex; align-items: center; gap: 28px; }
+  .topbar .logo { height: 60px; filter: brightness(0) invert(1); }
+  .topbar .sep { width: 1px; height: 46px; background: rgba(255,255,255,.3); }
+  .topbar .pri { height: 52px; }
+  .topbar .managed { margin-left: auto; text-align: right; font-size: 14px; line-height: 1.3; color: rgba(234,243,226,.72); font-weight: 500; }
+
+  .center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .kicker { font-size: 16px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #aed079; }
+  h1 { font-size: 72px; font-weight: 800; letter-spacing: -.022em; line-height: 1; margin: 12px 0 0; }
+  h1 .b { color: #aed079; }
+  .sub { margin-top: 13px; font-size: 19px; font-weight: 600; color: rgba(234,243,226,.92); }
+  .stats { display: flex; gap: 60px; margin-top: 22px; }
+  .stat .n { font-size: 34px; font-weight: 800; color: #aed079; line-height: 1; letter-spacing: -.01em; }
+  .stat .l { margin-top: 6px; font-size: 12.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(234,243,226,.8); }
+
+  .trusted { display: flex; align-items: center; justify-content: center; gap: 22px; }
+  .trusted .tlabel { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(234,243,226,.66); white-space: nowrap; }
+  .tstrip { display: flex; align-items: center; gap: 46px; background: #fff; border-radius: 14px; padding: 14px 34px; box-shadow: 0 10px 28px rgba(0,0,0,.24); }
+  .tstrip img { display: block; }
+  .tstrip .iel { height: 46px; }
+  .tstrip .ms { height: 34px; }
+  .tstrip .bm { height: 30px; }
+</style>
+</head>
+<body>
+  <div class="banner">
+    <div class="glow1"></div>
+    <div class="glow2"></div>
+    <div class="roofs"></div>
+    <div class="pad">
+
+      <div class="topbar">
+        <img class="logo" src="/img/logo.png" alt="Proactive Sustainable Bonds" />
+        <div class="sep"></div>
+        <img class="pri" src="/img/pri-white.png" alt="Signatory of the Principles for Responsible Investment" />
+        <div class="managed">Managed by<br/>Proactive Real Estate Group</div>
+      </div>
+
+      <div class="center">
+        <div class="kicker">Impact-first private credit, secured by real estate</div>
+        <h1>The bond that <span class="b">builds.</span></h1>
+        <div class="sub">Above-market fixed income, backed by affordable housing you can verify.</div>
+        <div class="stats">
+          <div class="stat"><div class="n">$7.5MM</div><div class="l">Returns delivered to investors</div></div>
+          <div class="stat"><div class="n">26+ yrs</div><div class="l">Investment experience</div></div>
+          <div class="stat"><div class="n">6+ yrs</div><div class="l">As fund manager</div></div>
+          <div class="stat"><div class="n">2,000+</div><div class="l">Residents housed</div></div>
+        </div>
+      </div>
+
+      <div class="trusted">
+        <span class="tlabel">Trusted by</span>
+        <div class="tstrip">
+          <img class="iel" src="/img/partners/impact-evaluation-labs.png" alt="Impact Evaluation Lab" />
+          <img class="ms" src="/img/partners/morningstar-sustainalytics.jpg" alt="Morningstar Sustainalytics" />
+          <img class="bm" src="/img/partners/bluemark.png" alt="BlueMark" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

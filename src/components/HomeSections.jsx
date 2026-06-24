@@ -211,7 +211,7 @@ function Opportunities2() {
     { name: '2–4 Year Opportunity', tag: 'Most accessible', desc: 'A flexible vehicle for stable income and positive impact.', annual: '9–15% / yr', total: 'up to ~60%', min: '$20K', term: '2–4 yrs', cap: '$175M', highlight: true },
     { name: 'Rapid Housing', desc: 'Short-term, focused on rapid deployment of affordable housing.', annual: '~15% / yr', total: '~30% over 24 mo', min: '$250K', term: '≤24 mo', cap: '$7M' },
     { name: 'Side Letter', desc: 'An exclusive allocation for strategic partners.', annual: '~15% / yr', total: '~45% over 36 mo', min: '$2M', term: '36 mo', cap: '$25M' },
-    { name: 'Proactive QOZ Fund I', desc: 'Opportunity-Zone fund with tax advantages and measurable impact.', annual: '8% / yr', total: 'Tax-advantaged', min: 'Contact', term: '10 yrs', cap: '$25M' },
+    { name: 'Proactive QOZ Fund I', tag: 'Tax-advantaged', desc: 'Opportunity-Zone fund with tax advantages and measurable impact.', annual: '8% / yr', total: '10 yrs for max tax benefits', min: 'Contact', term: '10 yrs', cap: '$25M' },
   ];
   return (
     <section id="opportunities" style={{ maxWidth: 1180, margin: '110px auto 0', padding: '0 22px', scrollMarginTop: 100 }}>
@@ -287,11 +287,24 @@ function Opportunities2() {
 
 /* ── Intake form ── */
 function IntakeForm() {
-  const [done, setDone] = useH(false);
-  const submit = (e) => { PSB.withPending(e.currentTarget, async () => {}, { ms: 800, pending: 'Sending…', done: 'Sent', hold: 1200 }).then(() => { setDone(true); }); };
+  const [frameH, setFrameH] = useH(700);
+  useHE(() => {
+    const onMsg = (e) => {
+      const d = e.data;
+      let ht = null;
+      if (typeof d === 'number') ht = d;
+      else if (d && typeof d === 'object') {
+        ht = d.height || d.frameHeight || d.scrollHeight ||
+          (typeof d.type === 'string' && /height|resize|size/i.test(d.type) ? (d.height || d.value || (d.payload && d.payload.height)) : null);
+      }
+      if (ht && ht > 200 && ht < 5000) setFrameH(Math.ceil(ht));
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
   return (
-    <section style={{ maxWidth: 1100, margin: '110px auto 0', padding: '0 22px' }}>
-      <style>{`@media (max-width: 760px){.psb-intake-grid{grid-template-columns:1fr !important}}@media (max-width: 560px){.psb-intake-row{grid-template-columns:1fr !important}}`}</style>
+    <section id="get-started" style={{ maxWidth: 1100, margin: '110px auto 0', padding: '0 22px', scrollMarginTop: 100 }}>
+      <style>{`@media (max-width: 760px){.psb-intake-grid{grid-template-columns:1fr !important}}`}</style>
       <div className="glass lit psb-intake-grid" style={{ borderRadius: 'var(--radius-2xl)', overflow: 'hidden', display: 'grid', gridTemplateColumns: '1fr 1.1fr' }}>
         <div style={{ padding: '48px 44px', background: 'linear-gradient(160deg, var(--forest-600), var(--forest-800))', color: '#eaf3e2', position: 'relative' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(110% 80% at 0% 100%, rgba(149,196,92,.2), transparent 55%)' }} />
@@ -306,29 +319,13 @@ function IntakeForm() {
             </div>
           </div>
         </div>
-        <div style={{ padding: '44px 42px', background: 'var(--surface)' }}>
-          {done ? (
-            <div style={{ height: '100%', display: 'grid', placeItems: 'center', textAlign: 'center' }}>
-              <div>
-                <div className="check-ring" style={{ width: 64, height: 64, margin: '0 auto' }}><span className="ripple" /><Ic name="check" size={32} stroke={2.6} /></div>
-                <h3 style={{ margin: '20px 0 6px', fontSize: 'var(--text-2xl)' }}>Thank you</h3>
-                <p style={{ margin: 0, color: 'var(--fg-2)', fontSize: 'var(--text-sm)' }}>We've received your details and will be in touch within one business day.</p>
-              </div>
-            </div>
-          ) : (
-            <React.Fragment>
-              <div className="psb-intake-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                <div><label className="field-label">Full name</label><input className="field" placeholder="Jane Investor" /></div>
-                <div><label className="field-label">Email</label><input className="field" placeholder="jane@email.com" /></div>
-              </div>
-              <div className="psb-intake-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                <div><label className="field-label">I am a…</label><select className="field"><option>Accredited investor</option><option>Family office</option><option>Institutional</option><option>Not yet accredited</option></select></div>
-                <div><label className="field-label">Amount of interest</label><select className="field"><option>$20K – $100K</option><option>$100K – $250K</option><option>$250K – $1M</option><option>$1M+</option></select></div>
-              </div>
-              <div style={{ marginBottom: 22 }}><label className="field-label">Anything we should know? (optional)</label><textarea className="field" rows="3" style={{ resize: 'none' }} placeholder="Your goals, timeline, questions…"></textarea></div>
-              <button className="btn btn-accent btn-lg" style={{ width: '100%', justifyContent: 'center' }} onClick={submit}>Request a conversation <Ic name="arrow-right" size={18} /></button>
-            </React.Fragment>
-          )}
+        <div style={{ background: 'var(--surface)', padding: 8 }}>
+          <iframe
+            src="https://tenthavenue.io/api/forms/webform/embed.html"
+            title="Request a conversation"
+            loading="lazy"
+            style={{ width: '100%', height: frameH, minHeight: 560, border: 0, display: 'block', background: 'var(--surface)', borderRadius: 'var(--radius-lg)' }}
+          ></iframe>
         </div>
       </div>
     </section>
