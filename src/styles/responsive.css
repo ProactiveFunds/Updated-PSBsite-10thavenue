@@ -52,19 +52,23 @@ main { overflow-x: clip; }
 .nav-mobile-actions { display: flex; gap: 10px; margin-top: 10px; padding: 2px; }
 .nav-mobile-actions .btn { flex: 1; justify-content: center; }
 
+/* Nav: 7 links including the long "ProActively Verified™" don't fit the pill on
+   small laptops, so collapse to the hamburger menu earlier than the rest of the
+   tablet layout (which stays at 900px). */
+@media (max-width: 1080px) {
+  .nav-links { display: none !important; }
+  .nav-burger { display: inline-flex !important; }
+  .nav-signin { display: none !important; }
+  .nav-actions > .btn-accent { display: none !important; }
+  .nav-mobile { display: flex !important; }
+}
+
 /* ------------------------------ Tablet ------------------------------ */
 @media (max-width: 900px) {
   /* Hero: stack text over visual, hide the floating-card art (it relies on
      negative offsets that don't translate to a narrow column). */
   .hero-grid { grid-template-columns: 1fr !important; gap: 8px !important; }
   .hero-visual { display: none !important; }
-
-  /* Nav: swap the center links + pill CTAs for a hamburger menu. */
-  .nav-links { display: none !important; }
-  .nav-burger { display: inline-flex !important; }
-  .nav-signin { display: none !important; }
-  .nav-actions > .btn-accent { display: none !important; }
-  .nav-mobile { display: flex !important; }
 
   /* Footer: 1.6/1/1/1 → two columns. */
   .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 28px 36px !important; }
