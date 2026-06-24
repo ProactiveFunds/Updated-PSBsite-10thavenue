@@ -10,5 +10,6 @@ dist/
 .env.production
 .env.*.local
 
-# original source assets (optimized copies live in public/img/ — not needed for the build)
+# original source assets (optimized copies live in public/img/ or public/verified/ — not needed for the build)
 Headshots/
+ProActively Verified/

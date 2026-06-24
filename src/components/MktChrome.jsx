@@ -10,6 +10,7 @@ const { useState, useEffect } = React;
 const NAV_LINKS = [
   { label: 'Opportunities', id: 'opportunities' },
   { label: 'Our Impact', id: 'impact' },
+  { label: 'ProActively Verified™', href: '/verified' },
   { label: 'How it works', id: 'how-it-works' },
   { label: 'Assets', href: '/assets' },
   { label: 'Team', href: '/team' },
