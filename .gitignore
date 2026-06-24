@@ -13,3 +13,4 @@ dist/
 # original source assets (optimized copies live in public/img/ or public/verified/ — not needed for the build)
 Headshots/
 ProActively Verified/
+/videos/

@@ -17,12 +17,11 @@ function FlipWord({ words = FLIP_WORDS }) {
   );
 }
 
-// Muted, looping YouTube background that covers the hero visual panel.
-function HeroBgVideo({ id }) {
-  const src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&disablekb=1&iv_load_policy=3`;
+// Muted, looping local video that covers the hero visual panel.
+function HeroBgVideo({ src, poster }) {
   return (
     <div className="hero-video-wrap">
-      <iframe src={src} title="Proactive community" allow="autoplay; encrypted-media; picture-in-picture" frameBorder="0" tabIndex={-1}></iframe>
+      <video src={src} poster={poster} autoPlay muted loop playsInline preload="auto" tabIndex={-1} aria-hidden="true"></video>
     </div>
   );
 }
@@ -75,7 +74,7 @@ function Hero({ onInvest }) {
           </div>
         </div>
         <div className="hero-visual" style={{ position: 'relative', height: 560 }}>
-          <div style={{ position: 'absolute', inset: '0 0 0 11%' }}><HeroBgVideo id="aMWDXp1n9_w" /></div>
+          <div style={{ position: 'absolute', inset: '0 0 0 11%' }}><HeroBgVideo src="/videos/banner.mp4" /></div>
           <div className="glass glass-strong lit stat-card rise" style={{ position: 'absolute', top: 32, left: -16, width: 252 }}>
             <span className="data-label">Housing you can verify</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18, marginTop: 16 }}>
@@ -98,7 +97,7 @@ function Hero({ onInvest }) {
         .flip-word { display: inline-block; color: var(--brand); transform-origin: 50% 100%; animation: psb-flip 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
         @keyframes psb-flip { 0% { transform: rotateX(-90deg); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; opacity: 1; } }
         .hero-video-wrap { position: absolute; inset: 0; overflow: hidden; border-radius: var(--radius-2xl); box-shadow: var(--shadow-lg); background: linear-gradient(155deg, #3a7a3f, #1f5e2e 58%, #123a1f); }
-        .hero-video-wrap iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 100%; width: auto; aspect-ratio: 16 / 9; min-width: 100%; min-height: 100%; border: 0; pointer-events: none; }
+        .hero-video-wrap video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; pointer-events: none; }
         @media (prefers-reduced-motion: reduce) { .flip-word { animation: none; } }
       `}</style>
     </section>
