@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { label: 'Opportunities', id: 'opportunities' },
   { label: 'Our Impact', id: 'impact' },
   { label: 'ProActively Verified™', href: '/verified' },
-  { label: 'How it works', id: 'how-it-works' },
+  { label: 'How it works', href: '/OurProcess' },
   { label: 'Assets', href: '/assets' },
   { label: 'Team', href: '/team' },
   { label: 'Digest', href: '/digest' },
