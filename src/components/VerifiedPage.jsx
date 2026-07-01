@@ -8,6 +8,7 @@ const { useEffect } = React;
 // Issuer logos live in /public/img; shown inside a white chip so they read in
 // both light and dark themes.
 const ISSUERS = {
+  morningstar: { name: 'Morningstar Sustainalytics', logo: '/img/sustainalytics.png' },
   bluemark: { name: 'BlueMark', logo: '/img/partners/bluemark.png' },
   iel: { name: 'Impact Evaluation Lab', logo: '/img/partners/impact-evaluation-labs.png' },
   pri: { name: 'PRI', logo: '/img/pri.png' },
@@ -17,6 +18,52 @@ const ISSUERS = {
 // Each document was studied and named from its contents. `file` resolves to
 // /public/verified/<file> and downloads with that clean name.
 const SECTIONS = [
+  {
+    key: 'morningstar',
+    eyebrow: 'Morningstar Sustainalytics',
+    title: 'Rated by Morningstar Sustainalytics',
+    sub: 'A leading global authority on ESG research and sustainable finance — its independent opinion and impact reporting on our framework.',
+    docs: [
+      {
+        issuer: 'morningstar', title: 'Morningstar Sustainalytics — Second-Party Opinion',
+        meta: 'Sustainable Finance Framework · 2024', file: 'morningstar-sustainalytics-second-party-opinion.pdf', pages: '10 pages', size: '1.2 MB',
+        desc: 'Sustainalytics’ independent Second-Party Opinion finds the Proactive Realty Income Fund II Sustainable Finance Framework credible, impactful, and aligned with the Sustainability Bond Guidelines 2021, Green Bond Principles 2021, and Social Bond Principles 2023.',
+        featured: true,
+      },
+      {
+        issuer: 'morningstar', title: 'Morningstar Sustainalytics — Impact Report',
+        meta: 'The Proactive Realty Group', file: 'morningstar-sustainalytics-impact-report-2025.pdf', pages: '7 pages', size: '1.4 MB',
+        desc: 'Morningstar Sustainalytics’ impact report on The Proactive Realty Group — an independent view of how our affordable-housing portfolio maps to recognized sustainable-finance and impact standards.',
+      },
+    ],
+  },
+  {
+    key: 'reports',
+    eyebrow: 'Investor impact reports',
+    title: 'The receipts, year by year',
+    sub: 'Annual impact and performance reporting since inception.',
+    docs: [
+      { issuer: 'proactive', title: 'Investor Impact Report — May 2025', meta: 'Proactive Realty Group', file: 'investor-impact-report-may-2025.pdf', pages: '12 pages', size: '1.8 MB', desc: 'Mid-year update across the national portfolio: acquisitions, occupancy, resident savings, and impact metrics.' },
+      { issuer: 'proactive', title: 'Investor Impact Report — 2024', meta: 'Proactive Realty Group', file: 'investor-impact-report-2024.pdf', pages: '10 pages', size: '2.5 MB', desc: 'Year-end 2024 results, including the FountainVue manufactured-home-park acquisition and a 30% resident rent-savings benchmark.' },
+      { issuer: 'proactive', title: 'Investor Impact Report — 2023', meta: 'Proactive Realty Group', file: 'investor-impact-report-2023.pdf', pages: '9 pages', size: '2.5 MB', desc: 'Year-end 2023 metrics and SDG-aligned outcomes across the affordable-housing portfolio.' },
+      { issuer: 'proactive', title: 'Investor Impact Report — 2021–2022', meta: 'Proactive Realty Group', file: 'investor-impact-report-2021-2022.pdf', pages: '13 pages', size: '3.6 MB', desc: 'Two-year update on housing access, jobs created, and SDG contributions, including the SOCAP2022 feature.' },
+      { issuer: 'proactive', title: 'Investor Impact Report — 2019–2020', meta: 'Proactive Realty Group', file: 'investor-impact-report-2019-2020.pdf', pages: '7 pages', size: '1.6 MB', desc: 'Our first investor update, from the firm’s August 2019 founding through year-end 2020.' },
+      { issuer: 'proactive', title: 'Hammonds Estates — Founding Report (2018)', meta: 'Proactive Realty Group', file: 'hammonds-estates-impact-report-2018.pdf', pages: '2 pages', size: '2.5 MB', desc: 'Where it began: Dr. Van’s first acquisition — a distressed 187-space mobile-home park in Orangeburg, SC — and the origin of the Proactive model.' },
+    ],
+  },
+  {
+    key: 'framework',
+    eyebrow: 'Framework & methodology',
+    title: 'How we measure impact',
+    sub: 'The methodology behind every number we report.',
+    docs: [
+      {
+        issuer: 'proactive', title: 'Impact Measurement & Management (IMM) Framework',
+        meta: 'Proactive Sustainable Bonds', file: 'impact-measurement-management-framework.pdf', pages: '46 pages', size: '9.9 MB',
+        desc: 'Our complete framework for measuring, managing, and reporting impact across the portfolio — the foundation our third-party assessments are built on.',
+      },
+    ],
+  },
   {
     key: 'verifications',
     eyebrow: 'Independent verification & ratings',
@@ -45,33 +92,6 @@ const SECTIONS = [
         meta: 'Principles for Responsible Investment · October 2025', file: 'pri-signatory-confirmation-2025.pdf', pages: '3 pages', size: '213 KB',
         desc: 'Confirmation of Proactive Sustainable Bonds as an Investment Manager signatory to the UN-supported Principles for Responsible Investment.',
       },
-    ],
-  },
-  {
-    key: 'framework',
-    eyebrow: 'Framework & methodology',
-    title: 'How we measure impact',
-    sub: 'The methodology behind every number we report.',
-    docs: [
-      {
-        issuer: 'proactive', title: 'Impact Measurement & Management (IMM) Framework',
-        meta: 'Proactive Sustainable Bonds', file: 'impact-measurement-management-framework.pdf', pages: '46 pages', size: '9.9 MB',
-        desc: 'Our complete framework for measuring, managing, and reporting impact across the portfolio — the foundation our third-party assessments are built on.',
-      },
-    ],
-  },
-  {
-    key: 'reports',
-    eyebrow: 'Investor impact reports',
-    title: 'The receipts, year by year',
-    sub: 'Annual impact and performance reporting since inception.',
-    docs: [
-      { issuer: 'proactive', title: 'Investor Impact Report — May 2025', meta: 'Proactive Realty Group', file: 'investor-impact-report-may-2025.pdf', pages: '12 pages', size: '1.8 MB', desc: 'Mid-year update across the national portfolio: acquisitions, occupancy, resident savings, and impact metrics.' },
-      { issuer: 'proactive', title: 'Investor Impact Report — 2024', meta: 'Proactive Realty Group', file: 'investor-impact-report-2024.pdf', pages: '10 pages', size: '2.5 MB', desc: 'Year-end 2024 results, including the FountainVue manufactured-home-park acquisition and a 30% resident rent-savings benchmark.' },
-      { issuer: 'proactive', title: 'Investor Impact Report — 2023', meta: 'Proactive Realty Group', file: 'investor-impact-report-2023.pdf', pages: '9 pages', size: '2.5 MB', desc: 'Year-end 2023 metrics and SDG-aligned outcomes across the affordable-housing portfolio.' },
-      { issuer: 'proactive', title: 'Investor Impact Report — 2021–2022', meta: 'Proactive Realty Group', file: 'investor-impact-report-2021-2022.pdf', pages: '13 pages', size: '3.6 MB', desc: 'Two-year update on housing access, jobs created, and SDG contributions, including the SOCAP2022 feature.' },
-      { issuer: 'proactive', title: 'Investor Impact Report — 2019–2020', meta: 'Proactive Realty Group', file: 'investor-impact-report-2019-2020.pdf', pages: '7 pages', size: '1.6 MB', desc: 'Our first investor update, from the firm’s August 2019 founding through year-end 2020.' },
-      { issuer: 'proactive', title: 'Hammonds Estates — Founding Report (2018)', meta: 'Proactive Realty Group', file: 'hammonds-estates-impact-report-2018.pdf', pages: '2 pages', size: '2.5 MB', desc: 'Where it began: Dr. Van’s first acquisition — a distressed 187-space mobile-home park in Orangeburg, SC — and the origin of the Proactive model.' },
     ],
   },
 ];
@@ -108,14 +128,16 @@ export default function VerifiedPage() {
           <h1 className="editorial">Independent proof, not just promises.</h1>
           <p className="lead">
             Impact is easy to claim and hard to prove. So we don’t grade ourselves. Proactive’s impact, governance, and reporting are
-            independently assessed by <strong>BlueMark</strong>, the <strong>Impact Evaluation Lab</strong>, and the UN-supported
-            <strong> Principles for Responsible Investment</strong>. Every certification and report is yours to download below.
+            independently assessed by <strong>Morningstar Sustainalytics</strong>, <strong>BlueMark</strong>, the
+            <strong> Impact Evaluation Lab</strong>, and the UN-supported <strong>Principles for Responsible Investment</strong>.
+            Every certification and report is yours to download below.
           </p>
           <div className="vf-trust">
             <span className="vf-trust-label">Verified by</span>
-            <span className="vf-logo vf-logo-lg"><img src={ISSUERS.bluemark.logo} alt="BlueMark" /></span>
-            <span className="vf-logo vf-logo-lg"><img src={ISSUERS.iel.logo} alt="Impact Evaluation Lab" /></span>
+            <span className="vf-logo vf-logo-lg"><img src={ISSUERS.morningstar.logo} alt="Morningstar Sustainalytics" /></span>
             <span className="vf-logo vf-logo-lg"><img src={ISSUERS.pri.logo} alt="Principles for Responsible Investment" /></span>
+            <span className="vf-logo vf-logo-lg"><img src={ISSUERS.iel.logo} alt="Impact Evaluation Lab" /></span>
+            <span className="vf-logo vf-logo-lg"><img src={ISSUERS.bluemark.logo} alt="BlueMark" /></span>
           </div>
         </section>
 
@@ -165,8 +187,8 @@ export default function VerifiedPage() {
         .vf-trust-label { font-size: var(--text-2xs); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-3); font-weight: 600; }
         .vf-logo { display: grid; place-items: center; background: #fff; border-radius: 10px; padding: 8px 12px; box-shadow: var(--shadow-sm); }
         .vf-logo img { display: block; height: 26px; width: auto; object-fit: contain; }
-        .vf-logo-lg { padding: 10px 16px; }
-        .vf-logo-lg img { height: 30px; }
+        .vf-logo-lg { padding: 12px 20px; }
+        .vf-logo-lg img { height: auto; max-height: 42px; width: auto; max-width: min(360px, 72vw); }
 
         .vf-section { max-width: 1180px; margin: 72px auto 0; padding: 0 22px; }
         .vf-section-head { max-width: 60ch; }
