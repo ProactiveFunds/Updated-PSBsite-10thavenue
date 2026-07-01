@@ -57,6 +57,18 @@ function HomeCalculator({ onStart }) {
         <span className="eyebrow">Model your investment</span>
         <h2 style={{ margin: '10px 0 0', fontSize: 'var(--text-2xl)', letterSpacing: '-0.02em', color: 'var(--fg-1)', fontWeight: 700 }}>See what your capital returns — before you commit.</h2>
         <p className="lead" style={{ margin: '8px auto 0', maxWidth: '78ch', fontSize: 'var(--text-sm)', lineHeight: 1.55, color: 'var(--fg-2)' }}>Every tier pays differently. Set your amount, investor type, and hold period to preview your projected income — and find the bond option matched to your profile.</p>
+        <a
+          href="#opportunities"
+          className="btn btn-ghost btn-sm"
+          style={{ marginTop: 16, textDecoration: 'none' }}
+          onClick={(e) => {
+            e.preventDefault();
+            const el = document.getElementById('opportunities');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }}
+        >
+          <Ic name="bar-chart" size={16} /> Compare opportunities
+        </a>
       </div>
       <div className="glass glass-strong lit" style={{ borderRadius: 'var(--radius-2xl)', overflow: 'hidden', boxShadow: 'var(--shadow-xl)' }}>
 
