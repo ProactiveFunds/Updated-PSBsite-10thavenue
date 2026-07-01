@@ -138,7 +138,7 @@ function HomeCalculator({ onStart }) {
               <div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-2)', lineHeight: 1.5 }}>{band.note}</div>
               {!st.ok && <div style={{ marginTop: 8, fontSize: 'var(--text-xs)', color: 'var(--amber-500)', display: 'flex', gap: 6, alignItems: 'flex-start' }}><Ic name="shield-check" size={14} /> Most options require accreditation — we'll help you check eligibility.</div>}
             </div>
-            <button className="btn btn-accent btn-lg" style={{ width: '100%', justifyContent: 'center', marginTop: 14 }} onClick={onStart}>
+            <button className="btn btn-accent btn-lg" style={{ width: '100%', justifyContent: 'center', marginTop: 14 }} onClick={st.ok ? () => { window.location.href = 'https://tier2.sustainablebonds.com'; } : () => { window.location.href = '/accreditation'; }}>
               {st.ok ? 'Start investing' : 'Check my eligibility'} <Ic name="arrow-right" size={18} />
             </button>
           </div>
