@@ -8,6 +8,8 @@ const VIDEOS = [
   { id: '7xQiUeu2eY8', name: 'A resident’s story' },
   { id: 'rrf1FLn-M3g', name: 'Jackie & Corey’s story' },
   { id: 'a5psuKxi7Ow', name: 'Resident testimonials' },
+  { id: 'c3kgmp2SKHw', name: 'A resident’s story' },
+  { id: 'u_aW_oeLAO8', name: 'Resident testimonials' },
 ];
 
 const YT_CHANNEL = 'https://www.youtube.com/@ProActiveSustainableBonds';
