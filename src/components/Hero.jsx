@@ -93,18 +93,29 @@ function Hero({ onInvest }) {
       </div>
 
       <div className="hero-award-row">
-        <div aria-hidden="true"></div>
+        <div className="hero-ira-cell">
+          <a href="/ira" className="ira-pill">
+            <span className="ira-pill-icon"><Ic name="dollar" size={14} /></span>
+            <span>Did you know you could invest with your IRA?</span>
+            <Ic name="arrow-right" size={14} style={{ opacity: 0.6, flex: 'none' }} />
+          </a>
+        </div>
         <a className="hero-award-banner" href="/verified" aria-label="Real Leaders 2026 Top Impact Investor — view our verifications">
           <img src="/img/real-impact-banner.jpg" alt="Real Leaders 2026 Top Impact Investors List — Proactive Sustainable Bonds, Top Impact Investor" />
         </a>
       </div>
 
       <style>{`
-        .hero-award-row { display: grid; grid-template-columns: 1.05fr .95fr; gap: 46px; margin-top: 18px; }
+        .hero-award-row { display: grid; grid-template-columns: 1.05fr .95fr; gap: 46px; margin-top: 18px; align-items: center; }
+        .hero-ira-cell { display: flex; align-items: center; }
+        .ira-pill { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border-radius: 999px; background: color-mix(in srgb, var(--brand) 9%, var(--surface)); border: 1.5px solid color-mix(in srgb, var(--brand) 50%, transparent); color: var(--forest-700); font-weight: 600; font-size: var(--text-sm); text-decoration: none; animation: ira-glow 2.8s ease-in-out infinite; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+        .ira-pill:hover { transform: translateY(-2px); text-decoration: none; }
+        .ira-pill-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; flex: none; }
+        @keyframes ira-glow { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 40%, transparent), var(--shadow-sm); } 50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--brand) 0%, transparent), var(--shadow-md); } }
         .hero-award-banner { display: block; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); line-height: 0; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
         .hero-award-banner:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
         .hero-award-banner img { width: 100%; height: auto; display: block; }
-        @media (max-width: 900px) { .hero-award-row { grid-template-columns: 1fr; margin-top: 14px; } .hero-award-row > [aria-hidden] { display: none; } }
+        @media (max-width: 900px) { .hero-award-row { grid-template-columns: 1fr; margin-top: 14px; gap: 18px; } .hero-ira-cell { justify-content: flex-start; } }
         .flip-word-wrap { display: inline-block; perspective: 600px; }
         .flip-word { display: inline-block; color: var(--brand); transform-origin: 50% 100%; animation: psb-flip 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
         @keyframes psb-flip { 0% { transform: rotateX(-90deg); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; opacity: 1; } }
