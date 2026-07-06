@@ -216,12 +216,12 @@ export default function VerifiedPage() {
         [data-theme="dark"] .vf-hero h1 { color: var(--lime-300); }
         .vf-hero .lead { margin: 20px auto 0; max-width: 64ch; }
         .vf-hero .lead strong { color: var(--fg-1); font-weight: 600; }
-        .vf-trust { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 34px; }
+        .vf-trust { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 18px; margin-top: 34px; }
         .vf-trust-label { font-size: var(--text-2xs); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-3); font-weight: 600; }
-        .vf-logo { display: grid; place-items: center; background: #fff; border-radius: 10px; padding: 8px 12px; box-shadow: var(--shadow-sm); }
+        .vf-logo { display: grid; place-items: center; background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: var(--shadow-sm); }
         .vf-logo img { display: block; height: 26px; width: auto; object-fit: contain; }
-        .vf-logo-lg { padding: 12px 20px; }
-        .vf-logo-lg img { height: auto; max-height: 42px; width: auto; max-width: min(360px, 72vw); }
+        .vf-logo-lg { padding: 16px 26px; }
+        .vf-logo-lg img { height: auto; max-height: 60px; width: auto; max-width: min(440px, 74vw); }
 
         .vf-section { max-width: 1180px; margin: 72px auto 0; padding: 0 22px; }
         .vf-section-head { max-width: 60ch; }
