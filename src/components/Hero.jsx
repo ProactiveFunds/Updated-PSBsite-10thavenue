@@ -74,8 +74,8 @@ function Hero({ onInvest }) {
           </div>
         </div>
         <div className="hero-visual" style={{ position: 'relative', height: 560 }}>
-          <div style={{ position: 'absolute', inset: '0 0 0 11%' }}><HeroBgVideo src="/videos/banner.mp4" /></div>
-          <div className="glass glass-strong lit stat-card rise" style={{ position: 'absolute', top: 32, left: -16, width: 252 }}>
+          <div style={{ position: 'absolute', inset: 0 }}><HeroBgVideo src="/videos/banner.mp4" /></div>
+          <div className="glass glass-strong lit stat-card rise" style={{ position: 'absolute', top: 28, left: -46, width: 206 }}>
             <span className="data-label">Housing you can verify</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18, marginTop: 16 }}>
               <img className="logo-light" src="/img/sustainalytics.png" alt="Morningstar Sustainalytics" style={{ height: 21, alignSelf: 'flex-start' }} />
@@ -84,7 +84,7 @@ function Hero({ onInvest }) {
               <img className="logo-dark" src="/img/pri-white.png" alt="Signatory of the Principles for Responsible Investment" style={{ height: 44, alignSelf: 'flex-start' }} />
             </div>
           </div>
-          <div className="glass glass-strong lit stat-card rise" style={{ position: 'absolute', bottom: 26, right: -14, width: 220 }}>
+          <div className="glass glass-strong lit stat-card rise" style={{ position: 'absolute', bottom: 28, right: -30, width: 196 }}>
             <span className="data-label">Distributions on time</span>
             <div className="stat-value" style={{ fontSize: 'var(--text-2xl)', color: 'var(--brand)' }}>100%</div>
             <div style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', marginTop: 4 }}>Every distribution, every quarter</div>
