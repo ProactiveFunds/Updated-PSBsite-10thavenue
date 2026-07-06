@@ -12,6 +12,7 @@ const ISSUERS = {
   bluemark: { name: 'BlueMark', logo: '/img/partners/bluemark.png' },
   iel: { name: 'Impact Evaluation Lab', logo: '/img/partners/impact-evaluation-labs.png' },
   pri: { name: 'PRI', logo: '/img/pri.png' },
+  realleaders: { name: 'Real Leaders 2026 Top Impact Investor', logo: '/img/realleaders-impact-investor.png' },
   proactive: { name: 'Proactive', logo: '/img/logo.png' },
 };
 
@@ -96,6 +97,31 @@ const SECTIONS = [
   },
 ];
 
+// Award announcement — Real Leaders 2026 Top Impact Investor.
+function AwardSection() {
+  return (
+    <section className="vf-section" id="award">
+      <div className="vf-section-head">
+        <span className="eyebrow">Recognition · 2026</span>
+        <h2 className="editorial">Named a Real Leaders® Top Impact Investor.</h2>
+        <p className="vf-section-sub">
+          We’re proud to be named to the <strong>Real Leaders® 2026 Top Impact Investors List</strong> — a global recognition of the
+          organizations turning capital into measurable good. It’s an honor that reflects the same independently verified, real-world
+          impact behind every bond we issue.
+        </p>
+      </div>
+      <div className="vf-award-card glass lit">
+        <img src="/img/realleaders-impact-investor.png" alt="Real Leaders 2026 Top Impact Investor" />
+        <div className="vf-award-body">
+          <div className="vf-award-kicker"><Ic name="check-circle" size={14} /> 2026 Top Impact Investors List</div>
+          <div className="vf-award-name">Real Leaders® Impact Investor</div>
+          <p>Proactive Sustainable Bonds joins a global community of organizations proving that financial performance and lasting social impact belong together.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function DocCard({ d }) {
   const iss = ISSUERS[d.issuer];
   return (
@@ -138,20 +164,24 @@ export default function VerifiedPage() {
             <span className="vf-logo vf-logo-lg"><img src={ISSUERS.pri.logo} alt="Principles for Responsible Investment" /></span>
             <span className="vf-logo vf-logo-lg"><img src={ISSUERS.iel.logo} alt="Impact Evaluation Lab" /></span>
             <span className="vf-logo vf-logo-lg"><img src={ISSUERS.bluemark.logo} alt="BlueMark" /></span>
+            <span className="vf-logo vf-logo-lg"><img src={ISSUERS.realleaders.logo} alt="Real Leaders 2026 Top Impact Investor" /></span>
           </div>
         </section>
 
         {SECTIONS.map((s) => (
-          <section className="vf-section" key={s.key} id={s.key}>
-            <div className="vf-section-head">
-              <span className="eyebrow">{s.eyebrow}</span>
-              <h2 className="editorial">{s.title}</h2>
-              <p className="vf-section-sub">{s.sub}</p>
-            </div>
-            <div className="vf-grid">
-              {s.docs.map((d) => <DocCard d={d} key={d.file} />)}
-            </div>
-          </section>
+          <React.Fragment key={s.key}>
+            <section className="vf-section" id={s.key}>
+              <div className="vf-section-head">
+                <span className="eyebrow">{s.eyebrow}</span>
+                <h2 className="editorial">{s.title}</h2>
+                <p className="vf-section-sub">{s.sub}</p>
+              </div>
+              <div className="vf-grid">
+                {s.docs.map((d) => <DocCard d={d} key={d.file} />)}
+              </div>
+            </section>
+            {s.key === 'morningstar' && <AwardSection />}
+          </React.Fragment>
         ))}
 
         <section className="vf-quote-wrap">
@@ -196,6 +226,15 @@ export default function VerifiedPage() {
         [data-theme="dark"] .vf-section-head h2 { color: var(--lime-300); }
         .vf-section-sub { margin: 10px 0 0; color: var(--fg-2); font-size: var(--text-base); line-height: 1.55; }
         .vf-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 26px; }
+
+        .vf-award-card { display: flex; align-items: center; gap: 30px; margin-top: 26px; border-radius: var(--radius-2xl); padding: 30px 36px; border-left: 4px solid var(--brand); }
+        .vf-award-card > img { width: 138px; height: 138px; object-fit: contain; flex: none; }
+        .vf-award-body { min-width: 0; }
+        .vf-award-kicker { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--forest-600); }
+        [data-theme="dark"] .vf-award-kicker { color: var(--lime-300); }
+        .vf-award-name { font-family: var(--font-editorial); font-size: var(--text-2xl); font-weight: 600; letter-spacing: -0.01em; color: var(--fg-1); margin-top: 6px; }
+        .vf-award-body p { margin: 10px 0 0; color: var(--fg-2); font-size: var(--text-base); line-height: 1.6; max-width: 62ch; }
+        @media (max-width: 640px) { .vf-award-card { flex-direction: column; text-align: center; align-items: center; padding: 26px 22px; } }
 
         .vf-card { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 24px 24px 20px; transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
         .vf-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); box-shadow: var(--shadow-md); transform: translateY(-2px); }
