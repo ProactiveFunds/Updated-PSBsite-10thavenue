@@ -92,14 +92,19 @@ function Hero({ onInvest }) {
         </div>
       </div>
 
-      <a className="hero-award-banner" href="/verified" aria-label="Real Leaders 2026 Top Impact Investor — view our verifications">
-        <img src="/img/real-impact-banner.jpg" alt="Real Leaders 2026 Top Impact Investors List — Proactive Sustainable Bonds, Top Impact Investor" />
-      </a>
+      <div className="hero-award-row">
+        <div aria-hidden="true"></div>
+        <a className="hero-award-banner" href="/verified" aria-label="Real Leaders 2026 Top Impact Investor — view our verifications">
+          <img src="/img/real-impact-banner.jpg" alt="Real Leaders 2026 Top Impact Investors List — Proactive Sustainable Bonds, Top Impact Investor" />
+        </a>
+      </div>
 
       <style>{`
-        .hero-award-banner { display: block; margin: 40px auto 0; border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-lg); line-height: 0; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
-        .hero-award-banner:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+        .hero-award-row { display: grid; grid-template-columns: 1.05fr .95fr; gap: 46px; margin-top: 18px; }
+        .hero-award-banner { display: block; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); line-height: 0; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+        .hero-award-banner:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
         .hero-award-banner img { width: 100%; height: auto; display: block; }
+        @media (max-width: 900px) { .hero-award-row { grid-template-columns: 1fr; margin-top: 14px; } .hero-award-row > [aria-hidden] { display: none; } }
         .flip-word-wrap { display: inline-block; perspective: 600px; }
         .flip-word { display: inline-block; color: var(--brand); transform-origin: 50% 100%; animation: psb-flip 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
         @keyframes psb-flip { 0% { transform: rotateX(-90deg); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; opacity: 1; } }

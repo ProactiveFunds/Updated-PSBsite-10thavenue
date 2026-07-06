@@ -116,33 +116,42 @@ export function IraCta() {
 function IraHero() {
   return (
     <section style={{ background: 'var(--bg)' }}>
-      {/* Hero copy */}
-      <div style={{ maxWidth: 860, margin: '0 auto', padding: '88px 22px 68px', textAlign: 'center' }}>
-        <span className="eyebrow-pill" style={{ marginBottom: 28, display: 'inline-block' }}>
-          Self-Directed IRAs
-        </span>
-        <h1 style={{
-          fontSize: 'clamp(2.2rem, 5.5vw, 3.6rem)',
-          lineHeight: 1.06,
-          letterSpacing: '-0.03em',
-          fontWeight: 800,
-          margin: '0 0 26px',
-          color: 'var(--fg-1)',
-        }}>
-          Grow Your Retirement With
-          <br />
-          <span style={{ color: 'var(--forest-700)' }}>Proactive Sustainable Bonds</span>
-        </h1>
-        <p className="lead" style={{ maxWidth: '60ch', margin: '0 auto 42px', color: 'var(--fg-2)', lineHeight: 1.65 }}>
-          Self-Directed IRA holders are uniquely positioned to take advantage of one of the most exciting alternative fixed-income opportunities in affordable housing — 9–15% annual returns, third-party verified impact, and real asset backing.
-        </p>
-        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button className="btn btn-accent btn-lg" onClick={goToCalculator}>
-            Schedule a Call <Ic name="arrow-right" size={18} />
-          </button>
-          <a className="btn btn-ghost btn-lg" href="/#calculator">
-            View Investment Tiers
-          </a>
+      {/* Hero copy over background video */}
+      <div style={{ position: 'relative', overflow: 'hidden', background: 'var(--forest-900)' }}>
+        <video
+          src="/videos/ira.mp4"
+          autoPlay muted loop playsInline preload="auto" tabIndex={-1} aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, pointerEvents: 'none' }}
+        ></video>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(180deg, rgba(9,28,17,0.72) 0%, rgba(9,28,17,0.76) 50%, rgba(9,28,17,0.88) 100%)' }} />
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 860, margin: '0 auto', padding: '104px 22px 92px', textAlign: 'center' }}>
+          <span className="eyebrow-pill" style={{ marginBottom: 28, display: 'inline-block', background: 'rgba(255,255,255,0.12)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}>
+            Self-Directed IRAs
+          </span>
+          <h1 style={{
+            fontSize: 'clamp(2.2rem, 5.5vw, 3.6rem)',
+            lineHeight: 1.06,
+            letterSpacing: '-0.03em',
+            fontWeight: 800,
+            margin: '0 0 26px',
+            color: '#fff',
+            textShadow: '0 2px 20px rgba(0,0,0,0.38)',
+          }}>
+            Grow Your Retirement With
+            <br />
+            <span style={{ color: 'var(--lime-300)' }}>Proactive Sustainable Bonds</span>
+          </h1>
+          <p className="lead" style={{ maxWidth: '60ch', margin: '0 auto 42px', color: 'rgba(255,255,255,0.9)', lineHeight: 1.65, textShadow: '0 1px 14px rgba(0,0,0,0.34)' }}>
+            Self-Directed IRA holders are uniquely positioned to take advantage of one of the most exciting alternative fixed-income opportunities in affordable housing — 9–15% annual returns, third-party verified impact, and real asset backing.
+          </p>
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn btn-accent btn-lg" onClick={goToCalculator}>
+              Schedule a Call <Ic name="arrow-right" size={18} />
+            </button>
+            <a className="btn btn-lg" href="/#calculator" style={{ color: '#fff', border: '1px solid rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.06)' }}>
+              View Investment Tiers
+            </a>
+          </div>
         </div>
       </div>
 

@@ -110,6 +110,9 @@ function AwardSection() {
           impact behind every bond we issue.
         </p>
       </div>
+      <div className="vf-award-banner">
+        <img src="/img/real-impact-award-banner.png" alt="Real Leaders 2026 Top Impact Companies — Proactive Sustainable Bonds" />
+      </div>
       <div className="vf-award-card glass lit">
         <img src="/img/realleaders-impact-investor.png" alt="Real Leaders 2026 Top Impact Investor" />
         <div className="vf-award-body">
@@ -227,7 +230,9 @@ export default function VerifiedPage() {
         .vf-section-sub { margin: 10px 0 0; color: var(--fg-2); font-size: var(--text-base); line-height: 1.55; }
         .vf-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 26px; }
 
-        .vf-award-card { display: flex; align-items: center; gap: 30px; margin-top: 26px; border-radius: var(--radius-2xl); padding: 30px 36px; border-left: 4px solid var(--brand); }
+        .vf-award-banner { margin-top: 26px; border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-md); background: #0b0b0d; line-height: 0; }
+        .vf-award-banner img { width: 100%; height: auto; display: block; }
+        .vf-award-card { display: flex; align-items: center; gap: 30px; margin-top: 20px; border-radius: var(--radius-2xl); padding: 30px 36px; border-left: 4px solid var(--brand); }
         .vf-award-card > img { width: 138px; height: 138px; object-fit: contain; flex: none; }
         .vf-award-body { min-width: 0; }
         .vf-award-kicker { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--forest-600); }
