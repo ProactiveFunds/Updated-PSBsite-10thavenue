@@ -216,7 +216,20 @@ const OPP_RISK = [
 
 const OPP_ROWS = [
   {
-    name: '2–4 Year Opportunity', tag: 'Most accessible', highlight: true,
+    name: 'Impact Bridge Debt Offering', tag: 'Limited · Q3 2026', highlight: true,
+    desc: 'Bridge debt ahead of a confirmed refinancing — current quarterly income.',
+    annual: '15–30% / yr', total: '15–30% over 12 mo', min: '$100K', term: '12 mo', cap: '$50M',
+    details: {
+      blurb: 'A limited capital raise bridging a short-term gap ahead of an already-confirmed refinancing event — offering accredited investors above-market return potential, backed by real estate assets in supply-constrained markets with durable demand.',
+      tiers: [['$100,000', '15%'], ['$500,000', '22%'], ['$1,500,000', '30%']],
+      risk: OPP_RISK,
+      holding: { value: '12 months', note: 'A short-duration bridge with income paid quarterly, ahead of an already-confirmed refinancing event.' },
+      capacity: { value: '$50 million', note: 'Limited to the first $50M; the offering extends to $50M total.' },
+      impact: { label: 'Affordable housing', note: 'Backed by real estate assets in supply-constrained markets with durable demand.' },
+    },
+  },
+  {
+    name: '2–4 Year Opportunity', tag: 'Most accessible',
     desc: 'A flexible vehicle for stable income and positive impact.',
     annual: '9–15% / yr', total: 'up to ~60%', min: '$20K', term: '2–4 yrs', cap: '$175M',
     details: {
@@ -282,19 +295,6 @@ const OPP_ROWS = [
         'Deep social impact tracked through SDG-aligned metrics and third-party reporting.',
         'Significant tax advantages through Opportunity Zone investing.',
       ],
-    },
-  },
-  {
-    name: 'Impact Bridge Debt Offering', tag: 'Limited · Q3 2026',
-    desc: 'Bridge debt ahead of a confirmed refinancing — current quarterly income.',
-    annual: '15–30% / yr', total: '15–30% over 12 mo', min: '$100K', term: '12 mo', cap: '$50M',
-    details: {
-      blurb: 'A limited capital raise bridging a short-term gap ahead of an already-confirmed refinancing event — offering accredited investors above-market return potential, backed by real estate assets in supply-constrained markets with durable demand.',
-      tiers: [['$100,000', '15%'], ['$500,000', '22%'], ['$1,500,000', '30%']],
-      risk: OPP_RISK,
-      holding: { value: '12 months', note: 'A short-duration bridge with income paid quarterly, ahead of an already-confirmed refinancing event.' },
-      capacity: { value: '$50 million', note: 'Limited to the first $50M; the offering extends to $50M total.' },
-      impact: { label: 'Affordable housing', note: 'Backed by real estate assets in supply-constrained markets with durable demand.' },
     },
   },
 ];
