@@ -220,6 +220,7 @@ const OPP_ROWS = [
     desc: 'Bridge debt ahead of a confirmed refinancing — current quarterly income.',
     annual: '15–30% / yr', total: '15–30% over 12 mo', min: '$100K', term: '12 mo', cap: '$50M',
     details: {
+      investHref: '/q3-special',
       blurb: 'A limited capital raise bridging a short-term gap ahead of an already-confirmed refinancing event — offering accredited investors above-market return potential, backed by real estate assets in supply-constrained markets with durable demand.',
       tiers: [['$100,000', '15%'], ['$500,000', '22%'], ['$1,500,000', '30%']],
       risk: OPP_RISK,
@@ -299,7 +300,15 @@ const OPP_ROWS = [
   },
 ];
 
-function OppActions() {
+function OppActions({ href }) {
+  if (href) {
+    return (
+      <div className="opp-actions">
+        <a className="btn btn-accent btn-lg" href={href}>Invest now <Ic name="arrow-right" size={18} /></a>
+        <span className="opp-actions-note">Opens the Q3 Special offering page.</span>
+      </div>
+    );
+  }
   return (
     <div className="opp-actions">
       <button className="btn btn-accent btn-lg" onClick={goToCalculator}>Invest now <Ic name="arrow-right" size={18} /></button>
@@ -331,7 +340,7 @@ function OppDetail({ d }) {
           <div><h4>Our strategy</h4><ul className="opp-bullets">{d.strategy.map((b) => <li key={b}>{b}</li>)}</ul></div>
           <div><h4>Investor value proposition</h4><ul className="opp-bullets">{d.valueProp.map((b) => <li key={b}>{b}</li>)}</ul></div>
         </div>
-        <OppActions />
+        <OppActions href={d.investHref} />
       </div>
     );
   }
@@ -366,7 +375,7 @@ function OppDetail({ d }) {
           <p className="opp-note">{d.impact.note}</p>
         </div>
       </div>
-      <OppActions />
+      <OppActions href={d.investHref} />
     </div>
   );
 }
