@@ -19,7 +19,8 @@ export default function App() {
         <HomeCalculator onStart={open} />
         <Partners />
         <Testimonials />
-        <BeforeAfter />
+        {/* Hidden until we have the before/after photos — restore when ready */}
+        {/* <BeforeAfter /> */}
         <ReturnComparison onInvest={open} />
         <SocialProof />
         <Opportunities2 />
