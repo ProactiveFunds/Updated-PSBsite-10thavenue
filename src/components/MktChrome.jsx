@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { label: 'Assets', href: '/assets' },
   { label: 'Team', href: '/team' },
   { label: 'Digest', href: '/digest' },
+  { label: 'Contact us', id: 'get-started' },
 ];
 
 function ThemeToggle() {
