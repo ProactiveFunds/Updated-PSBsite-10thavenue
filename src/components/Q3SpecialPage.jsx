@@ -52,7 +52,7 @@ function scrollToOffering(e) {
 function Hero() {
   return (
     <section className="q3-hero">
-      <video className="q3-hero-video" src="/videos/banner.mp4" autoPlay muted loop playsInline preload="auto" tabIndex={-1} aria-hidden="true"></video>
+      <video className="q3-hero-video" src="/videos/banner.mp4" poster="/videos/banner-poster.jpg" autoPlay muted loop playsInline preload="metadata" tabIndex={-1} aria-hidden="true"></video>
       <div className="q3-hero-overlay" />
       <div className="q3-hero-inner">
         <span className="eyebrow-pill q3-eyebrow">Q3 2026 · Limited Impact Bridge Offering</span>

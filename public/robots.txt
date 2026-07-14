@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Heavy verification PDFs (multi-MB each). Reachable by direct link for
+# visitors, but kept out of crawlers to reduce outbound bandwidth.
+Disallow: /verified/

@@ -21,7 +21,7 @@ function FlipWord({ words = FLIP_WORDS }) {
 function HeroBgVideo({ src, poster }) {
   return (
     <div className="hero-video-wrap">
-      <video src={src} poster={poster} autoPlay muted loop playsInline preload="auto" tabIndex={-1} aria-hidden="true"></video>
+      <video src={src} poster={poster} autoPlay muted loop playsInline preload="metadata" tabIndex={-1} aria-hidden="true"></video>
     </div>
   );
 }
@@ -74,7 +74,7 @@ function Hero({ onInvest }) {
           </div>
         </div>
         <div className="hero-visual" style={{ position: 'relative', height: 560 }}>
-          <div style={{ position: 'absolute', inset: 0 }}><HeroBgVideo src="/videos/banner.mp4" /></div>
+          <div style={{ position: 'absolute', inset: 0 }}><HeroBgVideo src="/videos/banner.mp4" poster="/videos/banner-poster.jpg" /></div>
           <div className="glass glass-strong lit stat-card rise" style={{ position: 'absolute', top: 24, left: -118, width: 202 }}>
             <span className="data-label">Housing you can verify</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18, marginTop: 16 }}>

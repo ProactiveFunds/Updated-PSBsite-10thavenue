@@ -129,7 +129,8 @@ function IraHero() {
       <div style={{ position: 'relative', overflow: 'hidden', background: 'var(--forest-900)' }}>
         <video
           src="/videos/ira.mp4"
-          autoPlay muted loop playsInline preload="auto" tabIndex={-1} aria-hidden="true"
+          poster="/videos/ira-poster.jpg"
+          autoPlay muted loop playsInline preload="metadata" tabIndex={-1} aria-hidden="true"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, pointerEvents: 'none' }}
         ></video>
         <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(180deg, rgba(9,28,17,0.72) 0%, rgba(9,28,17,0.76) 50%, rgba(9,28,17,0.88) 100%)' }} />
