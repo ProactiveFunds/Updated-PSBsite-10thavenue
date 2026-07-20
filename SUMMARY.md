@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-07-14_
+_Last updated: 2026-07-20_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -62,6 +62,13 @@ works, Assets, Team, Digest, **Contact us** (-> `#get-started`).
 ## Recent work log
 
 **July 2026**
+- **Brand logo swapped** to the new lockup (sprout growing through the "i" in *Proactive*).
+  Replaced `public/img/logo.png` with `Logos/Proactive Sustainable Bonds PNG/Green.png`
+  (1228×519, 28KB — smaller than the old 176KB). Updates every usage automatically: header +
+  footer (`MktChrome.jsx`), the Proactive mark on `VerifiedPage.jsx`, and `public/banner.html`.
+  New lockup has a squarer aspect ratio (~2.37 vs 3.03), so it renders a bit more compact at the
+  same pixel heights. `White.png`/`grey.png` variants are available in the same folder if a
+  theme-aware (dark-mode) logo is wanted later; `logo-white.png` remains unused.
 - **Outbound-bandwidth fixes** (Render reported ~5GB/7 days, driven by the hero background videos):
   - Re-encoded the autoplay background videos with a static `ffmpeg` (audio stripped — they are
     muted/decorative; H.264 CRF 30, `+faststart`). `banner.mp4` 3.89MB→1.06MB, `ira.mp4` 0.95MB→0.13MB.
