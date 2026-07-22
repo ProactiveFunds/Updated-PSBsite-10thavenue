@@ -10,6 +10,15 @@ dist/
 .env.production
 .env.*.local
 
+# design-sync: staged converter scripts + regenerated build output + machine state.
+# Everything else under .design-sync/ (config.json, NOTES.md, conventions.md,
+# entry.mjs, prepare-css.mjs, previews/, docs/) IS committed — it is the sync input.
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules
+
 # original source assets (optimized copies live in public/img/ or public/verified/ — not needed for the build)
 Headshots/
 ProActively Verified/

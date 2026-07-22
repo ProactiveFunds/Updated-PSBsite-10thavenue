@@ -1,0 +1,61 @@
+{
+  "projectId": "2fdd6050-b7b0-4fea-910a-fc3fa53329e9",
+  "shape": "package",
+  "pkg": "proactive-astro",
+  "globalName": "PSB",
+  "buildCmd": "python3 .design-sync/prepare-assets.py && node .design-sync/prepare-css.mjs",
+  "cssEntry": ".design-sync/.cache/psb-styles.css",
+  "extraFonts": [".design-sync/.cache/psb-fonts.css"],
+  "docsDir": ".design-sync/docs",
+  "componentSrcMap": {
+    "Hero": "src/components/Hero.jsx",
+    "ImpactBand": "src/components/Hero.jsx",
+    "Photo": "src/components/Hero.jsx",
+    "Partners": "src/components/HomeSections.jsx",
+    "BeforeAfter": "src/components/HomeSections.jsx",
+    "ReturnComparison": "src/components/HomeSections.jsx",
+    "SocialProof": "src/components/HomeSections.jsx",
+    "Opportunities2": "src/components/HomeSections.jsx",
+    "IntakeForm": "src/components/HomeSections.jsx",
+    "HomeSectionHead": "src/components/HomeSections.jsx",
+    "MktNav": "src/components/MktChrome.jsx",
+    "MktFooter": "src/components/MktChrome.jsx",
+    "ThemeToggle": "src/components/MktChrome.jsx",
+    "SectionHead": "src/components/Sections.jsx",
+    "Opportunities": "src/components/Sections.jsx",
+    "Process": "src/components/Sections.jsx",
+    "Testimonial": "src/components/Sections.jsx",
+    "Insights": "src/components/Sections.jsx",
+    "InvestModal": "src/components/Sections.jsx",
+    "HomeCalculator": "src/components/HomeCalculator.jsx",
+    "Ic": "src/components/icons.jsx"
+  },
+  "dtsPropsFor": {
+    "Ic": "  /** Which glyph to draw. Unknown names render an empty 24x24 svg. */\n  name:\n    | 'arrow-right' | 'arrow-up-right' | 'arrow-up' | 'arrow-down'\n    | 'trending-up' | 'shield-check' | 'map-pin' | 'home' | 'building'\n    | 'sprout' | 'leaf' | 'pie-chart' | 'bar-chart' | 'file-text' | 'lock'\n    | 'users' | 'bell' | 'search' | 'check' | 'check-circle'\n    | 'chevron-down' | 'chevron-right' | 'chevron-left' | 'plus' | 'settings'\n    | 'download' | 'calendar' | 'sun' | 'moon' | 'menu' | 'x' | 'wallet'\n    | 'play' | 'youtube' | 'filter' | 'external-link' | 'mail' | 'clock'\n    | 'dollar' | 'layers' | 'eye' | 'more' | 'logout' | 'linkedin';\n  /** Width and height in px. Default 20. */\n  size?: number;\n  /** Stroke width. Default 1.75 — the house weight; raise for large display icons. */\n  stroke?: number;\n  /** Merged over the built-in `flex: none`. */\n  style?: React.CSSProperties;\n  className?: string;",
+
+    "Hero": "  /** Primary CTA handler. Omit to use the site default, which scrolls to the on-page calculator (`#calculator`) and falls back to `/#calculator`. */\n  onInvest?: (e: React.MouseEvent) => void;",
+    "ImpactBand": "  /** No props — a full-width stat band with the portfolio's canonical figures baked in. */",
+    "Photo": "  /** Caption drawn over the bottom of the frame. */\n  label?: string;\n  /** Smaller line under `label`. */\n  sublabel?: string;\n  /** CSS height of the frame. Default '100%'. */\n  h?: string | number;\n  /** CSS border-radius. Default 'var(--radius-2xl)'. */\n  radius?: string;\n  /** Image URL. Without it the frame renders as a tinted placeholder. */\n  src?: string;",
+
+    "MktNav": "  /** Handler for the nav's \"Invest now\" button. Defaults to scrolling to the calculator. */\n  onInvest?: (e: React.MouseEvent) => void;",
+    "MktFooter": "  /** No props — site footer with the brand lockup, link columns and legal line baked in. */",
+    "ThemeToggle": "  /** No props — flips `data-theme` on `<html>` between 'light' and 'dark' and persists to localStorage. */",
+
+    "SectionHead": "  /** Small uppercase label above the title. */\n  eyebrow?: string;\n  /** The heading itself. */\n  title?: string;\n  /** Supporting paragraph under the title. */\n  sub?: string;\n  /** Text alignment. 'center' also constrains width to 46ch and centres the block. Default 'left'. */\n  align?: 'left' | 'center';",
+    "HomeSectionHead": "  /** Small uppercase label above the title. */\n  eyebrow?: string;\n  /** The heading itself. */\n  title?: string;\n  /** Supporting paragraph under the title. */\n  sub?: string;\n  /** Text alignment. 'center' also constrains width to 46rem and centres the block. Default 'center'. */\n  align?: 'left' | 'center';\n  /** Render the title in the editorial serif (Newsreader, forest-700) instead of the UI sans. */\n  serif?: boolean;",
+
+    "HomeCalculator": "  /** Handler for the calculator's \"Start investing\" CTA. */\n  onStart?: (e: React.MouseEvent) => void;",
+    "ReturnComparison": "  /** Handler for the CTA under the comparison bars. */\n  onInvest?: (e: React.MouseEvent) => void;",
+    "InvestModal": "  /** Whether the modal is shown. Renders nothing when false. */\n  open?: boolean;\n  /** Called on backdrop click, close button and Escape. */\n  onClose?: () => void;",
+
+    "Opportunities": "  /** No props — the four-vehicle opportunity grid, content baked in. */",
+    "Opportunities2": "  /** No props — the expandable \"Compare the opportunities\" table, content baked in. Rows expand in place. */",
+    "IntakeForm": "  /** No props — the lead intake form. Posts to Tenth Avenue via a hidden iframe; renders under `id=\"get-started\"`. */",
+    "Partners": "  /** No props — the partner/verifier logo wall. Swaps colour and white marks by theme. */",
+    "SocialProof": "  /** No props — the credibility band: metrics, verifier logos and press mentions. */",
+    "Insights": "  /** No props — the Digest teaser grid of recent editorial posts. */",
+    "Process": "  /** No props — the four-step \"From capital to keys\" explainer. */",
+    "Testimonial": "  /** No props — a single pull-quote block with attribution. */",
+    "BeforeAfter": "  /** No props — the before/after rehab comparison. Ships placeholder slots until real photography is supplied. */"
+  }
+}
