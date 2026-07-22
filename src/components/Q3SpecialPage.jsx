@@ -5,7 +5,11 @@ import { initInteractions } from '../lib/interactions.js';
 
 const { useEffect } = React;
 
-const TIER2 = 'https://tier2.sustainablebonds.com';
+// Bond-specific invest link: this Tenth Avenue portal URL is for the Q3 2026
+// Impact Bridge offering only. Do not reuse it in shared chrome (nav/footer) or
+// on the generic invest pages — those still funnel through the calculator /
+// tier2.sustainablebonds.com.
+const INVEST_URL = 'https://portal.tenthavenue.io/start/8ed1cd5979977726126230c2e3cdd7004c8c3a0f';
 
 const TIERS = [
   ['Tier 1', '$100K – $499K', '15%', '6% current + 9% deferred'],
@@ -61,7 +65,7 @@ function Hero() {
           America loses <strong>90,000 affordable homes</strong> a year. Proactive finances the buildings that stop the bleeding — preserving the naturally affordable housing families depend on. This quarter, we've opened a limited bridge offering so your capital can help hold the line.
         </p>
         <div className="q3-hero-cta">
-          <a className="btn btn-accent btn-lg" href={TIER2}>Start investing <Ic name="arrow-right" size={18} /></a>
+          <a className="btn btn-accent btn-lg" href={INVEST_URL}>Start investing <Ic name="arrow-right" size={18} /></a>
           <a className="btn btn-lg q3-btn-light" href="#offering" onClick={scrollToOffering}>See the offering</a>
         </div>
         <div className="q3-hero-foot">Impact-first private credit, secured by real estate.</div>
@@ -118,7 +122,7 @@ function Offering() {
         Limited to the first $50M; the offering extends to $50M total. Returns are cumulative over the 12-month bridge term and subject to the Private Placement Memorandum.
       </p>
       <div style={{ textAlign: 'center' }}>
-        <a className="btn btn-accent btn-lg" href={TIER2}>Start investing <Ic name="arrow-right" size={18} /></a>
+        <a className="btn btn-accent btn-lg" href={INVEST_URL}>Start investing <Ic name="arrow-right" size={18} /></a>
       </div>
     </section>
   );
@@ -196,7 +200,7 @@ function FinalCta() {
         <p style={{ margin: '16px auto 28px', color: 'rgba(234,243,226,.85)', maxWidth: '48ch', lineHeight: 1.6, fontSize: 'var(--text-base)' }}>
           The Q3 bridge window is limited to the first $50M. Start your investment today and put your capital to work behind real homes and real returns.
         </p>
-        <a className="btn btn-accent btn-lg" href={TIER2}>Start investing <Ic name="arrow-right" size={18} /></a>
+        <a className="btn btn-accent btn-lg" href={INVEST_URL}>Start investing <Ic name="arrow-right" size={18} /></a>
         <p className="q3-disc">
           For informational purposes only; not an offer to sell or a solicitation to buy any security. Interests are offered solely under Rule 506(c) of Regulation D to accredited investors via the Fund's Private Placement Memorandum (PPM), which governs. Securities are unregistered, speculative, and illiquid, involve risk including loss of capital, and are not FDIC- or SIPC-insured. Past performance is not indicative of future results; targets are illustrative.
         </p>

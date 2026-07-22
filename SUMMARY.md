@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-07-20_
+_Last updated: 2026-07-22_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -30,7 +30,7 @@ wired, plus conventions and gotchas), and **`CLAUDE.md`** for the working rules.
 | URL | Source | What it is |
 |---|---|---|
 | `/` | `index.astro` -> `App.jsx` | Marketing home: hero ("The bond that builds"), calculator, partners, comparison table of opportunities, social proof, intake/contact form (`id="get-started"`). The "See the IMPACT" before/after section is temporarily hidden pending photos. |
-| `/q3-special` | `q3-special.astro` -> `Q3SpecialPage.jsx` | Story-led landing page for the Q3 2026 Impact Bridge offering (hero video, story, tiers, past performance, verifications, team, CTA -> `tier2.sustainablebonds.com`). Has OG/Twitter tags for LinkedIn link cards. |
+| `/q3-special` | `q3-special.astro` -> `Q3SpecialPage.jsx` | Story-led landing page for the Q3 2026 Impact Bridge offering (hero video, story, tiers, past performance, verifications, team, CTA -> the Q3-only Tenth Avenue portal link, see "Invest CTA routing"). Has OG/Twitter tags for LinkedIn link cards. |
 | `/verified` | `verified.astro` -> `VerifiedPage.jsx` | ProActively Verified: the third-party verification story. |
 | `/assets` | `assets.astro` -> `AssetsExplorer.jsx` | Portfolio Explorer: filters + Leaflet map + sortable table with inline-expand rows + Table/Timeline toggle. |
 | `/team` | `team.astro` -> `AboutTeam.jsx` | About + team as transparent-cutout photos + bios. Dr. Williams has an "Author of" book strip. (`/about` redirects to `/team`.) |
@@ -39,6 +39,18 @@ wired, plus conventions and gotchas), and **`CLAUDE.md`** for the working rules.
 
 Top nav (`MktChrome.jsx` `NAV_LINKS`): Opportunities, Our Impact, ProActively Verified, How it
 works, Assets, Team, Digest, **Contact us** (-> `#get-started`).
+
+## Invest CTA routing (where "Start investing" / "Invest now" goes)
+Two destinations, deliberately kept apart. Guarded by `tests/invest-links.test.js`.
+
+| CTA | Where | Destination |
+|---|---|---|
+| "Start investing" x3 (hero, offering, final) | `/q3-special` (`Q3SpecialPage.jsx` `INVEST_URL`) | **Q3-only** Tenth Avenue portal: `portal.tenthavenue.io/start/8ed1cd59…` |
+| "Start investing" | `/OurProcess` (x2), `/accreditation`, home calculator (accredited result) | `tier2.sustainablebonds.com` |
+| "Start investing" / "Invest now" | Nav, footer, mobile menu (`MktChrome.jsx`), home sections | No outbound link - `goToCalculator()` scrolls to `#calculator` |
+
+The portal link is **bond-specific** (Q3 2026 Impact Bridge). Never put it in `MktChrome.jsx`
+or on the evergreen invest pages - shared chrome renders on every page and must stay generic.
 
 ## Data sources (real, from the legacy Base44 export; raw JSON in `../_data-export/`)
 - **`src/data/assets.js`** - `Property` entity, published, de-duplicated by address (drives map, table, KPIs).
@@ -62,6 +74,15 @@ works, Assets, Team, Digest, **Contact us** (-> `#get-started`).
 ## Recent work log
 
 **July 2026**
+- **Q3 invest CTAs repointed to the Tenth Avenue portal.** All three "Start investing" buttons on
+  `/q3-special` (hero, offering, final CTA) now go to
+  `https://portal.tenthavenue.io/start/8ed1cd5979977726126230c2e3cdd7004c8c3a0f` instead of
+  `tier2.sustainablebonds.com`. `TIER2` renamed to `INVEST_URL` in `Q3SpecialPage.jsx`.
+  **Scope is deliberately Q3-only** - the link is specific to this bond, so nav/footer/mobile-menu
+  CTAs and the evergreen invest pages (`/OurProcess`, `/accreditation`, home calculator) were left
+  untouched. Verified in the built `dist/q3-special/index.html` (3/3 anchors, 0 stale `tier2`) and
+  on the dev server; the new portal URL appears in no other page. New regression test
+  `tests/invest-links.test.js` locks the boundary in both directions. See "Invest CTA routing".
 - **Brand logo swapped** to the new lockup (sprout growing through the "i" in *Proactive*).
   Replaced `public/img/logo.png` with `Logos/Proactive Sustainable Bonds PNG/Green.png`
   (1228×519, 28KB — smaller than the old 176KB). Updates every usage automatically: header +
@@ -96,13 +117,20 @@ works, Assets, Team, Digest, **Contact us** (-> `#get-started`).
   case studies, investment terms, audience chips, and a prominent IMPORTANT DISCLOSURES block above the
   legal fine print). Delivered to the Desktop; source + render pipeline kept in the session scratchpad,
   not in this repo. Generated `public/img/logo-white.png` (white logo for dark backgrounds).
+  A variant with the investment figure changed from `$20,000 MINIMUM` to `$100K–$2M+ INVESTMENT`
+  was later produced by editing the PDF in place (redraw in the brand's Spline Mono / Hanken fonts),
+  saved alongside the original as `...Overview (100K-2M).pdf` in the project root.
 - **"Contact us" nav link** added (`MktChrome.jsx`), scrolls to the intake form (`#get-started`).
   Committed `a6670c1`, pushed to both remotes.
 - **Project memory added:** `rules.md` (operating manual), `CLAUDE.md` (working rules), this `SUMMARY.md`,
   and a `tests/` unit-test suite (Node's built-in runner) covering the data layer and pure utilities.
 
-**Pending deploy:** commits `6641184` (Alicia headshot) and `a6670c1` (Contact us nav) are on both
-remotes but **not yet live** - they publish only after a Render Manual Deploy.
+**Pending deploy:** the following commits are on both remotes but **not yet live** - they publish
+only after a Render Manual Deploy (latest = `c4a8469`):
+- `c4a8469` - brand logo swapped to the new lockup
+- `ad612d2` - outbound-bandwidth fixes (compressed videos, cache headers, robots.txt)
+- `a6670c1` - Contact us nav link
+- `6641184` - Alicia Galloway headshot
 
 ---
 
