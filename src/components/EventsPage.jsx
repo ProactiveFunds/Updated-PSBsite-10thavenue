@@ -136,7 +136,7 @@ export default function EventsPage() {
       <MktFooter />
 
       <style>{`
-        .ev-sec { max-width: 1180px; margin: 0 auto; padding: 96px 22px 0; }
+        .ev-sec { max-width: 1240px; margin: 0 auto; padding: 96px 22px 0; }
         .ev-sec-head { margin-bottom: 34px; }
         .ev-h2 { margin: 13px 0 0; font-family: var(--font-editorial); font-weight: 600;
           font-size: clamp(1.75rem, 3.2vw, 2.4rem); line-height: 1.12; letter-spacing: -0.022em; color: var(--forest-700); }

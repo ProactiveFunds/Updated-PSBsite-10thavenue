@@ -235,7 +235,7 @@ function Dream() {
   const base = grow(amt, BASE_RATE, YEARS);
   const impact = grow(amt, IMPACT_RATE, YEARS);
   return (
-    <section className="sd-sec sd-sec-narrow">
+    <section className="sd-sec">
       <span className="eyebrow">Why this evening</span>
       <h2 className="sd-h2">The retirement you actually pictured.</h2>
       <div className="sd-prose">
@@ -326,7 +326,7 @@ function Learn() {
 
 function Speaker() {
   return (
-    <section className="sd-sec sd-sec-narrow">
+    <section className="sd-sec">
       <div className="sd-speaker">
         <div className="sd-speaker-photo">
           <img src={EVENT.speaker.image} alt={EVENT.speaker.name} loading="lazy" />
@@ -364,7 +364,7 @@ function Speaker() {
 
 function Agenda() {
   return (
-    <section id="agenda" className="sd-sec sd-sec-narrow" style={{ scrollMarginTop: 92 }}>
+    <section id="agenda" className="sd-sec" style={{ scrollMarginTop: 92 }}>
       <div className="sd-sec-head">
         <span className="eyebrow">The hour</span>
         <h2 className="sd-h2">How the evening runs.</h2>
@@ -392,7 +392,7 @@ function Agenda() {
 
 function ForYou() {
   return (
-    <section className="sd-sec sd-sec-narrow">
+    <section className="sd-sec">
       <div className="sd-foryou">
         <div>
           <span className="eyebrow">Come along if</span>
@@ -445,7 +445,7 @@ function Hosts() {
 
 function Faq() {
   return (
-    <section className="sd-sec sd-sec-narrow">
+    <section className="sd-sec">
       <div className="sd-sec-head">
         <span className="eyebrow">Before you ask</span>
         <h2 className="sd-h2">The honest answers.</h2>
@@ -540,14 +540,12 @@ export default function SdiraWebinarPage() {
 
       <style>{`
         /* ---- shared section rhythm ---- */
-        /* One container width everywhere, so every section shares a left edge.
-           Sections that want a narrower measure cap their own content block. */
-        .sd-sec { max-width: 1180px; margin: 0 auto; padding: 104px 22px 0; }
-        .sd-sec-narrow .sd-calc,
-        .sd-sec-narrow .sd-agenda,
-        .sd-sec-narrow .sd-faq { max-width: 920px; }
-        .sd-sec-narrow .sd-speaker,
-        .sd-sec-narrow .sd-foryou { max-width: 980px; }
+        /* One container width everywhere (1240 = the nav pill / footer rhythm), and
+           every block inside a section spans it edge to edge. Only raw text is
+           capped to a readable measure — see rules.md section 6 "Layout": capping a
+           *visible box* without an auto inline margin pins it left and leaves a dead
+           right gutter that grows with the viewport. */
+        .sd-sec { max-width: 1240px; margin: 0 auto; padding: 104px 22px 0; }
         .sd-sec-head { max-width: 62ch; margin-bottom: 40px; }
         .sd-h2 { margin: 14px 0 0; font-size: clamp(1.85rem, 3.4vw, 2.6rem); line-height: 1.1;
                  letter-spacing: -0.022em; color: var(--forest-700); font-weight: 600; font-family: var(--font-editorial); }
@@ -647,7 +645,10 @@ export default function SdiraWebinarPage() {
         .sd-learn-p { margin: 0; font-size: var(--text-sm); color: var(--fg-2); line-height: 1.72; }
 
         /* ---- speaker ---- */
-        .sd-speaker { display: grid; grid-template-columns: 260px 1fr; gap: 44px; align-items: start; }
+        .sd-speaker { display: grid; grid-template-columns: 280px minmax(0, 1fr);
+          gap: clamp(28px, 4vw, 52px); align-items: start;
+          background: var(--surface); border: 1px solid var(--border);
+          border-radius: var(--radius-2xl); padding: clamp(28px, 3.5vw, 46px); box-shadow: var(--shadow-sm); }
         .sd-speaker-photo { display: grid; justify-items: center; gap: 14px; }
         .sd-speaker-photo img { width: 100%; max-width: 260px; aspect-ratio: 1; border-radius: 50%;
           object-fit: cover; box-shadow: 0 0 0 4px var(--surface), 0 0 0 7px var(--lime-300), var(--shadow-lg); }
@@ -752,7 +753,7 @@ export default function SdiraWebinarPage() {
         @media (max-width: 1060px) {
           .sd-hero-inner { grid-template-columns: 1fr; gap: 40px; padding-top: 56px; }
           .sd-hero-form { position: static; }
-          .sd-reg { max-width: 560px; }
+          .sd-reg { max-width: 560px; margin-inline: auto; }
           .sd-team { grid-template-columns: repeat(3, 1fr); gap: 26px; }
         }
         @media (max-width: 860px) {

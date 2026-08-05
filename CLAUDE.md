@@ -19,6 +19,11 @@ Operating instructions for this project (Proactive Sustainable Bonds website).
 4. For anything visible in the browser, **drive the Claude Preview** (dev server, port 4321)
    and confirm the real behavior. Note the preview quirks in `rules.md` section 8
    (deep-scroll screenshots and smooth-scroll do not work in-preview; use DOM checks).
+5. **If the change touches layout or adds a page, run `npm run audit:layout`.** It must pass.
+   It catches pages that don't fill their container on a wide monitor — a bug that is invisible
+   at laptop width and has shipped twice. Read the Layout rule in `rules.md` section 6 *before*
+   writing section CSS: one 1240px centred container, blocks fill it, only text is capped, and
+   any deliberately narrow box needs `margin-inline: auto`.
 
 ## Shipping
 - Commit only when asked; keep commits focused. Trailer:

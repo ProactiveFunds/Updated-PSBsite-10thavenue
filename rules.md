@@ -120,6 +120,20 @@ platform used for the AlphaMaven campaign.
   anchor links scroll on the home page and fall back to `/#id` off-page via `go()`). A link is
   marked current for its own path *and* its sub-paths, so `/events/<slug>` keeps *Events* lit.
   The pill now carries nine links, so `responsive.css` collapses it to the burger at **1180px**.
+- **Layout: a page must fill its container at every width.** This has now broken twice, so it
+  is a hard rule:
+  1. One container width per page — **1240px, centred** (`max-width: 1240px; margin: 0 auto`).
+     That is the rhythm the nav pill and footer already use; don't invent a new one per section.
+  2. **Every block inside a section spans that container edge to edge.** Cards, grids, panels,
+     bordered lists — all 100% wide.
+  3. **Only raw text is capped** to a readable measure (`max-width: ~62-66ch` on the heading and
+     the paragraph itself). Text stopping early looks intentional; a *visible box* stopping
+     early looks broken.
+  4. If a box genuinely must be narrower than its container, it gets **`margin-inline: auto`**.
+     A bare `max-width` on a block element does **not** centre it — it pins it left and leaves a
+     dead gutter on the right that grows with the viewport. On a 1440px laptop that reads as a
+     wide margin; on a 2560px monitor it reads as a broken page.
+  Verify with **`npm run audit:layout`** (see section 9) — do not eyeball it at one width.
 - **Events:** `src/data/events.js` is the single source of truth for `/events` and every event
   landing page. Store `startsAt`/`endsAt` as ISO strings **with an explicit UTC offset** and
   render through `formatEventDate`/`formatEventTime`, which pin the output to `America/New_York`.
@@ -227,6 +241,16 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
 - The suite lives in `tests/` and uses Node's built-in runner (`node --test`, zero deps). It
   guards the data layer (`src/data/*`) and pure utilities (`src/lib/*`). Add a test whenever new
   pure logic or data invariants are introduced.
+- **`npm run audit:layout`** — run this for any change that touches layout or adds a page. With
+  the dev server up (or `npm run preview`), it drives headless Chrome over CDP across every route
+  at 1440/1920/2560 and fails on:
+  - **horizontal overflow** (the page scrolls sideways), and
+  - **stranded boxes** — a normal-flow block that paints a box, is capped narrower than its
+    container, and is not centred (see the Layout rule in section 6). It reports the selector,
+    its `max-width`, and its margins, so the fix is usually one line.
+  Zero deps (Node's built-in `fetch` + `WebSocket`); it starts and cleans up its own Chrome.
+  Grid/flex children and inline elements are deliberately exempt — they are sized by their
+  container, not their own margins. Unit tests cannot catch this class of bug; only a browser can.
 
 ---
 

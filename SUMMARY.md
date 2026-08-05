@@ -98,6 +98,15 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
     `public/img/events-sdira-og.png`.
   - Copy is deliberately dream-result-led rather than sales-led; the compounding panel is
     labelled illustrative (5% baseline vs 12%, the midpoint of the site's 9-15% range).
+- **Fixed: sections not filling the page on wide screens, and added a guard.** The webinar page
+  capped its inner blocks (calc panel, speaker, agenda, FAQ) with a bare `max-width`, which
+  left-aligns rather than centres — so each one sat pinned left with a dead right gutter that grew
+  with the viewport (861px of empty space at 2560px). Every block now spans one 1240px centred
+  container and only raw text keeps a readable measure. New **`npm run audit:layout`**
+  (`scripts/layout-audit.mjs`, zero deps) drives headless Chrome across every route at
+  1440/1920/2560 and fails on horizontal overflow or a "stranded box"; it was verified to catch
+  the exact regression before being committed. Rule written up in `rules.md` section 6 (Layout)
+  and added to the `CLAUDE.md` post-change checklist.
 
 **July 2026**
 - **Design system synced to Claude Design** (`claude.ai/design`) so its design agent builds new
