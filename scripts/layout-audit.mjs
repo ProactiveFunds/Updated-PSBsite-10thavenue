@@ -69,6 +69,40 @@ const PROBE = `(() => {
   const vw = document.documentElement.clientWidth;
   const out = [];
   const seen = new Set();
+
+  // Reveal collapsed content first. An accordion answer is laid out only when
+  // open, so a closed <details> is a blind spot the audit would otherwise call
+  // clean — which is exactly how a stranded FAQ answer shipped.
+  for (const d of document.querySelectorAll('details')) d.open = true;
+
+  // A pinned element that means to be centred but is not. The classic cause is
+  // an entrance animation ending on \`transform: none\`, which silently wipes out
+  // a \`translateX(-50%)\` centring transform and shunts the element right.
+  for (const el of document.querySelectorAll('body *')) {
+    const cs = getComputedStyle(el);
+    if (cs.position !== 'fixed' && cs.position !== 'sticky') continue;
+    const r = el.getBoundingClientRect();
+    if (r.width < 80 || r.width > vw - 8) continue;
+    // Chrome resolves \`right\` to a used px value even when it was never authored,
+    // so it cannot be used to tell "pinned to the midpoint" from "stretched".
+    // The reliable signature is: left lands on the viewport midpoint and nothing
+    // translates the element back by half its width.
+    const leftPx = parseFloat(cs.left);
+    if (!Number.isFinite(leftPx) || Math.abs(leftPx - vw / 2) > 4) continue;
+    const xShift = new DOMMatrixReadOnly(cs.transform).m41;
+    if (Math.abs(xShift) > 1) continue;         // a centring translate is present
+    const off = Math.round((r.left + r.width / 2) - vw / 2);
+    if (Math.abs(off) > 8) {
+      out.push({
+        kind: 'off-centre pinned element',
+        sel: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).trim().split(/\\s+/).join('.') : ''),
+        width: Math.round(r.width), avail: vw, gapL: Math.round(r.left), gapR: Math.round(vw - r.right),
+        detail: 'off centre by ' + off + 'px — left:' + cs.left + '  transform:' + cs.transform
+          + '  (an animation ending on "transform: none" wipes out a centring translate)',
+      });
+    }
+  }
+
   for (const el of document.querySelectorAll('main *')) {
     const cs = getComputedStyle(el);
     if (cs.position === 'fixed' || cs.position === 'absolute') continue;
@@ -91,10 +125,14 @@ const PROBE = `(() => {
       || cs.backgroundImage !== 'none';
     // A prose block is just as stranded as a box: a paragraph capped at ~64ch in
     // a 1240px container leaves half the row empty and reads as a broken page.
-    // Split the head into columns, or let it fill.
-    const prose = !paints
-      && el.querySelector(':scope > p, :scope > h1, :scope > h2, :scope > h3')
-      && el.innerText.trim().length > 140;
+    // Split the head into columns, or let it fill. Check body copy ITSELF as well
+    // as wrappers around it — the stranded FAQ answer was a bare <p> with no
+    // wrapper, so a container-only check walked straight past it.
+    const text = el.innerText ? el.innerText.trim().length : 0;
+    const isBodyCopy = /^(P|BLOCKQUOTE)$/.test(el.tagName) && text > 100;
+    const isCopyWrapper = !!el.querySelector(':scope > p, :scope > h1, :scope > h2, :scope > h3')
+      && text > 140;
+    const prose = !paints && (isBodyCopy || isCopyWrapper);
     if (!paints && !prose) continue;
 
     const p = el.parentElement;
@@ -124,7 +162,7 @@ const PROBE = `(() => {
       kind: paints ? 'box' : 'text',
       sel: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).trim().split(/\\s+/).join('.') : ''),
       width: Math.round(r.width), avail: Math.round(avail), gapL, gapR,
-      maxWidth: cs.maxWidth, marginLeft: cs.marginLeft, marginRight: cs.marginRight,
+      detail: 'max-width:' + cs.maxWidth + '  margin-left:' + cs.marginLeft + '  margin-right:' + cs.marginRight,
     });
   }
   return {
@@ -159,15 +197,20 @@ try {
     for (const w of WIDTHS) {
       await send('Emulation.setDeviceMetricsOverride', { width: w, height: 1000, deviceScaleFactor: 1, mobile: false });
       await send('Page.navigate', { url: BASE + route });
-      await sleep(1800);
+      await sleep(1500);
+      // Scroll past the fold so reveal-on-scroll sections lay out and any
+      // scroll-triggered pinned bars actually exist before we measure.
+      await send('Runtime.evaluate', { expression: 'window.scrollTo(0, 1200)' });
+      await sleep(700);
       const { result } = await send('Runtime.evaluate', { expression: PROBE, returnByValue: true });
       const r = result.value;
       if (!r) continue;
       if (r.overflow > 1) problems.push(`  @${w}px  HORIZONTAL OVERFLOW by ${r.overflow}px`);
       for (const s of r.stranded) {
-        problems.push(`  @${w}px  stranded ${s.kind}  ${s.sel}\n`
+        const label = s.kind.includes(' ') ? s.kind : `stranded ${s.kind}`;
+        problems.push(`  @${w}px  ${label}  ${s.sel}\n`
           + `           width ${s.width} of ${s.avail} available — left gap ${s.gapL}, right gap ${s.gapR}\n`
-          + `           max-width:${s.maxWidth}  margin-left:${s.marginLeft}  margin-right:${s.marginRight}`);
+          + `           ${s.detail}`);
       }
     }
     if (problems.length) {

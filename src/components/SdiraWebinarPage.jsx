@@ -735,7 +735,12 @@ export default function SdiraWebinarPage() {
           text-transform: uppercase; color: var(--fg-3); margin-top: 6px; line-height: 1.35; }
 
         /* ---- faq ---- */
+        /* Two columns on wide screens so an open answer fills its item instead of
+           trailing off across a 1200px row. */
         .sd-faq { display: grid; gap: 10px; }
+        @media (min-width: 1000px) {
+          .sd-faq { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+        }
         .sd-faq-item { background: var(--surface); border: 1px solid var(--border);
           border-radius: var(--radius-lg); padding: 4px 22px; }
         .sd-faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -743,7 +748,7 @@ export default function SdiraWebinarPage() {
         .sd-faq-item summary::-webkit-details-marker { display: none; }
         .sd-faq-item summary svg { flex: none; color: var(--fg-3); transition: transform var(--dur-base) var(--ease-out); }
         .sd-faq-item[open] summary svg { transform: rotate(180deg); }
-        .sd-faq-item p { margin: 0 0 20px; font-size: var(--text-sm); color: var(--fg-2); line-height: 1.72; max-width: 72ch; }
+        .sd-faq-item p { margin: 0 0 20px; font-size: var(--text-sm); color: var(--fg-2); line-height: 1.72; }
 
         /* ---- final ---- */
         .sd-final { position: relative; overflow: hidden; border-radius: var(--radius-2xl); text-align: center;
@@ -758,7 +763,11 @@ export default function SdiraWebinarPage() {
         .sd-disc { margin: 34px auto 0; max-width: 82ch; color: rgba(234,243,226,0.5); font-size: 11px; line-height: 1.65; }
 
         /* ---- sticky bar ---- */
-        .sd-sticky { position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; z-index: 60;
+        /* Centred with auto inline margins, NOT left:50% + translateX(-50%):
+           the psb-rise entrance animation ends on "transform: none", which would
+           wipe out a centring translate and shunt the bar half its width right. */
+        .sd-sticky { position: fixed; left: 0; right: 0; margin-inline: auto; width: fit-content;
+          bottom: 20px; z-index: 60;
           display: flex; align-items: center; gap: 20px; padding: 12px 12px 12px 22px;
           border-radius: var(--radius-pill); animation: psb-rise var(--dur-slow) var(--ease-out) both; }
         .sd-sticky-txt { display: flex; flex-direction: column; line-height: 1.25; }

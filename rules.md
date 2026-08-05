@@ -120,6 +120,10 @@ platform used for the AlphaMaven campaign.
   anchor links scroll on the home page and fall back to `/#id` off-page via `go()`). A link is
   marked current for its own path *and* its sub-paths, so `/events/<slug>` keeps *Events* lit.
   The pill now carries nine links, so `responsive.css` collapses it to the burger at **1180px**.
+- **Never put a backtick inside a component's `<style>{` … `}</style>` block** — not even in a
+  CSS comment. It closes the template literal and the build dies with a misleading
+  `Expected "}" but found …`. Use plain quotes when quoting a CSS property in a comment. (This
+  has cost two debugging cycles; the error never points at the comment.)
 - **Layout: a page must fill its container at every width.** This has now broken twice, so it
   is a hard rule:
   1. One container width per page — **1240px, centred** (`max-width: 1240px; margin: 0 auto`).
@@ -138,6 +142,15 @@ platform used for the AlphaMaven campaign.
      A bare `max-width` on a block element does **not** centre it — it pins it left and leaves a
      dead gutter on the right that grows with the viewport. On a 1440px laptop that reads as a
      wide margin; on a 2560px monitor it reads as a broken page.
+  5. **The rule applies to content that is collapsed or off-screen too.** An accordion answer is
+     laid out only once open, so a `max-width` there is invisible until a user clicks — the FAQ
+     answers shipped stranded for exactly this reason. The audit now forces every `<details>`
+     open and scrolls past the fold before measuring; don't reason your way around it.
+  6. **Never centre a pinned element with `left: 50%` + `translateX(-50%)` if it also has an
+     entrance animation.** `psb-rise` (and any keyframe ending on `transform: none`) wipes out
+     the centring translate, and the element jumps right by half its width once the animation
+     settles. Use `left: 0; right: 0; margin-inline: auto; width: fit-content` instead — no
+     transform to clobber.
   Verify with **`npm run audit:layout`** (see section 9) — do not eyeball it at one width, and do
   not reason about whether a gap "looks deliberate". Measure it.
 - **Events:** `src/data/events.js` is the single source of truth for `/events` and every event
@@ -253,10 +266,16 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
   - **horizontal overflow** (the page scrolls sideways),
   - **stranded boxes** — a normal-flow block that paints a box, is capped narrower than its
     container, and is not centred (see the Layout rule in section 6), and
-  - **stranded text** — a prose block abandoning more than a third of its row. This is the check
+  - **stranded text** — a prose block abandoning more than a quarter of its row. This is the check
     that catches the "half-column" look; it found a live instance on `/verified` the day it was
     written. It reports the selector, its `max-width`, and its margins, so the fix is usually
-    one line (or wrapping the head into two columns).
+    one line (or wrapping the head into two columns), and
+  - **off-centre pinned elements** — a fixed/sticky bar that means to be centred but is not,
+    which is what an animation ending on `transform: none` does to `translateX(-50%)`.
+
+  Before measuring it forces every `<details>` open and scrolls past the fold, so collapsed
+  accordions and scroll-triggered bars cannot hide from it. Both of those were real blind spots:
+  the FAQ answers and the sticky CTA bar each shipped broken while the audit reported clean.
   Zero deps (Node's built-in `fetch` + `WebSocket`); it starts and cleans up its own Chrome.
   Grid/flex children and inline elements are deliberately exempt — they are sized by their
   container, not their own margins. Unit tests cannot catch this class of bug; only a browser can.

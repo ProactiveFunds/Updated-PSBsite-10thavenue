@@ -116,6 +116,14 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
   the same bug on `/verified` (`.vf-section-head`, capped at 60ch, stranding 573px); fixed there
   too. The old guidance in `rules.md` — "only raw text is capped… text stopping early looks
   intentional" — was wrong and has been rewritten.
+- **Two audit blind spots closed.** The FAQ answers (`max-width: 72ch`) and the sticky CTA bar
+  both shipped broken while the audit reported clean, because it only measured what was visible
+  at scroll 0 with accordions shut. It now forces every `<details>` open and scrolls past the
+  fold before probing, and gained an **off-centre pinned element** check. The sticky bar's cause
+  is worth remembering: it was centred with `left: 50%` + `translateX(-50%)`, and the `psb-rise`
+  entrance animation ends on `transform: none`, which wiped out the centring translate and
+  shunted the bar half its width right. It now centres with `margin-inline: auto` and no
+  transform. The FAQ runs as two columns above 1000px so an open answer fills its item.
 
 **July 2026**
 - **Design system synced to Claude Design** (`claude.ai/design`) so its design agent builds new

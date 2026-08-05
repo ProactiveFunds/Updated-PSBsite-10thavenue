@@ -132,9 +132,13 @@ export default function AssetsExplorer() {
     <section style={{ maxWidth: 1240, margin: '0 auto', padding: '40px 22px 0' }}>
       {/* Header + KPIs */}
       <div style={{ marginBottom: 28 }}>
-        <span className="eyebrow">Portfolio</span>
-        <h1 style={{ margin: '12px 0 0', fontSize: 'var(--text-4xl)', letterSpacing: '-0.025em', lineHeight: 1.05 }}>The portfolio, in detail.</h1>
-        <p className="lead" style={{ maxWidth: '52ch', margin: '14px 0 0', fontSize: 'var(--text-base)' }}>Every community we hold — filter, compare, and open any asset to see occupancy, thesis, and impact without leaving the page.</p>
+        <div className="asset-head">
+          <div>
+            <span className="eyebrow">Portfolio</span>
+            <h1 style={{ margin: '12px 0 0', fontSize: 'var(--text-4xl)', letterSpacing: '-0.025em', lineHeight: 1.05 }}>The portfolio, in detail.</h1>
+          </div>
+          <p className="lead" style={{ margin: 0, fontSize: 'var(--text-base)' }}>Every community we hold — filter, compare, and open any asset to see occupancy, thesis, and impact without leaving the page.</p>
+        </div>
         <div className="asset-kpis">
           {[['Assets', kpis.count], ['States', kpis.states], ['Total units', kpis.units || '—'], ['Avg occupancy', kpis.avgOcc != null ? kpis.avgOcc + '%' : '—']].map(([l, v]) => (
             <div key={l} className="asset-kpi"><div className="figure" style={{ fontSize: 'var(--text-2xl)', fontWeight: 600 }}>{v}</div><div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', marginTop: 2 }}>{l}</div></div>
@@ -226,6 +230,13 @@ export default function AssetsExplorer() {
       </div>
 
       <style>{`
+        /* Heading left, lead right, so the row fills instead of stranding the
+           lead in the left half. See rules.md section 6 "Layout". */
+        .asset-head { display: grid; gap: 14px; }
+        @media (min-width: 900px) {
+          .asset-head { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: clamp(36px, 5vw, 76px); align-items: end; }
+        }
         .asset-kpis { display: flex; gap: 38px; margin-top: 28px; flex-wrap: wrap; }
         .asset-filters { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 22px; }
         .asset-search { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 220px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0 14px; }
