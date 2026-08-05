@@ -81,13 +81,15 @@ export default function EventsPage() {
           <div className="ev-hero-glow" />
           <div className="ev-hero-inner">
             <span className="eyebrow-pill ev-eyebrow">Live sessions &amp; webinars</span>
-            <h1 className="ev-h1">The conversations we wish somebody had had with us.</h1>
-            <p className="ev-lead">
-              Every so often we bring in someone who genuinely knows their corner of this world —
-              custodians, tax specialists, operators — and give them an hour and an open floor.
-              No pitch decks, no hard sell. Just the things that turn out to matter, explained
-              early enough to be useful.
-            </p>
+            <div className="ev-hero-grid">
+              <h1 className="ev-h1">The conversations we wish somebody had had with us.</h1>
+              <p className="ev-lead">
+                Every so often we bring in someone who genuinely knows their corner of this world —
+                custodians, tax specialists, operators — and give them an hour and an open floor.
+                No pitch decks, no hard sell. Just the things that turn out to matter, explained
+                early enough to be useful.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -147,12 +149,19 @@ export default function EventsPage() {
           background: linear-gradient(158deg, var(--forest-700) 0%, var(--forest-900) 70%, #071a0f 100%); }
         .ev-hero-glow { position: absolute; inset: 0; pointer-events: none;
           background: radial-gradient(720px 560px at 84% -10%, rgba(149,196,92,0.20), transparent 62%); }
-        .ev-hero-inner { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 88px 22px 92px; }
-        .ev-eyebrow { margin-bottom: 24px; background: rgba(255,255,255,0.10); color: #eaf3e2;
+        /* Hero runs as two columns on wide screens — heading left, lead right — so
+           the row is filled instead of stranding both in the left half. */
+        .ev-hero-inner { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 88px 22px 92px; }
+        .ev-eyebrow { margin-bottom: 26px; background: rgba(255,255,255,0.10); color: #eaf3e2;
           border: 1px solid rgba(255,255,255,0.26); font-weight: 600; }
-        .ev-h1 { margin: 0 0 20px; font-family: var(--font-editorial); font-weight: 600; color: #fff;
-          font-size: clamp(2.1rem, 4.2vw, 3.2rem); line-height: 1.08; letter-spacing: -0.024em; max-width: 20ch; }
-        .ev-lead { margin: 0; max-width: 60ch; color: rgba(238,246,232,0.82); line-height: 1.72; font-size: var(--text-base); }
+        .ev-hero-grid { display: grid; gap: 22px; }
+        @media (min-width: 900px) {
+          .ev-hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: clamp(36px, 5vw, 76px); align-items: end; }
+        }
+        .ev-h1 { margin: 0; font-family: var(--font-editorial); font-weight: 600; color: #fff;
+          font-size: clamp(2.1rem, 4.2vw, 3.2rem); line-height: 1.08; letter-spacing: -0.024em; }
+        .ev-lead { margin: 0; color: rgba(238,246,232,0.82); line-height: 1.72; font-size: var(--text-base); }
 
         /* featured card */
         .ev-feature { display: grid; grid-template-columns: 1fr 300px; gap: 0; overflow: hidden;
@@ -170,7 +179,7 @@ export default function EventsPage() {
         .ev-feature-h { margin: 0; font-family: var(--font-editorial); font-weight: 600; color: var(--fg-1);
           font-size: clamp(1.6rem, 3vw, 2.15rem); line-height: 1.14; letter-spacing: -0.022em; }
         .ev-feature-sub { margin: 8px 0 0; font-size: var(--text-lg); color: var(--brand); font-weight: 500; }
-        .ev-feature-p { margin: 18px 0 0; max-width: 60ch; color: var(--fg-2); line-height: 1.72; font-size: var(--text-base); }
+        .ev-feature-p { margin: 18px 0 0; color: var(--fg-2); line-height: 1.72; font-size: var(--text-base); }
         .ev-meta { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 0; }
         .ev-meta span { display: inline-flex; align-items: center; gap: 7px; font-size: var(--text-xs);
           font-weight: 600; color: var(--fg-2); background: var(--bg-sunken); padding: 0.55em 0.9em;

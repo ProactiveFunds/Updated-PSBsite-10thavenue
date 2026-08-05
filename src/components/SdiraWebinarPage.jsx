@@ -89,6 +89,22 @@ function scrollToId(id) {
   };
 }
 
+// Section heading. With copy, it runs as two columns on wide screens — heading
+// left, copy right — so the row is filled while every line stays at a readable
+// measure. A paragraph capped at ~64ch inside a 1240px container would strand
+// half the row, which reads as a broken page. See rules.md section 6 "Layout".
+function SecHead({ eyebrow, title, children }) {
+  return (
+    <div className={`sd-sec-head${children ? ' sd-sec-head-split' : ''}`}>
+      <div>
+        <span className="eyebrow">{eyebrow}</span>
+        <h2 className="sd-h2">{title}</h2>
+      </div>
+      {children ? <div className="sd-sec-head-copy">{children}</div> : null}
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------------ hero -- */
 
 function EventMeta({ tone = 'dark' }) {
@@ -236,9 +252,7 @@ function Dream() {
   const impact = grow(amt, IMPACT_RATE, YEARS);
   return (
     <section className="sd-sec">
-      <span className="eyebrow">Why this evening</span>
-      <h2 className="sd-h2">The retirement you actually pictured.</h2>
-      <div className="sd-prose">
+      <SecHead eyebrow="Why this evening" title="The retirement you actually pictured.">
         <p>
           Most retirement arithmetic is built quietly on four or five percent and a certain amount
           of hope. It is the number underneath everything else — whether you stop at sixty-two or
@@ -254,7 +268,7 @@ function Dream() {
           Applied patiently across a decade, that one change is the difference between a
           comfortable retirement and a generous one.
         </p>
-      </div>
+      </SecHead>
 
       <div className="sd-calc">
         <div className="sd-calc-head">
@@ -301,14 +315,13 @@ function Dream() {
 function Learn() {
   return (
     <section className="sd-sec">
-      <div className="sd-sec-head">
-        <span className="eyebrow">What you will walk away with</span>
-        <h2 className="sd-h2">Four things most people learn ten years too late.</h2>
-        <p className="sd-sec-sub">
+      <SecHead eyebrow="What you will walk away with" title="Four things most people learn ten years too late.">
+        <p>
           No slides about market outlook. Just the mechanics of an account you are already
-          allowed to open, explained by somebody who sets them up every day.
+          allowed to open, explained by somebody who sets them up every day — and the handful of
+          details that decide whether the whole thing works the way you expect it to.
         </p>
-      </div>
+      </SecHead>
       <div className="sd-learn">
         {LEARN.map((c) => (
           <div key={c.title} className="sd-learn-card">
@@ -334,7 +347,7 @@ function Speaker() {
             <Ic name="linkedin" size={16} />LinkedIn
           </a>
         </div>
-        <div>
+        <div className="sd-speaker-bio">
           <span className="eyebrow">Your guest</span>
           <h2 className="sd-h2 sd-h2-tight">Meet Jeff Minnick.</h2>
           <p className="sd-speaker-role">{EVENT.speaker.title} · <a href={EVENT.speaker.orgUrl} target="_blank" rel="noreferrer">Directed IRA</a></p>
@@ -352,9 +365,17 @@ function Speaker() {
               named by Inc. 5000 several times over as the fastest-growing IRA provider in the
               industry, with more than a thousand five-star client reviews behind it.
             </p>
-            <p className="sd-pull">He is not coming to sell you a bond. He is coming to explain the account.</p>
           </div>
         </div>
+        <aside className="sd-speaker-aside">
+          <p className="sd-pull">He is not coming to sell you a bond. He is coming to explain the account.</p>
+          <ul className="sd-speaker-points">
+            <li>What the account can and cannot hold</li>
+            <li>Rollovers and transfers, step by step</li>
+            <li>Prohibited transactions, in plain English</li>
+            <li>Live Q&amp;A — bring your own situation</li>
+          </ul>
+        </aside>
       </div>
     </section>
   );
@@ -365,11 +386,12 @@ function Speaker() {
 function Agenda() {
   return (
     <section id="agenda" className="sd-sec" style={{ scrollMarginTop: 92 }}>
-      <div className="sd-sec-head">
-        <span className="eyebrow">The hour</span>
-        <h2 className="sd-h2">How the evening runs.</h2>
-        <p className="sd-sec-sub">Tight, useful, and finished on time. The last stretch belongs to you.</p>
-      </div>
+      <SecHead eyebrow="The hour" title="How the evening runs.">
+        <p>
+          Tight, useful, and finished on time. Jeff takes the first three quarters and the last
+          stretch belongs to you — no hard stop while there are still hands up.
+        </p>
+      </SecHead>
       <div className="sd-agenda">
         {AGENDA.map(([n, title, mins, body]) => (
           <div key={n} className="sd-agenda-row">
@@ -413,21 +435,19 @@ function ForYou() {
 function Hosts() {
   return (
     <section className="sd-sec">
-      <div className="sd-sec-head">
-        <span className="eyebrow">Your hosts</span>
-        <h2 className="sd-h2">Why we are the ones putting this on.</h2>
-        <p className="sd-sec-sub">
+      <SecHead eyebrow="Your hosts" title="Why we are the ones putting this on.">
+        <p>
           We finance naturally occurring affordable housing — the manufactured-home communities,
           workforce apartments and SRO buildings quietly holding up the bottom half of the American
           housing market. It is exactly the kind of asset a Self-Directed IRA was built to hold:
           real, occupied, income-producing, and boring in the best possible way.
         </p>
-        <p className="sd-sec-sub">
+        <p>
           We are not the custodian and we take nothing for the account. We simply meet a great many
           investors who wish somebody had explained this to them ten years sooner. So we asked Jeff.
           The whole team will be on the call.
         </p>
-      </div>
+      </SecHead>
       <div className="sd-team">
         {TEAM.map((m) => (
           <div key={m.name} className="sd-team-card">
@@ -446,10 +466,12 @@ function Hosts() {
 function Faq() {
   return (
     <section className="sd-sec">
-      <div className="sd-sec-head">
-        <span className="eyebrow">Before you ask</span>
-        <h2 className="sd-h2">The honest answers.</h2>
-      </div>
+      <SecHead eyebrow="Before you ask" title="The honest answers.">
+        <p>
+          The things people email us about after they register — answered here so you do not have
+          to spend a question on them during the Q&amp;A.
+        </p>
+      </SecHead>
       <div className="sd-faq">
         {FAQ.map(([q, a]) => (
           <details key={q} className="sd-faq-item">
@@ -546,13 +568,25 @@ export default function SdiraWebinarPage() {
            *visible box* without an auto inline margin pins it left and leaves a dead
            right gutter that grows with the viewport. */
         .sd-sec { max-width: 1240px; margin: 0 auto; padding: 104px 22px 0; }
-        .sd-sec-head { max-width: 62ch; margin-bottom: 40px; }
+
+        /* Section head: heading left, copy right, so the row is filled and each
+           column lands near 65 characters. Never cap a lone paragraph and leave
+           the other half of the row empty. */
+        .sd-sec-head { margin-bottom: 44px; }
+        .sd-sec-head-copy { display: grid; gap: 18px; }
+        .sd-sec-head-copy p { margin: 0; color: var(--fg-2); font-size: var(--text-base); line-height: 1.78; }
+        .sd-sec-head-copy strong { color: var(--fg-1); font-weight: 600; }
+        @media (min-width: 900px) {
+          .sd-sec-head-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: clamp(36px, 5vw, 76px); align-items: start; }
+        }
         .sd-h2 { margin: 14px 0 0; font-size: clamp(1.85rem, 3.4vw, 2.6rem); line-height: 1.1;
                  letter-spacing: -0.022em; color: var(--forest-700); font-weight: 600; font-family: var(--font-editorial); }
         [data-theme="dark"] .sd-h2 { color: var(--lime-300); }
         .sd-h2-tight { margin-bottom: 6px; }
-        .sd-sec-sub { color: var(--fg-2); font-size: var(--text-base); line-height: 1.72; margin: 16px 0 0; }
-        .sd-prose { display: grid; gap: 18px; margin-top: 20px; max-width: 64ch; }
+        /* No max-width: .sd-prose only ever sits inside a grid column that has
+           already set a readable measure. Capping it here would strand it. */
+        .sd-prose { display: grid; gap: 18px; margin-top: 20px; }
         .sd-prose p { color: var(--fg-2); line-height: 1.78; margin: 0; }
         .sd-prose strong { color: var(--fg-1); font-weight: 600; }
 
@@ -568,7 +602,7 @@ export default function SdiraWebinarPage() {
         .sd-h1 { margin: 0 0 22px; font-family: var(--font-editorial); font-weight: 600;
           font-size: clamp(2.3rem, 4.4vw, 3.5rem); line-height: 1.07; letter-spacing: -0.024em; color: #fff; }
         .sd-h1 em { font-style: italic; color: var(--lime-300); }
-        .sd-lead { max-width: 56ch; margin: 0 0 15px; color: rgba(238,246,232,0.84); line-height: 1.7; font-size: var(--text-base); }
+        .sd-lead { margin: 0 0 15px; color: rgba(238,246,232,0.84); line-height: 1.7; font-size: var(--text-base); }
         .sd-lead strong { color: #fff; font-weight: 600; }
         .sd-lead-last { color: var(--lime-300); font-weight: 500; }
 
@@ -645,10 +679,18 @@ export default function SdiraWebinarPage() {
         .sd-learn-p { margin: 0; font-size: var(--text-sm); color: var(--fg-2); line-height: 1.72; }
 
         /* ---- speaker ---- */
-        .sd-speaker { display: grid; grid-template-columns: 280px minmax(0, 1fr);
-          gap: clamp(28px, 4vw, 52px); align-items: start;
+        /* Three columns so the bio measure stays readable while the card fills the
+           container: portrait, bio, and the pull-quote / takeaways rail. */
+        .sd-speaker { display: grid; grid-template-columns: 240px minmax(0, 1.25fr) minmax(0, 0.85fr);
+          gap: clamp(26px, 3.4vw, 48px); align-items: start;
           background: var(--surface); border: 1px solid var(--border);
           border-radius: var(--radius-2xl); padding: clamp(28px, 3.5vw, 46px); box-shadow: var(--shadow-sm); }
+        .sd-speaker-aside { display: grid; gap: 22px; }
+        .sd-speaker-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
+        .sd-speaker-points li { position: relative; padding-left: 20px; font-size: var(--text-sm);
+          color: var(--fg-2); line-height: 1.55; }
+        .sd-speaker-points li::before { content: ""; position: absolute; left: 0; top: 8px;
+          width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
         .sd-speaker-photo { display: grid; justify-items: center; gap: 14px; }
         .sd-speaker-photo img { width: 100%; max-width: 260px; aspect-ratio: 1; border-radius: 50%;
           object-fit: cover; box-shadow: 0 0 0 4px var(--surface), 0 0 0 7px var(--lime-300), var(--shadow-lg); }
@@ -750,6 +792,10 @@ export default function SdiraWebinarPage() {
         .ta-form__submit:active { transform: scale(.98); }
 
         /* ---- responsive ---- */
+        @media (max-width: 1100px) {
+          .sd-speaker { grid-template-columns: 220px minmax(0, 1fr); }
+          .sd-speaker-aside { grid-column: 1 / -1; }
+        }
         @media (max-width: 1060px) {
           .sd-hero-inner { grid-template-columns: 1fr; gap: 40px; padding-top: 56px; }
           .sd-hero-form { position: static; }

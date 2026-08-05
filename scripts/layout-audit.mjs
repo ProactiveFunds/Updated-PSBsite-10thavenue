@@ -89,7 +89,13 @@ const PROBE = `(() => {
       || parseFloat(cs.borderTopWidth) > 0 || parseFloat(cs.borderLeftWidth) > 0
       || cs.boxShadow !== 'none'
       || cs.backgroundImage !== 'none';
-    if (!paints) continue;
+    // A prose block is just as stranded as a box: a paragraph capped at ~64ch in
+    // a 1240px container leaves half the row empty and reads as a broken page.
+    // Split the head into columns, or let it fill.
+    const prose = !paints
+      && el.querySelector(':scope > p, :scope > h1, :scope > h2, :scope > h3')
+      && el.innerText.trim().length > 140;
+    if (!paints && !prose) continue;
 
     const p = el.parentElement;
     if (!p) continue;
@@ -107,11 +113,15 @@ const PROBE = `(() => {
     // Fills its container, or is centred within it => fine.
     if (gapR <= ${GUTTER}) continue;
     if (Math.abs(gapL - gapR) <= ${GUTTER}) continue;
+    // Prose is allowed a modest trailing gutter (a measure cap that still uses
+    // most of the row); it is "stranded" once it abandons a quarter of it.
+    if (prose && gapR / avail < 0.25) continue;
 
     const key = el.tagName + '.' + el.className;
     if (seen.has(key)) continue;
     seen.add(key);
     out.push({
+      kind: paints ? 'box' : 'text',
       sel: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).trim().split(/\\s+/).join('.') : ''),
       width: Math.round(r.width), avail: Math.round(avail), gapL, gapR,
       maxWidth: cs.maxWidth, marginLeft: cs.marginLeft, marginRight: cs.marginRight,
@@ -155,7 +165,7 @@ try {
       if (!r) continue;
       if (r.overflow > 1) problems.push(`  @${w}px  HORIZONTAL OVERFLOW by ${r.overflow}px`);
       for (const s of r.stranded) {
-        problems.push(`  @${w}px  stranded box  ${s.sel}\n`
+        problems.push(`  @${w}px  stranded ${s.kind}  ${s.sel}\n`
           + `           width ${s.width} of ${s.avail} available — left gap ${s.gapL}, right gap ${s.gapR}\n`
           + `           max-width:${s.maxWidth}  margin-left:${s.marginLeft}  margin-right:${s.marginRight}`);
       }

@@ -126,14 +126,20 @@ platform used for the AlphaMaven campaign.
      That is the rhythm the nav pill and footer already use; don't invent a new one per section.
   2. **Every block inside a section spans that container edge to edge.** Cards, grids, panels,
      bordered lists — all 100% wide.
-  3. **Only raw text is capped** to a readable measure (`max-width: ~62-66ch` on the heading and
-     the paragraph itself). Text stopping early looks intentional; a *visible box* stopping
-     early looks broken.
+  3. **Text takes its measure from a column, never from a bare `max-width`.** A heading or
+     paragraph capped at ~62ch inside a 1240px container strands half the row. That is *not*
+     "intentional whitespace" — on a wide monitor it reads as a half-finished page, and it is the
+     exact thing that got flagged here twice. Give a section head **two columns** — heading left,
+     copy right, `minmax(0, 1fr) minmax(0, 1fr)`, collapsing to one column under 900px. The row
+     fills, and each column lands near 65 characters on its own with no cap at all.
+     Same rule inside a wide card: split it into columns (the speaker card runs
+     portrait / bio / pull-quote) rather than letting one text block trail off.
   4. If a box genuinely must be narrower than its container, it gets **`margin-inline: auto`**.
      A bare `max-width` on a block element does **not** centre it — it pins it left and leaves a
      dead gutter on the right that grows with the viewport. On a 1440px laptop that reads as a
      wide margin; on a 2560px monitor it reads as a broken page.
-  Verify with **`npm run audit:layout`** (see section 9) — do not eyeball it at one width.
+  Verify with **`npm run audit:layout`** (see section 9) — do not eyeball it at one width, and do
+  not reason about whether a gap "looks deliberate". Measure it.
 - **Events:** `src/data/events.js` is the single source of truth for `/events` and every event
   landing page. Store `startsAt`/`endsAt` as ISO strings **with an explicit UTC offset** and
   render through `formatEventDate`/`formatEventTime`, which pin the output to `America/New_York`.
@@ -244,10 +250,13 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
 - **`npm run audit:layout`** — run this for any change that touches layout or adds a page. With
   the dev server up (or `npm run preview`), it drives headless Chrome over CDP across every route
   at 1440/1920/2560 and fails on:
-  - **horizontal overflow** (the page scrolls sideways), and
+  - **horizontal overflow** (the page scrolls sideways),
   - **stranded boxes** — a normal-flow block that paints a box, is capped narrower than its
-    container, and is not centred (see the Layout rule in section 6). It reports the selector,
-    its `max-width`, and its margins, so the fix is usually one line.
+    container, and is not centred (see the Layout rule in section 6), and
+  - **stranded text** — a prose block abandoning more than a third of its row. This is the check
+    that catches the "half-column" look; it found a live instance on `/verified` the day it was
+    written. It reports the selector, its `max-width`, and its margins, so the fix is usually
+    one line (or wrapping the head into two columns).
   Zero deps (Node's built-in `fetch` + `WebSocket`); it starts and cleans up its own Chrome.
   Grid/flex children and inline elements are deliberately exempt — they are sized by their
   container, not their own margins. Unit tests cannot catch this class of bug; only a browser can.

@@ -107,6 +107,15 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
   1440/1920/2560 and fails on horizontal overflow or a "stranded box"; it was verified to catch
   the exact regression before being committed. Rule written up in `rules.md` section 6 (Layout)
   and added to the `CLAUDE.md` post-change checklist.
+- **Follow-up: the same fault in text form.** Filling the *boxes* was not enough — headings and
+  paragraphs capped at ~62ch still sat in the left half of a 1240px row with the other half empty.
+  Section heads (and the `/events` hero, and the speaker card) now run as **two columns** —
+  heading left, copy right, collapsing to one column under 900px — so the row fills and each
+  column lands near 65 characters with no cap at all. The audit gained a **stranded-text** check
+  (prose abandoning more than a quarter of its row), which immediately found a live instance of
+  the same bug on `/verified` (`.vf-section-head`, capped at 60ch, stranding 573px); fixed there
+  too. The old guidance in `rules.md` — "only raw text is capped… text stopping early looks
+  intentional" — was wrong and has been rewritten.
 
 **July 2026**
 - **Design system synced to Claude Design** (`claude.ai/design`) so its design agent builds new

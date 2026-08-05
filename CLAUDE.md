@@ -21,9 +21,10 @@ Operating instructions for this project (Proactive Sustainable Bonds website).
    (deep-scroll screenshots and smooth-scroll do not work in-preview; use DOM checks).
 5. **If the change touches layout or adds a page, run `npm run audit:layout`.** It must pass.
    It catches pages that don't fill their container on a wide monitor — a bug that is invisible
-   at laptop width and has shipped twice. Read the Layout rule in `rules.md` section 6 *before*
-   writing section CSS: one 1240px centred container, blocks fill it, only text is capped, and
-   any deliberately narrow box needs `margin-inline: auto`.
+   at laptop width and has been reported twice. Read the Layout rule in `rules.md` section 6
+   *before* writing section CSS: one 1240px centred container, blocks fill it, section heads run
+   as two columns rather than capping a paragraph at ~62ch, and any deliberately narrow box needs
+   `margin-inline: auto`. Do not judge by eye at one width — measure.
 
 ## Shipping
 - Commit only when asked; keep commits focused. Trailer:

@@ -102,8 +102,10 @@ function AwardSection() {
   return (
     <section className="vf-section" id="award">
       <div className="vf-section-head">
-        <span className="eyebrow">Recognition · 2026</span>
-        <h2 className="editorial">Named a Real Leaders® Top Impact Investor.</h2>
+        <div>
+          <span className="eyebrow">Recognition · 2026</span>
+          <h2 className="editorial">Named a Real Leaders® Top Impact Investor.</h2>
+        </div>
         <p className="vf-section-sub">
           We’re proud to be named to the <strong>Real Leaders® 2026 Top Impact Investors List</strong> — a global recognition of the
           organizations turning capital into measurable good. It’s an honor that reflects the same independently verified, real-world
@@ -175,8 +177,10 @@ export default function VerifiedPage() {
           <React.Fragment key={s.key}>
             <section className="vf-section" id={s.key}>
               <div className="vf-section-head">
-                <span className="eyebrow">{s.eyebrow}</span>
-                <h2 className="editorial">{s.title}</h2>
+                <div>
+                  <span className="eyebrow">{s.eyebrow}</span>
+                  <h2 className="editorial">{s.title}</h2>
+                </div>
                 <p className="vf-section-sub">{s.sub}</p>
               </div>
               <div className="vf-grid">
@@ -224,7 +228,13 @@ export default function VerifiedPage() {
         .vf-logo-lg img { height: auto; max-height: 60px; width: auto; max-width: min(440px, 74vw); }
 
         .vf-section { max-width: 1180px; margin: 72px auto 0; padding: 0 22px; }
-        .vf-section-head { max-width: 60ch; }
+        /* Heading left, copy right, so the row is filled and neither column runs
+           past a readable measure. See rules.md section 6 "Layout". */
+        .vf-section-head { display: grid; gap: 16px; }
+        @media (min-width: 900px) {
+          .vf-section-head { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: clamp(36px, 5vw, 76px); align-items: start; }
+        }
         .vf-section-head h2 { margin: 12px 0 0; font-size: var(--text-3xl); letter-spacing: -0.02em; color: var(--forest-700); }
         [data-theme="dark"] .vf-section-head h2 { color: var(--lime-300); }
         .vf-section-sub { margin: 10px 0 0; color: var(--fg-2); font-size: var(--text-base); line-height: 1.55; }
