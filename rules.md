@@ -98,6 +98,15 @@ platform used for the AlphaMaven campaign.
   `https://tenthavenue.io/api/forms/<form-key>/submit` targeting a hidden `<iframe>`.
 - The home page intake/contact form is the section with **`id="get-started"`**
   (heading "Tell us about your goals."). The nav "Contact us" link points to `#get-started`.
+- **Form keys in use:** `webform` (home intake), `ira` (`/ira`), `sdira-webinar`
+  (`/events/self-directed-ira` registration). Give a campaign its own key whenever the list must
+  stay separate — webinar registrants receive a Zoom link and must not land in the evergreen
+  enquiry lists.
+- **The success state is driven by the hidden iframe's `onLoad`, not by a real API response.** If
+  a form key does not exist in Tenth Avenue the page still shows "you're in" while the submission
+  goes nowhere. Confirm the key exists before launching any page that introduces a new one.
+- Custom field names are per-form (`field_9zklv` = accredited status, `field_yapu2` = SMS consent
+  on `webform`/`ira`). Do not assume they carry across to a new form key.
 
 ---
 
@@ -108,7 +117,15 @@ platform used for the AlphaMaven campaign.
 - **Structure:** components in `src/components/`, routes in `src/pages/`, data in
   `src/data/`, shared logic in `src/lib/`, styles in `src/styles/`.
 - **Nav + footer:** `src/components/MktChrome.jsx` (`MktNav` uses the `NAV_LINKS` array;
-  anchor links scroll on the home page and fall back to `/#id` off-page via `go()`).
+  anchor links scroll on the home page and fall back to `/#id` off-page via `go()`). A link is
+  marked current for its own path *and* its sub-paths, so `/events/<slug>` keeps *Events* lit.
+  The pill now carries nine links, so `responsive.css` collapses it to the burger at **1180px**.
+- **Events:** `src/data/events.js` is the single source of truth for `/events` and every event
+  landing page. Store `startsAt`/`endsAt` as ISO strings **with an explicit UTC offset** and
+  render through `formatEventDate`/`formatEventTime`, which pin the output to `America/New_York`.
+  Note that "6:30 PM EST" in an August brief means Eastern *daylight* time (`-04:00`); labelling
+  it "ET" in the UI is correct year-round. `tests/events.test.js` guards the weekday, the
+  displayed time, and the UTC window in the Google-Calendar link.
 - **Fonts (self-hosted):** woff2 files in `public/fonts/`, declared via `@font-face` in
   `src/styles/global.css`. Families: **Hanken Grotesk** (sans/UI), **Newsreader**
   (editorial serif), **Spline Sans Mono** (numbers/labels).
@@ -157,6 +174,34 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
 - LinkedIn Featured image size used: **1200 x 644**. OG/Twitter preview tags matter for link
   cards; refresh via LinkedIn Post Inspector after changing them.
 
+### The investor deck (`Presentations/PSB Deck_7.26.26.pptx`)
+
+- **Every slide is one flattened full-bleed PNG** (`ppt/media/imageN.png`, 3024 x 1964) - a
+  screenshot of the PDF open in macOS Preview. There is no editable text or picture placeholder,
+  so "change the photo on slide N" means editing pixels in that PNG.
+- PowerPoint hides the macOS chrome with an `<a:srcRect>` crop on the picture, e.g. slide 6 is
+  `l=1385 t=13775 r=3112 b=5303` (hundredths of a percent). Keep the PNG's dimensions identical
+  and the crop still lines up; nothing in the XML needs touching.
+- **Slide 6 = the team slide.** Six rounded-rect tiles, `y 681..1186` (506 px tall), x ranges
+  `155-560, 604-1009, 1053-1456, 1500-1905, 1949-2354, 2399-2801` (~406 wide, pitch ~449),
+  corner radius ~20 px, tile fill **#E4EAE6**, page background **#FFFDFA**.
+- Framing convention on those tiles: face-box height ~0.40 of tile height, crown ~0.05 down from
+  the top, face centred, subject bleeding off the bottom and both sides.
+- **Repackage by copying the zip entry-by-entry** and swapping only the one PNG - that keeps every
+  other part byte-identical. Rebuilding via python-pptx is unnecessary and riskier.
+- Source headshots live in `Headshots/` (gitignored). Most are transparent cutouts; composite them
+  onto #E4EAE6. `dr.-Van-1-green.jpg` is a green-screen frame - key it with a border-connected
+  component so his green tie survives. `Bob-Tataro` (a PNG with no extension) has white hair on a
+  light grey backdrop, so **luminance alone cannot key it** — but the backdrop is neutral/cool
+  (B >= R) while his hair is warm (R > B), so `(min>188) & (sat<14) & (B-R > -1.5)`, restricted to
+  the border-connected component, separates them cleanly. Done in Aug 2026 to produce
+  `public/img/team/bob.webp`; reuse that instead of re-keying.
+- Matching the existing cutouts' framing: **1110x1100**, crown ~1% down from the top, head ~0.42
+  of the frame width, head centred, shoulders bleeding off both sides.
+- `scipy.ndimage.binary_closing` **erodes the mask at the image border** (default
+  `border_value=0`). Pass `border_value=1` or the outermost rows/columns silently flip to
+  foreground and every crop measured off that mask comes out wrong.
+
 ---
 
 ## 8. Verification / preview quirks (learned)
@@ -196,7 +241,29 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
 
 ---
 
-## 11. Security rules
+## 11. Claude Design sync (design system)
+
+The site's reusable components are published to **Claude Design** (`claude.ai/design`) so its
+design agent builds new PSB screens from our real components rather than generic ones.
+
+- Project: `Proactive Sustainable Bonds` — <https://claude.ai/design/p/2fdd6050-b7b0-4fea-910a-fc3fa53329e9>
+- Sync inputs are committed under **`.design-sync/`**; `ds-bundle/` (output) and `.ds-sync/`
+  (staged converter) are gitignored.
+- **Read `.design-sync/NOTES.md` before re-syncing.** This repo is an Astro site, not a component
+  library, so the sync needs a hand-written bundle entry, hand-written prop contracts, and two
+  generated CSS inputs. The traps are documented there — the biggest are (a) `@font-face` must be
+  stripped from the concatenated stylesheet or dead duplicates silently shadow the brand fonts,
+  and (b) the components' absolute `/img/…` paths 404 outside the Astro server and are inlined as
+  data URIs by `prepare-assets.py`.
+- Scope is **reusable components only** — page-level components (`App`, `Q3SpecialPage`, …) and
+  the leaflet/dataset-bound ones (`PortfolioMap`, `AssetsExplorer`) are deliberately excluded.
+- `.design-sync/conventions.md` is the brief the design agent reads. It enumerates the real class
+  vocabulary; keep it true. (Note there is **no `.btn-primary`** — it is `.btn-accent` / `.btn-brand`
+  / `.btn-ghost` / `.btn-glass` / `.btn-quiet`.)
+
+---
+
+## 12. Security rules
 
 - Never paste, print, commit, or store secrets (GitHub PAT, Supabase keys, deploy hook URLs,
   API keys). Mask credentials in command output.

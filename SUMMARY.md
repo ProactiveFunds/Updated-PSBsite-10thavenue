@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-07-22_
+_Last updated: 2026-08-05_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -36,9 +36,13 @@ wired, plus conventions and gotchas), and **`CLAUDE.md`** for the working rules.
 | `/team` | `team.astro` -> `AboutTeam.jsx` | About + team as transparent-cutout photos + bios. Dr. Williams has an "Author of" book strip. (`/about` redirects to `/team`.) |
 | `/OurProcess` | how-it-works page | "How it works". |
 | `/digest`, `/digest/<slug>`, `/digest/blog[/<slug>]` | `digest/` <- `digestPages.js`, `blogPosts.js` | Editorial Digest: cover feature + 11 content pages + 27 blog posts (Markdown). |
+| `/events` | `events/index.astro` -> `EventsPage.jsx` | Events summary: upcoming sessions (featured card per event, speaker rail, countdown), past sessions, and a "keep me posted" CTA. Driven by `src/data/events.js`; renders an empty state when nothing is scheduled. |
+| `/events/self-directed-ira` | `events/self-directed-ira.astro` -> `SdiraWebinarPage.jsx` | Landing page for the SDIRA webinar (Tue 18 Aug 2026, 6:30 PM ET) with guest Jeff Minnick of Directed IRA. Two-column hero with a sticky registration card, illustrative compounding comparison, agenda, speaker bio, all six team members, FAQ, sticky CTA bar. Has OG/Twitter tags plus `Event` JSON-LD. |
 
 Top nav (`MktChrome.jsx` `NAV_LINKS`): Opportunities, Our Impact, ProActively Verified, How it
-works, Assets, Team, Digest, **Contact us** (-> `#get-started`).
+works, Assets, Team, **Events**, Digest, **Contact us** (-> `#get-started`). The old "Sign in"
+button was removed (Aug 2026) - it was a dead button with no destination. Nav links light up on
+their sub-pages too (`/events/…` keeps *Events* active).
 
 ## Invest CTA routing (where "Start investing" / "Invest now" goes)
 Two destinations, deliberately kept apart. Guarded by `tests/invest-links.test.js`.
@@ -73,7 +77,45 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
 
 ## Recent work log
 
+**August 2026**
+- **Events section added.** New `/events` summary page and the first event landing page,
+  `/events/self-directed-ira` - a webinar on **Tuesday 18 August 2026, 6:30 PM ET** with guest
+  **Jeff Minnick, VP Relationship - New Accounts at Directed IRA**. Structure follows the
+  milapennchazak.com/tax-strategy reference (hero + sticky register card, value section,
+  agenda, speaker, hosts, FAQ, final CTA) but rebuilt in the Proactive design system.
+  - `src/data/events.js` is the single source of truth for both pages (ISO timestamps with
+    explicit offsets, `formatEventDate/Time`, `daysUntil`, `calendarUrl`). Covered by
+    `tests/events.test.js` (12 cases, incl. that the date really is a Tuesday and that the
+    Google-Calendar window is 22:30-23:30 UTC).
+  - **Registration posts to a dedicated Tenth Avenue form key, `sdira-webinar`** (constant
+    `TA_FORM` in `SdiraWebinarPage.jsx`). This form must exist in Tenth Avenue before launch -
+    it is deliberately separate from `ira`/`webform` so the Zoom link only goes to registrants.
+  - Nav: **"Sign in" removed**, **"Events" added**; nav collapse breakpoint moved 1080 -> 1180px
+    because the pill now carries nine links.
+  - New assets: `public/img/team/bob.webp` (Bob Totaro keyed from `Headshots/Bob-Tataro` -
+    his backdrop is neutral/cool while his white hair is warm, so `B - R` separates them where
+    luminance cannot), `public/img/speakers/jeff-minnick.webp`, and the 1200x644 link card
+    `public/img/events-sdira-og.png`.
+  - Copy is deliberately dream-result-led rather than sales-led; the compounding panel is
+    labelled illustrative (5% baseline vs 12%, the midpoint of the site's 9-15% range).
+
 **July 2026**
+- **Design system synced to Claude Design** (`claude.ai/design`) so its design agent builds new
+  PSB screens out of our real components instead of generic ones.
+  Project: <https://claude.ai/design/p/2fdd6050-b7b0-4fea-910a-fc3fa53329e9>.
+  - **21 components** exported — the reusable surface only, in 5 groups: *chrome* (MktNav,
+    MktFooter, ThemeToggle), *hero* (Hero, ImpactBand, Photo), *sections* (SectionHead,
+    HomeSectionHead, Partners, SocialProof, Insights, Process, Testimonial, BeforeAfter),
+    *investing* (HomeCalculator, ReturnComparison, Opportunities, Opportunities2, InvestModal,
+    IntakeForm), *primitives* (Ic). Page-level and leaflet/data-bound components are excluded.
+  - Each ships an authored preview (34 cells, all graded good), a hand-written props contract,
+    and a usage doc. Final validate: **21/21 render cleanly, zero warnings**.
+  - Sync inputs live in **`.design-sync/`** (committed): `config.json`, `entry.mjs`,
+    `prepare-css.mjs`, `prepare-assets.py`, `previews/`, `docs/`, `conventions.md`, `NOTES.md`.
+    Build output (`ds-bundle/`) and the staged converter (`.ds-sync/`) are gitignored.
+  - Re-sync is one command, but **read `.design-sync/NOTES.md` first** — it documents the two
+    non-obvious traps (duplicate `@font-face` shadowing the brand fonts, and `/img/` paths that
+    need data-URI inlining to survive outside the Astro server).
 - **Q3 invest CTAs repointed to the Tenth Avenue portal.** All three "Start investing" buttons on
   `/q3-special` (hero, offering, final CTA) now go to
   `https://portal.tenthavenue.io/start/8ed1cd5979977726126230c2e3cdd7004c8c3a0f` instead of
@@ -122,6 +164,11 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
   saved alongside the original as `...Overview (100K-2M).pdf` in the project root.
 - **"Contact us" nav link** added (`MktChrome.jsx`), scrolls to the intake form (`#get-started`).
   Committed `a6670c1`, pushed to both remotes.
+- **Investor deck team slide re-shot** - all six headshots on slide 6 ("Experienced Stewards of
+  Capital") of `Presentations/PSB Deck_7.26.26.pptx` replaced with the current green-tie set from
+  `Headshots/`. The deck's slides are flattened screenshots, so this was a pixel edit of
+  `ppt/media/image6.png` (see `rules.md` s7 for the geometry). Written as
+  `Presentations/PSB Deck_7.26.26 (new headshots).pptx`; the original is untouched.
 - **Project memory added:** `rules.md` (operating manual), `CLAUDE.md` (working rules), this `SUMMARY.md`,
   and a `tests/` unit-test suite (Node's built-in runner) covering the data layer and pure utilities.
 
@@ -135,6 +182,11 @@ only after a Render Manual Deploy (latest = `c4a8469`):
 ---
 
 ## Open items / known issues
+0. **Create the `sdira-webinar` form in Tenth Avenue** before `/events/self-directed-ira` goes
+   live, and wire it to send the Zoom link + calendar hold. Until it exists the registration
+   form will post into the void (the page still shows its success state, because the confirmation
+   is driven by the hidden iframe's load event). Also decide whether Bob Totaro should join
+   `src/data/team.js` so he appears on `/team` too - he is currently only on the webinar page.
 1. **Number consistency** - site/assets say 27 / 756; deck + cover letters say 22 / 647. Pick one canonical set.
 2. **Residual duplicate** - "252 Ceceile St" vs "252 Cecile Street" (Denmark, SC) is one property; true unique ~26.
 3. **Greg's headshot** is cropped tighter than the others; a re-export with more headroom would make all five uniform.

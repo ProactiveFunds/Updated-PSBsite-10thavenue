@@ -52,13 +52,12 @@ main { overflow-x: clip; }
 .nav-mobile-actions { display: flex; gap: 10px; margin-top: 10px; padding: 2px; }
 .nav-mobile-actions .btn { flex: 1; justify-content: center; }
 
-/* Nav: 7 links including the long "ProActively Verified™" don't fit the pill on
-   small laptops, so collapse to the hamburger menu earlier than the rest of the
+/* Nav: 9 links including the long "ProActively Verified™" don't fit the pill on
+   laptops, so collapse to the hamburger menu earlier than the rest of the
    tablet layout (which stays at 900px). */
-@media (max-width: 1080px) {
+@media (max-width: 1180px) {
   .nav-links { display: none !important; }
   .nav-burger { display: inline-flex !important; }
-  .nav-signin { display: none !important; }
   .nav-actions > .btn-accent { display: none !important; }
   .nav-mobile { display: flex !important; }
 }

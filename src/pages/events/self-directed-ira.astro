@@ -1,0 +1,75 @@
+---
+import '../../styles/global.css';
+import '../../styles/responsive.css';
+import '../../styles/motion.css';
+import SdiraWebinarPage from '../../components/SdiraWebinarPage.jsx';
+import { getEvent, formatEventDate, formatEventTime } from '../../data/events.js';
+
+const event = getEvent('self-directed-ira');
+const when = `${formatEventDate(event)} at ${formatEventTime(event)}`;
+const desc = `${when} · Live on Zoom, free. Jeff Minnick of Directed IRA explains how a Self-Directed IRA actually works — what it can hold, how to move an old 401(k) without a tax bill, and how investors are earning 9–15% backed by real affordable homes.`;
+
+// Google surfaces webinars from Event structured data; keep it in step with src/data/events.js.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: `${event.title} — ${event.subtitle}`,
+  description: event.summary,
+  startDate: event.startsAt,
+  endDate: event.endsAt,
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+  location: {
+    '@type': 'VirtualLocation',
+    url: `https://www.sustainablebonds.com${event.href}`,
+  },
+  image: ['https://www.sustainablebonds.com/img/events-sdira-og.png'],
+  organizer: {
+    '@type': 'Organization',
+    name: 'Proactive Sustainable Bonds',
+    url: 'https://www.sustainablebonds.com',
+  },
+  performer: {
+    '@type': 'Person',
+    name: event.speaker.name,
+    jobTitle: event.speaker.title,
+    worksFor: { '@type': 'Organization', name: event.speaker.org },
+  },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+    url: `https://www.sustainablebonds.com${event.href}`,
+    validFrom: '2026-08-05T00:00:00-04:00',
+  },
+};
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={desc} />
+    <title>Your IRA Is Allowed to Buy Real Homes — Live Webinar, {formatEventDate(event)}</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Proactive Sustainable Bonds" />
+    <meta property="og:title" content="Your IRA is allowed to buy real homes. Nobody at the bank will tell you." />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content="https://www.sustainablebonds.com/events/self-directed-ira" />
+    <meta property="og:image" content="https://www.sustainablebonds.com/img/events-sdira-og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="644" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Your IRA is allowed to buy real homes." />
+    <meta name="twitter:description" content={desc} />
+    <meta name="twitter:image" content="https://www.sustainablebonds.com/img/events-sdira-og.png" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <SdiraWebinarPage client:load />
+  </body>
+</html>
