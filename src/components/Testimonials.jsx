@@ -40,7 +40,7 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section style={{ maxWidth: 1240, margin: '110px auto 0', padding: '0 22px' }}>
+    <section id="testimonials" style={{ maxWidth: 1240, margin: '110px auto 0', padding: '0 22px', scrollMarginTop: 90 }}>
       <div style={{ textAlign: 'center', maxWidth: '46rem', margin: '0 auto 36px' }}>
         <span className="eyebrow">Real tenant testimonials</span>
         <h2 className="editorial" style={{ margin: '14px 0 0', letterSpacing: '-0.02em', lineHeight: 1.08, color: 'var(--forest-700)', fontWeight: 600 }}>The return that moves in.</h2>

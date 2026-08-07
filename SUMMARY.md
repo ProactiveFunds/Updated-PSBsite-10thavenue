@@ -78,6 +78,14 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
 ## Recent work log
 
 **August 2026**
+- **Footer links connected.** All 16 were dead `#` placeholders. The map now lives in
+  `src/data/footerLinks.js` (data, not inline JSX, so it is testable) and every destination is a
+  real route, Digest page or on-page anchor. Anchors are written absolute (`/#id`) because the
+  footer renders on every page. Added `id="testimonials"` to `Testimonials.jsx`, which had no
+  anchor, and pointed the dead Newsletter button at `/#get-started`.
+  `tests/footer-links.test.js` asserts no placeholder survives, every page path exists in
+  `src/pages`, every Digest slug exists in `digestPages.js`, and every anchor id exists in the
+  component source — verified by breaking three links and watching it fail.
 - **Events section added.** New `/events` summary page and the first event landing page,
   `/events/self-directed-ira` - a webinar on **Tuesday 18 August 2026, 6:30 PM ET** with guest
   **Jeff Minnick, VP Relationship - New Accounts at Directed IRA**. Structure follows the
@@ -218,7 +226,11 @@ only after a Render Manual Deploy (latest = `c4a8469`):
 3. **Greg's headshot** is cropped tighter than the others; a re-export with more headroom would make all five uniform.
 4. **FAQ** (Digest) still uses the old "Bond Option 1-4 / Rapid Housing 45% total" framing; reconcile with corrected wording.
 5. **Video Library** is a "coming soon" placeholder.
-6. **Footer links** are still placeholder `#` anchors.
+6. ~~**Footer links** are still placeholder `#` anchors.~~ **Done (Aug 2026)** — wired in
+   `src/data/footerLinks.js` and guarded by `tests/footer-links.test.js`. Two labels still have no
+   dedicated destination and share a target: *Proactive QOZ Fund* points at `/#opportunities`
+   (where the QOZ Fund I card lives, but there is no QOZ page), and *Terms* shares
+   `/digest/disclosure-terms` with *Disclosures*. Give either its own page and update the map.
 7. **Before/after impact section** stays hidden until photos are provided.
 8. **Real Leaders Real Estate Award** shown as a text ribbon on collateral (no clean badge yet); confirm exact name/logo.
 9. **Email campaign** (AlphaMaven lead-nurture) lives outside the repo; needs number alignment + compliance pass before sending.

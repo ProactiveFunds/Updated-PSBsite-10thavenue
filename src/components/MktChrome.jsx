@@ -2,6 +2,7 @@ import React from 'react';
 import { Ic } from './icons.jsx';
 import { PSB } from '../lib/interactions.js';
 import { goToCalculator } from '../lib/cta.js';
+import { FOOTER_COLS, FOOTER_LEGAL } from '../data/footerLinks.js';
 // MktChrome.jsx — marketing nav + footer + theme toggle
 const { useState, useEffect } = React;
 
@@ -97,11 +98,7 @@ function MktNav({ onInvest }) {
 }
 
 function MktFooter() {
-  const cols = [
-    ['Invest', ['Opportunities', 'Proactive QOZ Fund', 'SDIRA', 'Investment scenarios']],
-    ['Company', ['Our mission', 'The housing crisis', 'Team', 'Partnerships']],
-    ['Learn', ['Insights', 'Investor testimonials', 'FAQ', 'Video library']],
-  ];
+  const cols = FOOTER_COLS;
   return (
     <footer style={{ marginTop: 40, padding: '56px 22px 30px' }}>
       <div className="glass lit" style={{ maxWidth: 1240, margin: '0 auto', borderRadius: 'var(--radius-2xl)', padding: '48px 52px' }}>
@@ -113,14 +110,18 @@ function MktFooter() {
             </p>
             <div style={{ display: 'flex', gap: 10, marginTop: 22 }}>
               <button className="btn btn-accent btn-sm" onClick={goToCalculator}>Start investing</button>
-              <button className="btn btn-ghost btn-sm"><Ic name="mail" size={16} />Newsletter</button>
+              <a className="btn btn-ghost btn-sm" href="/#get-started"><Ic name="mail" size={16} />Newsletter</a>
             </div>
           </div>
           {cols.map(([h, items]) => (
             <div key={h}>
               <div className="data-label" style={{ marginBottom: 14 }}>{h}</div>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 11 }}>
-                {items.map((i) => <li key={i}><a href="#" style={{ color: 'var(--fg-2)', textDecoration: 'none', fontSize: 'var(--text-sm)' }}>{i}</a></li>)}
+                {items.map(([label, href]) => (
+                  <li key={label}>
+                    <a href={href} className="footer-link" style={{ color: 'var(--fg-2)', textDecoration: 'none', fontSize: 'var(--text-sm)' }}>{label}</a>
+                  </li>
+                ))}
               </ul>
             </div>
           ))}
@@ -128,7 +129,12 @@ function MktFooter() {
         <hr className="hairline" style={{ margin: '36px 0 20px' }} />
         <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, fontSize: 'var(--text-xs)', color: 'var(--fg-3)' }}>
           <span>© 2026 Proactive Sustainable Bonds. Investing involves risk, including possible loss of principal.</span>
-          <span style={{ display: 'flex', gap: 18 }}><a href="#" style={{ color: 'inherit' }}>Privacy</a><a href="#" style={{ color: 'inherit' }}>Terms</a><a href="#" style={{ color: 'inherit' }}>Disclosures</a></span>
+          <span style={{ display: 'flex', gap: 18 }}>
+            {FOOTER_LEGAL.map(([label, href]) => (
+              <a key={label} href={href} className="footer-link" style={{ color: 'inherit' }}
+                 {...(href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}>{label}</a>
+            ))}
+          </span>
         </div>
       </div>
     </footer>
