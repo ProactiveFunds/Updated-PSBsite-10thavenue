@@ -8,13 +8,15 @@ const { useEffect, useState, useRef } = React;
 
 // How the page takes registrations.
 //
-//   'zoom' — embed Zoom's own registration page. Registering there is what issues
-//            the join link, so this is the live path today.
-//   'form' — our Tenth Avenue form (below). Switch to this once that form is
-//            approved to register people into Zoom directly via the API;
-//            until then it would collect names but never send a join link.
+//   'zoom' — every CTA links straight out to Zoom's own registration page.
+//            Registering there is what issues the join link, so this is the
+//            live path today.
+//   'form' — our Tenth Avenue form, rendered as an on-page #register section.
+//            Switch to this once that form is approved to register people into
+//            Zoom directly via the API; until then it would collect names but
+//            never send a join link.
 //
-// Both paths are kept wired so this is a one-line flip.
+// Both paths stay wired, so this is a one-line flip.
 const REGISTER_MODE = 'zoom';
 
 // Used when REGISTER_MODE is 'form'. Kept separate from the evergreen
@@ -99,6 +101,13 @@ function scrollToId(id) {
   };
 }
 
+// Props for every "register" CTA on the page, so they cannot drift apart: in
+// 'zoom' mode they all open Zoom's registration page in a new tab; in 'form'
+// mode they all scroll to the on-page form.
+const registerProps = () => (REGISTER_MODE === 'zoom'
+  ? { href: EVENT.zoomRegisterUrl, target: '_blank', rel: 'noreferrer' }
+  : { href: '#register', onClick: scrollToId('register') });
+
 // Section heading. With copy, it runs as two columns on wide screens — heading
 // left, copy right — so the row is filled while every line stays at a readable
 // measure. A paragraph capped at ~64ch inside a 1240px container would strand
@@ -162,57 +171,10 @@ function HeroCta() {
         Registration runs through Zoom, so your private join link arrives within seconds — along
         with a calendar hold and the recording afterwards, whether or not you make it live.
       </p>
-      <a className="btn btn-accent btn-lg sd-reg-btn" href="#register" onClick={scrollToId('register')}>
+      <a className="btn btn-accent btn-lg sd-reg-btn" {...registerProps()}>
         Register now <Ic name="arrow-right" size={18} />
       </a>
       <p className="sd-reg-fine">No cost, no obligation, and no one calls you unless you ask.</p>
-    </div>
-  );
-}
-
-// Zoom's page repeats our title, date and description above the fields, so the
-// frame is scrolled down to the "Webinar Registration" heading and only the form
-// shows. The offsets below are measured against Zoom's live page — the block is
-// not a fixed distance down, it moves with how the description wraps:
-//
-//   frame width   heading at   Register button ends
-//   >= 800px      503px        892px
-//   500-799px     439px        828px
-//   360-499px     562px        992px
-//   < 360px       586px        1037px
-//
-// Crucially the wrapper stays scrollable rather than clipping with overflow
-// hidden. If Zoom's description is ever edited these numbers drift, and a hard
-// crop would silently hide the fields with no way to reach them; this way the
-// worst case is a slightly off starting position the visitor can scroll.
-const ZOOM_SCROLL_BY_WIDTH = [
-  [800, 490],
-  [500, 426],
-  [360, 549],
-  [0, 573],
-];
-const zoomScrollFor = (w) => (ZOOM_SCROLL_BY_WIDTH.find(([min]) => w >= min) || [0, 426])[1];
-
-function ZoomForm() {
-  const wrap = useRef(null);
-  const align = () => {
-    const el = wrap.current;
-    if (el) el.scrollTop = zoomScrollFor(el.clientWidth);
-  };
-  useEffect(() => {
-    // Zoom renders client-side, so re-align a few times as its content settles,
-    // and again whenever the frame is resized into a different wrap.
-    const timers = [400, 1200, 2500, 4000].map((t) => setTimeout(align, t));
-    window.addEventListener('resize', align);
-    return () => { timers.forEach(clearTimeout); window.removeEventListener('resize', align); };
-  }, []);
-  return (
-    <div className="sd-zoom-frame" ref={wrap}>
-      <iframe
-        src={EVENT.zoomRegisterUrl}
-        title={`Register for ${EVENT.title} — ${formatEventDate(EVENT)}`}
-        onLoad={align}
-      />
     </div>
   );
 }
@@ -230,9 +192,8 @@ function Register() {
     <section id="register" className="sd-sec" style={{ scrollMarginTop: 88 }}>
       <SecHead eyebrow="Registration" title="Save your seat.">
         <p>
-          Registration is handled by Zoom, so the moment you submit this you will have your
-          private join link — plus a calendar hold, and the recording afterwards whether or not
-          you make it on the night.
+          Tell us where to send it and your private join link is on its way — plus a calendar
+          hold, and the recording afterwards whether or not you make it on the night.
         </p>
       </SecHead>
       <div className="sd-register-grid">
@@ -246,11 +207,8 @@ function Register() {
           <p className="sd-register-note">
             You do not need to be an accredited investor to attend. {EVENT.seatsNote}
           </p>
-          <a className="sd-register-alt" href={EVENT.zoomRegisterUrl} target="_blank" rel="noreferrer">
-            <Ic name="external-link" size={16} />Open the registration page in a new tab
-          </a>
         </div>
-        <ZoomForm />
+        <RegisterCard id="register-form" />
       </div>
     </section>
   );
@@ -351,7 +309,7 @@ function Hero() {
           <p className="sd-lead sd-lead-last">One evening. Sixty minutes. Bring every question you have.</p>
           <EventMeta />
           <div className="sd-hero-cta">
-            <a className="btn btn-accent btn-lg" href="#register" onClick={scrollToId('register')}>Save my seat <Ic name="arrow-right" size={18} /></a>
+            <a className="btn btn-accent btn-lg" {...registerProps()}>Save my seat <Ic name="arrow-right" size={18} /></a>
             <a className="btn btn-lg sd-btn-light" href="#agenda" onClick={scrollToId('agenda')}>See what we will cover</a>
             <Countdown />
           </div>
@@ -621,7 +579,7 @@ function FinalCta() {
           The account has been sitting there, available, your entire working life. This is simply
           the evening somebody finally explains it. {EVENT.seatsNote}
         </p>
-        <a className="btn btn-accent btn-lg" href="#register" onClick={scrollToId('register')}>
+        <a className="btn btn-accent btn-lg" {...registerProps()}>
           Save my seat <Ic name="arrow-right" size={18} />
         </a>
         <div className="sd-final-meta">
@@ -659,7 +617,7 @@ function StickyBar() {
         <strong>{formatEventDate(EVENT, { short: true })}</strong>
         <span>{formatEventTime(EVENT)} · {EVENT.location}</span>
       </div>
-      <a className="btn btn-accent btn-sm" href="#register" onClick={scrollToId('register')}>Save my seat</a>
+      <a className="btn btn-accent btn-sm" {...registerProps()}>Save my seat</a>
     </div>
   );
 }
@@ -673,7 +631,7 @@ export default function SdiraWebinarPage() {
       <MktNav />
       <main>
         <Hero />
-        <Register />
+        {REGISTER_MODE === 'form' && <Register />}
         <Dream />
         <Learn />
         <Speaker />
@@ -783,20 +741,7 @@ export default function SdiraWebinarPage() {
         .sd-register-side { background: var(--bg-sunken); border-radius: var(--radius-2xl);
           padding: clamp(24px, 3vw, 34px); display: grid; gap: 20px; }
         .sd-register-note { margin: 0; font-size: var(--text-sm); color: var(--fg-2); line-height: 1.7; }
-        .sd-register-alt { display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-sm);
-          font-weight: 600; color: var(--brand); text-decoration: none; }
-        .sd-register-alt:hover { text-decoration: underline; }
-        /* Scrolled to the form, not clipped to it — see ZOOM_SCROLL_BY_WIDTH.
-           The iframe is taller than Zoom's whole page so its fixed-position
-           cookie banner sits far below the visible window instead of covering
-           the fields. */
-        .sd-zoom-frame { height: 470px; overflow-y: auto; overflow-x: hidden;
-          -webkit-overflow-scrolling: touch;
-          border-radius: var(--radius-2xl); border: 1px solid var(--border);
-          background: #fff; box-shadow: var(--shadow-sm); }
-        .sd-zoom-frame iframe { display: block; width: 100%; height: 1600px; border: 0; }
         @media (max-width: 900px) { .sd-register-grid { grid-template-columns: 1fr; } }
-        @media (max-width: 560px) { .sd-zoom-frame { height: 520px; } }
 
         /* ---- the compounding illustration ---- */
         .sd-calc { margin-top: 42px; border-radius: var(--radius-2xl); padding: 32px clamp(22px, 4vw, 40px);

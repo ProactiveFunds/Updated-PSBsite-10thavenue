@@ -574,6 +574,10 @@ small, .caption { font-size: var(--text-sm); color: var(--fg-2); }
 .btn {
   font-family: inherit; font-weight: var(--weight-semibold); font-size: var(--text-sm);
   border: none; cursor: pointer; border-radius: var(--radius-pill);
+  /* border-box because there is no global reset: without it any `width` set on a
+     button adds the 1.45em side padding on top and the button bleeds past its
+     container. */
+  box-sizing: border-box;
   padding: 0.78em 1.45em; display: inline-flex; align-items: center; gap: 0.55em;
   white-space: nowrap; line-height: 1; text-decoration: none;
   transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), color var(--dur-base);
