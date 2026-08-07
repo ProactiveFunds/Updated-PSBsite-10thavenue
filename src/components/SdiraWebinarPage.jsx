@@ -170,6 +170,53 @@ function HeroCta() {
   );
 }
 
+// Zoom's page repeats our title, date and description above the fields, so the
+// frame is scrolled down to the "Webinar Registration" heading and only the form
+// shows. The offsets below are measured against Zoom's live page — the block is
+// not a fixed distance down, it moves with how the description wraps:
+//
+//   frame width   heading at   Register button ends
+//   >= 800px      503px        892px
+//   500-799px     439px        828px
+//   360-499px     562px        992px
+//   < 360px       586px        1037px
+//
+// Crucially the wrapper stays scrollable rather than clipping with overflow
+// hidden. If Zoom's description is ever edited these numbers drift, and a hard
+// crop would silently hide the fields with no way to reach them; this way the
+// worst case is a slightly off starting position the visitor can scroll.
+const ZOOM_SCROLL_BY_WIDTH = [
+  [800, 490],
+  [500, 426],
+  [360, 549],
+  [0, 573],
+];
+const zoomScrollFor = (w) => (ZOOM_SCROLL_BY_WIDTH.find(([min]) => w >= min) || [0, 426])[1];
+
+function ZoomForm() {
+  const wrap = useRef(null);
+  const align = () => {
+    const el = wrap.current;
+    if (el) el.scrollTop = zoomScrollFor(el.clientWidth);
+  };
+  useEffect(() => {
+    // Zoom renders client-side, so re-align a few times as its content settles,
+    // and again whenever the frame is resized into a different wrap.
+    const timers = [400, 1200, 2500, 4000].map((t) => setTimeout(align, t));
+    window.addEventListener('resize', align);
+    return () => { timers.forEach(clearTimeout); window.removeEventListener('resize', align); };
+  }, []);
+  return (
+    <div className="sd-zoom-frame" ref={wrap}>
+      <iframe
+        src={EVENT.zoomRegisterUrl}
+        title={`Register for ${EVENT.title} — ${formatEventDate(EVENT)}`}
+        onLoad={align}
+      />
+    </div>
+  );
+}
+
 // The registration section proper. In 'zoom' mode this is Zoom's own page in an
 // iframe — Zoom sends no X-Frame-Options and sets no CSP frame-ancestors, so it
 // frames cleanly, and registering there is what actually issues the join link.
@@ -203,13 +250,7 @@ function Register() {
             <Ic name="external-link" size={16} />Open the registration page in a new tab
           </a>
         </div>
-        <div className="sd-zoom-frame">
-          <iframe
-            src={EVENT.zoomRegisterUrl}
-            title={`Register for ${EVENT.title} — ${formatEventDate(EVENT)}`}
-            loading="lazy"
-          />
-        </div>
+        <ZoomForm />
       </div>
     </section>
   );
@@ -745,14 +786,17 @@ export default function SdiraWebinarPage() {
         .sd-register-alt { display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-sm);
           font-weight: 600; color: var(--brand); text-decoration: none; }
         .sd-register-alt:hover { text-decoration: underline; }
-        .sd-zoom-frame { border-radius: var(--radius-2xl); overflow: hidden;
-          border: 1px solid var(--border); background: #fff; box-shadow: var(--shadow-sm); }
-        .sd-zoom-frame iframe { display: block; width: 100%; height: 940px; border: 0; }
-        @media (max-width: 900px) {
-          .sd-register-grid { grid-template-columns: 1fr; }
-          .sd-zoom-frame iframe { height: 1020px; }
-        }
-        @media (max-width: 560px) { .sd-zoom-frame iframe { height: 1120px; } }
+        /* Scrolled to the form, not clipped to it — see ZOOM_SCROLL_BY_WIDTH.
+           The iframe is taller than Zoom's whole page so its fixed-position
+           cookie banner sits far below the visible window instead of covering
+           the fields. */
+        .sd-zoom-frame { height: 470px; overflow-y: auto; overflow-x: hidden;
+          -webkit-overflow-scrolling: touch;
+          border-radius: var(--radius-2xl); border: 1px solid var(--border);
+          background: #fff; box-shadow: var(--shadow-sm); }
+        .sd-zoom-frame iframe { display: block; width: 100%; height: 1600px; border: 0; }
+        @media (max-width: 900px) { .sd-register-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 560px) { .sd-zoom-frame { height: 520px; } }
 
         /* ---- the compounding illustration ---- */
         .sd-calc { margin-top: 42px; border-radius: var(--radius-2xl); padding: 32px clamp(22px, 4vw, 40px);
