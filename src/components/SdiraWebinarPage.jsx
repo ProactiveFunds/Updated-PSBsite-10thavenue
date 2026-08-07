@@ -747,7 +747,17 @@ export default function SdiraWebinarPage() {
         .sd-calc { margin-top: 42px; border-radius: var(--radius-2xl); padding: 32px clamp(22px, 4vw, 40px);
           background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
         .sd-calc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 26px; }
-        .sd-calc-tabs button { font-family: var(--font-mono); font-size: var(--text-sm); }
+        /* The base .tabs selected state uses background: var(--surface) — the same
+           white as this card, so the selection read as nothing but a faint
+           shadow. Solid forest instead, which also carries into dark mode. */
+        .sd-calc-tabs { background: var(--bg-sunken); border-color: var(--border); }
+        .sd-calc-tabs button { font-family: var(--font-mono); font-size: var(--text-sm);
+          font-weight: 600; color: var(--fg-2); padding: 0.55em 1.15em; }
+        .sd-calc-tabs button:hover { color: var(--fg-1); background: var(--surface); }
+        .sd-calc-tabs button[aria-selected="true"] { background: var(--forest-600); color: #fff;
+          box-shadow: var(--shadow-sm); }
+        .sd-calc-tabs button[aria-selected="true"]:hover { background: var(--forest-700); color: #fff; }
+        [data-theme="dark"] .sd-calc-tabs button[aria-selected="true"] { background: var(--forest-500); }
         .sd-calc-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center; }
         .sd-calc-col { border-radius: var(--radius-xl); padding: 24px 22px; background: var(--bg-sunken); text-align: center; }
         .sd-calc-col-hero { background: linear-gradient(158deg, var(--forest-600), var(--forest-800)); }

@@ -122,8 +122,10 @@ platform used for the AlphaMaven campaign.
   The pill now carries nine links, so `responsive.css` collapses it to the burger at **1180px**.
 - **Never put a backtick inside a component's `<style>{` … `}</style>` block** — not even in a
   CSS comment. It closes the template literal and the build dies with a misleading
-  `Expected "}" but found …`. Use plain quotes when quoting a CSS property in a comment. (This
-  has cost two debugging cycles; the error never points at the comment.)
+  `Expected "}" but found …` pointing nowhere near the comment that caused it. Use plain quotes
+  when quoting a CSS property in a comment. This cost three separate debugging cycles before
+  being caught mechanically — **`tests/style-blocks.test.js`** now fails with the exact file and
+  line, so trust the test rather than the build error.
 - **Layout: a page must fill its container at every width.** This has now broken twice, so it
   is a hard rule:
   1. One container width per page — **1240px, centred** (`max-width: 1240px; margin: 0 auto`).
