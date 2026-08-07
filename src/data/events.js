@@ -23,6 +23,10 @@ export const events = [
     location: 'Live on Zoom',
     cost: 'Complimentary',
     seatsNote: 'Seats are limited so the Q&A stays a real conversation.',
+    // Zoom's own registration page. Registering here is what actually issues the
+    // join link, so it is the live path until our Tenth Avenue form is approved
+    // for direct Zoom API registration. Tracking parameters deliberately stripped.
+    zoomRegisterUrl: 'https://perspectives-studio.zoom.us/webinar/register/WN_hi3PWvB_Rra21nSHQzzuZw',
     topics: [
       'What an SDIRA can hold',
       'Rollovers without a tax bill',

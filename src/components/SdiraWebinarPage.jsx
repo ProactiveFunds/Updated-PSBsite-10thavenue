@@ -6,10 +6,20 @@ import { getEvent, formatEventDate, formatEventTime, daysUntil, calendarUrl } fr
 
 const { useEffect, useState, useRef } = React;
 
-// Registration posts to a Tenth Avenue form dedicated to this webinar, so the
-// registrant list stays separate from the evergreen `ira` / `webform` enquiries
-// (the Zoom link only goes to this list). The `sdira-webinar` form must exist in
-// Tenth Avenue before the page goes live.
+// How the page takes registrations.
+//
+//   'zoom' — embed Zoom's own registration page. Registering there is what issues
+//            the join link, so this is the live path today.
+//   'form' — our Tenth Avenue form (below). Switch to this once that form is
+//            approved to register people into Zoom directly via the API;
+//            until then it would collect names but never send a join link.
+//
+// Both paths are kept wired so this is a one-line flip.
+const REGISTER_MODE = 'zoom';
+
+// Used when REGISTER_MODE is 'form'. Kept separate from the evergreen
+// `ira` / `webform` enquiries so the Zoom link only reaches registrants. The
+// `sdira-webinar` form must exist in Tenth Avenue before switching to it.
 const TA_FORM = 'https://tenthavenue.io/api/forms/sdira-webinar/submit';
 
 const EVENT = getEvent('self-directed-ira');
@@ -131,6 +141,80 @@ function Countdown() {
   return <span className="sd-count">{days} {days === 1 ? 'day' : 'days'} to go</span>;
 }
 
+// Zoom's registration page embedded directly. Zoom sends no X-Frame-Options and
+// sets no CSP frame-ancestors, so it frames cleanly — and registering here is
+// what actually issues the join link.
+//
+// The escape hatch below it is load-bearing, not decoration: this is a
+// cross-origin form, and browsers that block third-party cookies outright
+// (Safari by default) may stop Zoom's own session from completing inside a
+// frame. Anyone that hits it needs a visible way out.
+// Compact hero card. The Zoom form itself lives in its own section below,
+// because Zoom's page repeats our title and date above the fields — roughly
+// 610px of it — and cropping that away would break the moment the webinar
+// description is edited.
+function HeroCta() {
+  return (
+    <div className="sd-reg sd-reg-teaser">
+      <span className="sd-reg-badge">{EVENT.cost} · Limited seats</span>
+      <h3 className="sd-reg-h">Save your seat</h3>
+      <p className="sd-reg-sub">
+        Registration runs through Zoom, so your private join link arrives within seconds — along
+        with a calendar hold and the recording afterwards, whether or not you make it live.
+      </p>
+      <a className="btn btn-accent btn-lg sd-reg-btn" href="#register" onClick={scrollToId('register')}>
+        Register now <Ic name="arrow-right" size={18} />
+      </a>
+      <p className="sd-reg-fine">No cost, no obligation, and no one calls you unless you ask.</p>
+    </div>
+  );
+}
+
+// The registration section proper. In 'zoom' mode this is Zoom's own page in an
+// iframe — Zoom sends no X-Frame-Options and sets no CSP frame-ancestors, so it
+// frames cleanly, and registering there is what actually issues the join link.
+//
+// The escape hatch is load-bearing, not decoration: this is a cross-origin form,
+// and a browser that blocks third-party cookies outright (Safari by default) may
+// stop Zoom's own session completing inside a frame. Anyone who hits that needs
+// a visible way out.
+function Register() {
+  return (
+    <section id="register" className="sd-sec" style={{ scrollMarginTop: 88 }}>
+      <SecHead eyebrow="Registration" title="Save your seat.">
+        <p>
+          Registration is handled by Zoom, so the moment you submit this you will have your
+          private join link — plus a calendar hold, and the recording afterwards whether or not
+          you make it on the night.
+        </p>
+      </SecHead>
+      <div className="sd-register-grid">
+        <div className="sd-register-side">
+          <ul className="sd-speaker-points">
+            <li>{formatEventDate(EVENT)} at {formatEventTime(EVENT)}</li>
+            <li>{EVENT.durationMins} minutes, including live Q&amp;A</li>
+            <li>{EVENT.location} · {EVENT.cost}</li>
+            <li>Recording sent to everyone who registers</li>
+          </ul>
+          <p className="sd-register-note">
+            You do not need to be an accredited investor to attend. {EVENT.seatsNote}
+          </p>
+          <a className="sd-register-alt" href={EVENT.zoomRegisterUrl} target="_blank" rel="noreferrer">
+            <Ic name="external-link" size={16} />Open the registration page in a new tab
+          </a>
+        </div>
+        <div className="sd-zoom-frame">
+          <iframe
+            src={EVENT.zoomRegisterUrl}
+            title={`Register for ${EVENT.title} — ${formatEventDate(EVENT)}`}
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function RegisterCard({ id }) {
   const [done, setDone] = useState(false);
   const submitted = useRef(false);
@@ -238,7 +322,7 @@ function Hero() {
             </div>
           </div>
         </div>
-        <div className="sd-hero-form"><RegisterCard id="register" /></div>
+        <div className="sd-hero-form"><HeroCta /></div>
       </div>
     </section>
   );
@@ -548,6 +632,7 @@ export default function SdiraWebinarPage() {
       <MktNav />
       <main>
         <Hero />
+        <Register />
         <Dream />
         <Learn />
         <Speaker />
@@ -643,6 +728,31 @@ export default function SdiraWebinarPage() {
         .sd-reg-done { text-align: center; display: grid; justify-items: center; gap: 14px; padding: 22px 4px; }
         .sd-reg-done-h { margin: 6px 0 0; font-size: var(--text-2xl); font-weight: 700; color: var(--fg-1); letter-spacing: -0.02em; }
         .sd-reg-done-p { margin: 0; font-size: var(--text-sm); color: var(--fg-2); line-height: 1.65; max-width: 34ch; }
+
+        /* Hero CTA card */
+        .sd-reg-teaser .sd-reg-sub { margin-bottom: 24px; }
+        .sd-reg-btn { width: 100%; justify-content: center; margin-bottom: 12px; }
+
+        /* Registration section. The iframe height is measured against Zoom's own
+           page at this column width: the form starts around 610px and the
+           Register button ends around 865px, so 940px shows the whole thing
+           without an inner scrollbar. */
+        .sd-register-grid { display: grid; grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
+          gap: clamp(28px, 4vw, 56px); align-items: start; }
+        .sd-register-side { background: var(--bg-sunken); border-radius: var(--radius-2xl);
+          padding: clamp(24px, 3vw, 34px); display: grid; gap: 20px; }
+        .sd-register-note { margin: 0; font-size: var(--text-sm); color: var(--fg-2); line-height: 1.7; }
+        .sd-register-alt { display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-sm);
+          font-weight: 600; color: var(--brand); text-decoration: none; }
+        .sd-register-alt:hover { text-decoration: underline; }
+        .sd-zoom-frame { border-radius: var(--radius-2xl); overflow: hidden;
+          border: 1px solid var(--border); background: #fff; box-shadow: var(--shadow-sm); }
+        .sd-zoom-frame iframe { display: block; width: 100%; height: 940px; border: 0; }
+        @media (max-width: 900px) {
+          .sd-register-grid { grid-template-columns: 1fr; }
+          .sd-zoom-frame iframe { height: 1020px; }
+        }
+        @media (max-width: 560px) { .sd-zoom-frame iframe { height: 1120px; } }
 
         /* ---- the compounding illustration ---- */
         .sd-calc { margin-top: 42px; border-radius: var(--radius-2xl); padding: 32px clamp(22px, 4vw, 40px);
