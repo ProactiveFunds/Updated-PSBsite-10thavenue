@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-08-05_
+_Last updated: 2026-08-11_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -57,16 +57,32 @@ The portal link is **bond-specific** (Q3 2026 Impact Bridge). Never put it in `M
 or on the evergreen invest pages - shared chrome renders on every page and must stay generic.
 
 ## Data sources (real, from the legacy Base44 export; raw JSON in `../_data-export/`)
-- **`src/data/assets.js`** - `Property` entity, published, de-duplicated by address (drives map, table, KPIs).
-  Also exports `SDG_LABELS`, `FUNDS`, `STATUSES`.
+- **`src/data/assets.js`** - 22 properties (drives map, table, KPIs). **Generated** from the client
+  workbook by `scripts/generate-assets.py`; edit the workbook (or the generator's carried-over prose
+  tables), not this file. Also exports `SDG_LABELS`, `FUNDS`, `STATUSES`.
 - **`src/data/team.js`** - 5 `TeamMember` records + Dr. Williams' books. Headshots optimized to
   `public/img/team/*.webp` (transparent cutouts).
 - **`src/data/blogPosts.js`** - 27 published posts (Markdown). **`src/data/digestPages.js`** - 11 Digest pages.
   **`src/data/digestNav.js`** - Digest nav groups/items.
 
 ## Canonical numbers currently shown
-- Homepage + `/assets`: **27 communities, 756 units, $26M AUM, 15% (target) annual interest**.
-- These do **not** match the deck/cover-letter figures (**22 communities / 647 units**). See open items.
+Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (two visible tabs —
+*Property Information* = owned, *In Contract* = under contract), imported 11 Aug 2026.
+
+- **22 communities · 842 units/pads · 8 states · $65M AUM · 27% occupancy · 15% (target) annual interest.**
+- Split: **17 owned** (549 units, 5 states, $40.2M, 40% occupancy) + **5 under contract**
+  (293 units, 3 further states, $25.2M, not yet closed).
+- "$65M" is the workbook's *Estimated Value* column, footnoted there as **based on 100% occupancy**
+  — stabilised, not current market value. Purchase price across the 22 is $18.7M. Pages that quote
+  the figure now carry that caveat; keep it attached if you move the number.
+- One owned row is deliberately **not** published: *906 West Main* (Peru, IN — 46 pads, $3.875M),
+  which the workbook lists as "(for sale)". See `HELD_SKIP` in `scripts/generate-assets.py`; a test
+  guards it. Add it back by clearing that set if it comes off the market.
+- Quoted on: `/` (hero stats + "Communities audited"), `/assets` (KPI strip, computed from the data),
+  `/OurProcess`, `/q3-special`, `/ira`. `tests/data.test.js` pins the totals, so a data refresh that
+  moves them fails the suite and tells you which copy to update.
+- Refresh with `python3 scripts/generate-assets.py` (needs `openpyxl`); it rewrites
+  `src/data/assets.js` from the workbook.
 
 ## Deployment
 - `render.yaml` blueprint (static): `npm install && npm run build` -> publish `dist`, `NODE_VERSION=22`.
@@ -78,6 +94,31 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
 ## Recent work log
 
 **August 2026**
+- **Portfolio data re-imported from the client workbook (11 Aug).** `Proactive Realty Group -
+  Property Information.xlsx` replaced the base44 export as the source of truth for every per-asset
+  figure. `src/data/assets.js` is now **generated** by `scripts/generate-assets.py` from the two
+  visible tabs; re-running it is idempotent.
+  - **27 rows → 22 properties**: four base44 duplicate pairs collapsed (252 Ceceile/Cecile,
+    1905 Ellis Ave/Avenue, 105 W. 154/154th, Stilton); two rows absent from the workbook dropped
+    (720 E. Charleston Blvd, 100 Banashee Circle); and *906 West Main*, listed in the workbook as
+    "(for sale)", withheld. All three confirmed with the client on 11 Aug.
+  - Units, occupancy, estimated value and purchase dates all refreshed; several moved a long way
+    (6633 McCartney 24 → 89 pads, 121 Fountainevue 136 → 176, 3 Wycombe 68 → 66 and 0 → 18 occupied).
+    New fields: `county`, `purchasePrice`.
+  - Status **"In Contract" → "Under Contract"** everywhere (data, `STATUSES`, filter, pill), and
+    `/assets` now says in words how many assets are under contract and that they have not closed.
+  - Carried-over prose was corrected where the workbook contradicted it (926 Moseley was described
+    as "38-unit … 95% occupancy", now 40 and 90%; 1905 Ellis said "$61K acquisition", actually
+    $610K), and two impact theses had raw citation artefacts (`【…†…】`) rendering on the page —
+    stripped, with `tests/data.test.js` guarding against their return.
+  - `/assets` occupancy KPI is now **unit-weighted** rather than a mean of per-asset rates, so a
+    1-unit condo at 100% no longer offsets a 176-pad park at 34%. Added a portfolio-value KPI and
+    a `county` fact; detail grid went 5 columns → 3 (six facts now).
+  - Canonical numbers updated on `/`, `/OurProcess`, `/q3-special`, `/ira` — see the section above.
+- **Footer tidy-up (11 Aug).** *Newsletter* now points at `/digest` (it went to the home intake
+  form); *Investment scenarios* removed; *Our mission* and *Team* merged into one
+  **Our mission & team** link on `/team` — *Our mission* pointed at the home `#impact` anchor, so
+  the Company column had two near-duplicate destinations.
 - **Footer links connected.** All 16 were dead `#` placeholders. The map now lives in
   `src/data/footerLinks.js` (data, not inline JSX, so it is testable) and every destination is a
   real route, Digest page or on-page anchor. Anchors are written absolute (`/#id`) because the
@@ -221,8 +262,19 @@ only after a Render Manual Deploy (latest = `c4a8469`):
    form will post into the void (the page still shows its success state, because the confirmation
    is driven by the hidden iframe's load event). Also decide whether Bob Totaro should join
    `src/data/team.js` so he appears on `/team` too - he is currently only on the webinar page.
-1. **Number consistency** - site/assets say 27 / 756; deck + cover letters say 22 / 647. Pick one canonical set.
-2. **Residual duplicate** - "252 Ceceile St" vs "252 Cecile Street" (Denmark, SC) is one property; true unique ~26.
+1. ~~**Number consistency** - site/assets say 27 / 756; deck + cover letters say 22 / 647.~~
+   **Done (11 Aug 2026)** — the client workbook is now the single source of truth and the site
+   says **22 / 842 / $65M**. The deck, cover letters and the AlphaMaven email sequence still carry
+   the old 22 / 647 and $25–29M figures and need the same pass (the deck's "22" is a coincidence —
+   different properties, different unit count).
+2. ~~**Residual duplicate** - "252 Ceceile St" vs "252 Cecile Street".~~ **Done (11 Aug 2026)** —
+   all four base44 duplicate pairs collapsed in the workbook import.
+2a. ~~Three judgement calls in the import.~~ **Resolved 11 Aug** — client confirmed all three are
+   off the site: *720 E. Charleston Blvd* (was "In Contract", on neither tab), *100 Banashee Circle*
+   (sold 2018), and *906 West Main* (owned but being marketed for sale).
+2b. **"38 Communities audited · Verified · Deloitte"** on the homepage now reads **22**, tracking the
+   portfolio. The attribution was never re-verified — confirm the audited count with Deloitte, since
+   the label makes it a third-party claim.
 3. **Greg's headshot** is cropped tighter than the others; a re-export with more headroom would make all five uniform.
 4. **FAQ** (Digest) still uses the old "Bond Option 1-4 / Rapid Housing 45% total" framing; reconcile with corrected wording.
 5. **Video Library** is a "coming soon" placeholder.

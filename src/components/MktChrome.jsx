@@ -110,7 +110,7 @@ function MktFooter() {
             </p>
             <div style={{ display: 'flex', gap: 10, marginTop: 22 }}>
               <button className="btn btn-accent btn-sm" onClick={goToCalculator}>Start investing</button>
-              <a className="btn btn-ghost btn-sm" href="/#get-started"><Ic name="mail" size={16} />Newsletter</a>
+              <a className="btn btn-ghost btn-sm" href="/digest"><Ic name="mail" size={16} />Newsletter</a>
             </div>
           </div>
           {cols.map(([h, items]) => (

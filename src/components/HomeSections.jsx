@@ -168,7 +168,7 @@ function SocialProof() {
     ['sprout', '4,200', 'Homes funded', 'Verified · RSM US'],
     ['users', '11,800', 'Residents housed', 'Verified · RSM US'],
     ['home', '−22%', 'Rents below market', 'Verified · CoStar'],
-    ['shield-check', '38', 'Communities audited', 'Verified · Deloitte'],
+    ['shield-check', '22', 'Communities audited', 'Verified · Deloitte'],
   ];
   const perf = [
     ['100%', 'Distributions paid on time'],

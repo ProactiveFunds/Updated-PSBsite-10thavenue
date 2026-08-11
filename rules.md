@@ -286,8 +286,25 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
 
 ## 10. Content caveats (see SUMMARY.md "Open items" for the live list)
 
-- Number inconsistency: site/assets show **27 communities / 756 units / $26M AUM / 15%**,
-  while the deck + cover letters say **22 / 647**. Pick one canonical set before big sends.
+- **Portfolio numbers have one source of truth: the client workbook**
+  `../Proactive Realty Group - Property Information.xlsx` — the two *visible* tabs
+  (*Property Information* = owned, *In Contract* = under contract; the other 18 are hidden
+  and are not site inputs). `src/data/assets.js` is generated from it by
+  `scripts/generate-assets.py` — **do not hand-edit that data file**; fix the workbook, or the
+  carried-over prose tables in the generator, and re-run it.
+  - Current set: **22 communities / 842 units / 8 states / $65M / 27% occupancy** (17 owned +
+    5 under contract). *906 West Main* is on the owned tab but marked "(for sale)" and is withheld
+    from the site — see `HELD_SKIP` in the generator. `tests/data.test.js` pins these, so a refresh that moves them fails the
+    suite by design — that failure is the checklist of marketing copy to update
+    (`/` hero + impact band, `/OurProcess`, `/q3-special`, `/ira`).
+  - The workbook's *Estimated Value* column is **based on 100% occupancy** — stabilised, not
+    current market value. Every page that quotes the $69M carries that caveat; keep it attached.
+  - Off-site collateral (deck, cover letters, AlphaMaven email sequence) still carries the old
+    **22 / 647 / $25–29M** (that 22 is a different set of properties, not this one). Align it before any big send.
+- Some homepage figures are **not** portfolio-derived and were deliberately left alone: "4,200 homes
+  funded" and "11,800 residents housed" are cumulative over the operating history (Verified · RSM US),
+  and the blog's "$23M portfolio from a single $50K note" is a quoted founder story. Do not
+  reconcile these against the workbook without asking.
 - The "See the IMPACT ... before/after" home section is intentionally **hidden** (commented
   out in `App.jsx`) until real before/after photos exist.
 - Real Leaders "Real Estate Award" (2026) currently rendered as a text ribbon on collateral

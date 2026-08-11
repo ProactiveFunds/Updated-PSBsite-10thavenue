@@ -57,6 +57,56 @@ test('assets: ids are unique', () => {
   assert.deepEqual(dupes(ids), [], `duplicate asset ids: ${dupes(ids).join(', ')}`);
 });
 
+// The figures below are the canonical set quoted on /, /process, /q3-special
+// and /ira. They come from "Proactive Realty Group - Property Information.xlsx".
+// If this test fails after a data refresh, the marketing copy needs updating too
+// — see SUMMARY.md "Canonical numbers currently shown".
+test('assets: portfolio totals match the canonical numbers quoted site-wide', () => {
+  const sum = (f) => assets.reduce((s, a) => s + (a[f] || 0), 0);
+  assert.equal(assets.length, 22, 'asset count drifted from the 22 quoted site-wide');
+  assert.equal(assets.filter((a) => a.status === 'Acquired').length, 17, 'owned-asset count drifted');
+  assert.equal(assets.filter((a) => a.status === 'Under Contract').length, 5, 'under-contract count drifted');
+  assert.equal(sum('units'), 842, 'total units drifted from the 842 quoted site-wide');
+  assert.equal(sum('occupiedUnits'), 227, 'occupied units drifted');
+  assert.equal(sum('estimatedValue'), 65377060, 'estimated value drifted from the $65M quoted site-wide');
+  assert.equal(new Set(assets.map((a) => a.state)).size, 8, 'state count drifted from the 8 quoted site-wide');
+  assert.equal(Math.round((sum('occupiedUnits') / sum('units')) * 100), 27, 'portfolio occupancy drifted');
+});
+
+// 906 West Main is on the workbook's owned tab as "(for sale)" and is
+// deliberately excluded — see HELD_SKIP in scripts/generate-assets.py.
+test('assets: the property being marketed for sale is not published', () => {
+  assert.ok(!assets.some((a) => /906|west main/i.test(a.name)), '906 West Main is back on the site');
+});
+
+test('assets: per-asset occupancy is internally consistent', () => {
+  for (const a of assets) {
+    assert.ok(a.occupiedUnits <= a.units, `${a.name}: ${a.occupiedUnits} occupied > ${a.units} units`);
+    assert.equal(a.occupancyRate, Math.round((a.occupiedUnits / a.units) * 100),
+      `${a.name}: occupancyRate ${a.occupancyRate}% does not match ${a.occupiedUnits}/${a.units}`);
+    assert.ok(Number.isFinite(a.estimatedValue) && a.estimatedValue > 0, `${a.name} missing estimatedValue`);
+    assert.ok(Number.isFinite(a.purchasePrice) && a.purchasePrice > 0, `${a.name} missing purchasePrice`);
+    assert.ok(isNonEmptyString(a.county), `${a.name} missing county`);
+  }
+});
+
+test('assets: under-contract deals are not dated as acquired', () => {
+  for (const a of assets.filter((x) => x.status === 'Under Contract')) {
+    assert.equal(a.purchaseDate, null, `${a.name} is under contract but carries a purchaseDate`);
+    assert.equal(a.yearAcquired, null, `${a.name} is under contract but carries a yearAcquired`);
+  }
+});
+
+// A previous import left OpenAI-style citation markers (【…†…】) in two impact
+// theses; they rendered verbatim on /assets. Guard against that coming back.
+test('assets: prose carries no citation artefacts', () => {
+  for (const a of assets) {
+    for (const field of ['investmentThesis', 'impactThesis']) {
+      assert.ok(!/[【】]/.test(a[field] || ''), `${a.name} ${field} contains a citation artefact`);
+    }
+  }
+});
+
 test('blogPosts: non-empty, slug+title present, slugs unique', () => {
   assert.ok(Array.isArray(posts) && posts.length > 0, 'posts should be a non-empty array');
   for (const p of posts) {

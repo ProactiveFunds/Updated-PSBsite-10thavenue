@@ -12,9 +12,16 @@ const moneyShort = (n) => {
   if (n >= 1e3) return '$' + Math.round(n / 1e3) + 'K';
   return '$' + n;
 };
+// Dates arrive as plain "YYYY-MM-DD" from the workbook; render them without
+// letting the browser's timezone shift the day.
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const fmtDate = (iso) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+  return m ? `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}` : null;
+};
 const STATUS_TONE = {
   'Acquired': { bg: 'color-mix(in srgb, var(--brand) 16%, transparent)', fg: 'var(--brand)' },
-  'In Contract': { bg: 'color-mix(in srgb, #d9a441 20%, transparent)', fg: '#a9772a' },
+  'Under Contract': { bg: 'color-mix(in srgb, #d9a441 20%, transparent)', fg: '#a9772a' },
   'In Review': { bg: 'var(--surface-2)', fg: 'var(--fg-2)' },
   'Sold': { bg: 'var(--surface-2)', fg: 'var(--fg-3)' },
 };
@@ -72,9 +79,18 @@ export default function AssetsExplorer() {
   const kpis = useMemo(() => {
     const states = new Set(rows.map((r) => r.state).filter(Boolean));
     const units = rows.reduce((s, r) => s + (r.units || 0), 0);
-    const occ = rows.filter((r) => r.occupancyRate != null);
-    const avgOcc = occ.length ? Math.round(occ.reduce((s, r) => s + r.occupancyRate, 0) / occ.length) : null;
-    return { count: rows.length, states: states.size, units, avgOcc };
+    const occupied = rows.reduce((s, r) => s + (r.occupiedUnits || 0), 0);
+    const value = rows.reduce((s, r) => s + (r.estimatedValue || 0), 0);
+    const uc = rows.filter((r) => r.status === 'Under Contract');
+    return {
+      count: rows.length, states: states.size, units, value,
+      // Unit-weighted, not an average of per-asset rates, so a 1-unit condo at
+      // 100% cannot outweigh a 176-pad park at 34%. This is the figure quoted
+      // as portfolio occupancy elsewhere on the site.
+      occ: units ? Math.round((occupied / units) * 100) : null,
+      ucCount: uc.length,
+      ucUnits: uc.reduce((s, r) => s + (r.units || 0), 0),
+    };
   }, [rows]);
 
   const availableStates = useMemo(() => [...new Set(ALL.map((a) => a.state).filter(Boolean))].sort(), []);
@@ -94,8 +110,11 @@ export default function AssetsExplorer() {
 
   const Detail = ({ a }) => {
     const facts = [
-      ['Fund', a.fund || '—'], ['Acquired', a.purchaseDate || a.yearAcquired || '—'],
-      ['Avg rent', a.avgRent ? money(a.avgRent) + '/mo' : '—'], ['Est. value', money(a.estimatedValue)],
+      ['Fund', a.fund || '—'],
+      ['Acquired', a.status === 'Under Contract' ? 'Under contract — not yet closed' : (fmtDate(a.purchaseDate) || a.yearAcquired || '—')],
+      ['County', a.county || '—'],
+      ['Avg rent', a.avgRent ? money(a.avgRent) + '/mo' : '—'],
+      ['Est. value', money(a.estimatedValue)],
     ];
     return (
       <div className="asset-detail">
@@ -137,13 +156,28 @@ export default function AssetsExplorer() {
             <span className="eyebrow">Portfolio</span>
             <h1 style={{ margin: '12px 0 0', fontSize: 'var(--text-4xl)', letterSpacing: '-0.025em', lineHeight: 1.05 }}>The portfolio, in detail.</h1>
           </div>
-          <p className="lead" style={{ margin: 0, fontSize: 'var(--text-base)' }}>Every community we hold — filter, compare, and open any asset to see occupancy, thesis, and impact without leaving the page.</p>
+          <p className="lead" style={{ margin: 0, fontSize: 'var(--text-base)' }}>Every community we hold, plus the acquisitions currently under contract — filter, compare, and open any asset to see occupancy, thesis, and impact without leaving the page.</p>
         </div>
         <div className="asset-kpis">
-          {[['Assets', kpis.count], ['States', kpis.states], ['Total units', kpis.units || '—'], ['Avg occupancy', kpis.avgOcc != null ? kpis.avgOcc + '%' : '—']].map(([l, v]) => (
+          {[
+            ['Assets', kpis.count],
+            ['States', kpis.states],
+            ['Units / pads', kpis.units || '—'],
+            ['Portfolio value', kpis.value ? moneyShort(kpis.value) : '—'],
+            ['Occupancy', kpis.occ != null ? kpis.occ + '%' : '—'],
+          ].map(([l, v]) => (
             <div key={l} className="asset-kpi"><div className="figure" style={{ fontSize: 'var(--text-2xl)', fontWeight: 600 }}>{v}</div><div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', marginTop: 2 }}>{l}</div></div>
           ))}
         </div>
+        <p className="asset-kpi-note">
+          {kpis.ucCount > 0 && (
+            <>
+              <strong>{kpis.ucCount}</strong> of these {kpis.ucCount === 1 ? 'assets is' : 'assets are'} <strong>under contract</strong>
+              {' '}({kpis.ucUnits.toLocaleString()} units / pads) and {kpis.ucCount === 1 ? 'has' : 'have'} not yet closed. ·{' '}
+            </>
+          )}
+          Portfolio value is estimated at 100% occupancy.
+        </p>
       </div>
 
       {/* Filter bar */}
@@ -238,6 +272,8 @@ export default function AssetsExplorer() {
             gap: clamp(36px, 5vw, 76px); align-items: end; }
         }
         .asset-kpis { display: flex; gap: 38px; margin-top: 28px; flex-wrap: wrap; }
+        .asset-kpi-note { margin: 14px 0 0; font-size: var(--text-xs); color: var(--fg-3); }
+        .asset-kpi-note strong { color: var(--fg-2); font-weight: 600; }
         .asset-filters { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 22px; }
         .asset-search { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 220px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0 14px; }
         .asset-search input { border: none; outline: none; background: transparent; font: inherit; font-size: var(--text-sm); color: var(--fg-1); padding: 11px 0; width: 100%; }
@@ -272,7 +308,7 @@ export default function AssetsExplorer() {
         .asset-chev { width: 30px; text-align: right; }
         .asset-detail-row td { padding: 0; background: var(--surface-2); border-bottom: 1px solid var(--border); }
         .asset-detail { padding: 24px; }
-        .asset-detail-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; }
+        .asset-detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
         .asset-thesis { margin-top: 18px; max-width: 70ch; }
         .asset-thesis p { margin: 6px 0 0; color: var(--fg-2); font-size: var(--text-sm); line-height: 1.6; }
         .asset-sdg { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 500; color: var(--forest-700); background: var(--lime-100); border-radius: 999px; padding: 5px 11px; }

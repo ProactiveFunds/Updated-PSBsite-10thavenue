@@ -10,12 +10,10 @@ export const FOOTER_COLS = [
     ['Opportunities', '/#opportunities'],
     ['Proactive QOZ Fund', '/#opportunities'],
     ['SDIRA', '/ira'],
-    ['Investment scenarios', '/#calculator'],
   ]],
   ['Company', [
-    ['Our mission', '/#impact'],
+    ['Our mission & team', '/team'],
     ['The housing crisis', '/digest/housing-crisis'],
-    ['Team', '/team'],
     ['Partnerships', '/digest/partnerships'],
   ]],
   ['Learn', [

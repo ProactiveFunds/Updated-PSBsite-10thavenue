@@ -65,7 +65,7 @@ function Hero({ onInvest }) {
             <button className="btn btn-ghost btn-lg">View our impact</button>
           </div>
           <div className="hero-stats" style={{ display: 'flex', gap: 38, marginTop: 40 }}>
-            {[['15%', 'annual interest', true], ['$26M', 'assets under management'], ['756', 'units across the portfolio']].map(([n, l, hl]) => (
+            {[['15%', 'annual interest', true], ['$65M', 'assets under management'], ['842', 'units across the portfolio']].map(([n, l, hl]) => (
               <div key={l}>
                 <div className="figure" style={{ fontSize: 'var(--text-2xl)', color: hl ? 'var(--brand)' : 'var(--fg-1)' }}>{n}</div>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', marginTop: 2 }}>{l}</div>
@@ -131,8 +131,8 @@ function ImpactBand() {
   const items = [
     ['sprout', '4,200', 'Homes funded'],
     ['users', '11,800', 'Residents housed'],
-    ['building', '38', 'Communities'],
-    ['map-pin', '11', 'States'],
+    ['building', '22', 'Communities'],
+    ['map-pin', '8', 'States'],
   ];
   return (
     <section style={{ maxWidth: 1240, margin: '64px auto 0', padding: '0 22px' }}>
