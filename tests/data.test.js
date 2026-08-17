@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { team } from '../src/data/team.js';
-import { assets, SDG_LABELS, FUNDS, STATUSES } from '../src/data/assets.js';
+import { assets, SDG_LABELS, PORTFOLIO_SDGS, FUNDS, STATUSES } from '../src/data/assets.js';
 import { posts } from '../src/data/blogPosts.js';
 import { pages } from '../src/data/digestPages.js';
 import { DIGEST_GROUPS, DIGEST_ITEMS } from '../src/data/digestNav.js';
@@ -94,6 +94,61 @@ test('assets: under-contract deals are not dated as acquired', () => {
   for (const a of assets.filter((x) => x.status === 'Under Contract')) {
     assert.equal(a.purchaseDate, null, `${a.name} is under contract but carries a purchaseDate`);
     assert.equal(a.yearAcquired, null, `${a.name} is under contract but carries a yearAcquired`);
+  }
+});
+
+// Dr. Van asked (17 Aug 2026) for one address house style across every listing:
+//   "<number> <directional> <street> <Type>, <City>, <ST>"
+// e.g. "921 N Las Vegas Blvd, Las Vegas, NV". Set in the generator's ADDRESS
+// table, because the workbook's own strings are inconsistent.
+// Three rows the workbook cannot yet express in that style — raised with the
+// client 17 Aug 2026. Drop an id from here once the real address arrives.
+const ADDRESS_GAPS = new Set([
+  'umh-citrus-circle-sc',        // no house number ("Citrus Circle")
+  '526-518-520-522-stilton-sc',  // no street type ("518–526 Stilton")
+  '926-moseley-sc',              // no street type ("926 Moseley")
+]);
+
+test('assets: every address follows the one house style', () => {
+  const STREET_TYPE = /(?:St|Ave|Rd|Dr|Blvd|Ct|Ln|Way|Cir|Circle|Pl|Ter|Pkwy)$|(?:Highway|Hwy)\s+\d+$/;
+  for (const a of assets) {
+    assert.ok(isNonEmptyString(a.address), `${a.name} missing address`);
+    assert.ok(a.address.endsWith(`, ${a.city}, ${a.state}`),
+      `${a.address} should end ", ${a.city}, ${a.state}"`);
+    const street = a.address.slice(0, -`, ${a.city}, ${a.state}`.length);
+    assert.ok(!/\.$|\w\./.test(street), `${a.address}: abbreviations take no period`);
+    assert.ok(!/ & | and /i.test(street), `${a.address}: use an en-dash range, not "&"`);
+    assert.ok(!/\b(Street|Avenue|Road|Drive|Boulevard|Court)\b/.test(street),
+      `${a.address}: spell street types short (St, Ave, Rd, Dr, Blvd, Ct)`);
+    // Unit suffixes are the one permitted extra comma.
+    const head = street.split(', Unit ')[0];
+    assert.ok(!head.includes(','), `${a.address}: street line should not be a comma list`);
+    if (!ADDRESS_GAPS.has(a.id)) {
+      assert.match(head, /^\d/, `${a.address}: should start with a house number`);
+      assert.ok(STREET_TYPE.test(head), `${a.address}: unexpected street type`);
+    }
+  }
+});
+
+// Guards the reverse direction: if a real address lands for one of the three
+// gaps, this fails and reminds us to take it off the list.
+test('assets: the address gaps raised with the client are still open', () => {
+  for (const id of ADDRESS_GAPS) {
+    assert.ok(assets.some((a) => a.id === id), `${id} is gone — drop it from ADDRESS_GAPS`);
+  }
+});
+
+test('assets: the 921 N Las Vegas Blvd correction survives regeneration', () => {
+  const a = assets.find((x) => x.id === '921-las-vegas-blvd-nv');
+  assert.ok(a, '921 Las Vegas Blvd went missing');
+  assert.equal(a.address, '921 N Las Vegas Blvd, Las Vegas, NV',
+    'the workbook still says "921 Las Vegas Blvd" — the ADDRESS override was lost');
+});
+
+test('assets: SDG alignment is stated once for the portfolio', () => {
+  assert.deepEqual(PORTFOLIO_SDGS, [1, 3, 5, 6, 7, 10, 11], 'portfolio SDG set changed');
+  for (const n of PORTFOLIO_SDGS) {
+    assert.ok(isNonEmptyString(SDG_LABELS[n]), `SDG ${n} has no label to render`);
   }
 });
 

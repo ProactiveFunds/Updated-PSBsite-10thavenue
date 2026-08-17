@@ -19,7 +19,13 @@
 // To refresh: update the workbook, re-run `python3 scripts/generate-assets.py`,
 // then run `npm test` — tests/data.test.js pins the totals quoted on /,
 // /OurProcess, /q3-special and /ira, so it will tell you what copy to update.
-// Fields: id, name, fund, status, city, state, zip, county, units,
+// `address` is the normalised street line /assets renders (one house style, set
+// in the generator's ADDRESS table — the workbook's own strings are
+// inconsistent). `avgRent` and `estimatedValue` are NOT shown per property
+// (client request, 17 Aug 2026); estimatedValue is kept because the portfolio
+// value and the AUM figure quoted on four other pages are summed from it.
+//
+// Fields: id, name, address, fund, status, city, state, zip, county, units,
 // occupiedUnits, occupancyRate, avgRent, purchasePrice, estimatedValue,
 // purchaseDate, yearAcquired, investmentThesis, impactThesis, sdgs[]
 // ---------------------------------------------------------------------------
@@ -28,6 +34,7 @@ export const assets = [
   {
     "id": "3-wycombe-drive-in",
     "name": "3 Wycombe Drive",
+    "address": "3 Wycombe Dr, Peru, IN",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Peru",
@@ -49,6 +56,7 @@ export const assets = [
   {
     "id": "921-las-vegas-blvd-nv",
     "name": "921 Las Vegas Blvd",
+    "address": "921 N Las Vegas Blvd, Las Vegas, NV",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Las Vegas",
@@ -78,6 +86,7 @@ export const assets = [
   {
     "id": "14437-45-s-halsted-street-il",
     "name": "14437-45 S. Halsted Street",
+    "address": "14437–14445 S Halsted St, Harvey, IL",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Harvey",
@@ -99,6 +108,7 @@ export const assets = [
   {
     "id": "2405-2407-old-edisto-drive-sc",
     "name": "2405 & 2407 Old Edisto Drive",
+    "address": "2405–2407 Old Edisto Dr, Orangeburg, SC",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Orangeburg",
@@ -120,6 +130,7 @@ export const assets = [
   {
     "id": "6633-mccartney-road-oh",
     "name": "6633 McCartney Road",
+    "address": "6633 McCartney Rd, Lowellville, OH",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Lowellville",
@@ -141,6 +152,7 @@ export const assets = [
   {
     "id": "7400-west-flamingo-road-unit-1092-nv",
     "name": "7400 West Flamingo Road, Unit 1092",
+    "address": "7400 W Flamingo Rd, Unit 1092, Las Vegas, NV",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Las Vegas",
@@ -162,6 +174,7 @@ export const assets = [
   {
     "id": "121-fountainevue-dr-in",
     "name": "121 Fountainevue Dr",
+    "address": "121 Fountainevue Dr, LaFountaine, IN",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "LaFountaine",
@@ -183,6 +196,7 @@ export const assets = [
   {
     "id": "252-ceceile-st-sc",
     "name": "252 Ceceile St",
+    "address": "252 Ceceile St, Denmark, SC",
     "fund": "Proactive Realty Income Fund",
     "status": "Acquired",
     "city": "Denmark",
@@ -204,6 +218,7 @@ export const assets = [
   {
     "id": "50-old-train-road-sc",
     "name": "50 Old Train Road",
+    "address": "50 Old Train Rd, Greeleyville, SC",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Greeleyville",
@@ -225,6 +240,7 @@ export const assets = [
   {
     "id": "13845-s-atlantic-ave-il",
     "name": "13845 S. Atlantic Ave.",
+    "address": "13845 S Atlantic Ave, Riverdale, IL",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Riverdale",
@@ -246,6 +262,7 @@ export const assets = [
   {
     "id": "526-518-520-522-stilton-sc",
     "name": "526, 518, 520, 522 Stilton",
+    "address": "518–526 Stilton, Orangeburg, SC",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Orangeburg",
@@ -267,6 +284,7 @@ export const assets = [
   {
     "id": "1905-ellis-ave-sc",
     "name": "1905 Ellis Ave",
+    "address": "1905 Ellis Ave, Orangeburg, SC",
     "fund": "Proactive Realty Income Fund",
     "status": "Acquired",
     "city": "Orangeburg",
@@ -288,6 +306,7 @@ export const assets = [
   {
     "id": "926-moseley-sc",
     "name": "926 Moseley",
+    "address": "926 Moseley, Orangeburg, SC",
     "fund": "Proactive QOZ Fund I, LLC",
     "status": "Acquired",
     "city": "Orangeburg",
@@ -309,6 +328,7 @@ export const assets = [
   {
     "id": "105-w-154-street-il",
     "name": "105 W. 154 Street",
+    "address": "105 W 154th St, Harvey, IL",
     "fund": "Proactive Realty Income Fund",
     "status": "Acquired",
     "city": "Harvey",
@@ -330,6 +350,7 @@ export const assets = [
   {
     "id": "113-w-154-street-il",
     "name": "113 W. 154 Street",
+    "address": "113 W 154th St, Harvey, IL",
     "fund": "Proactive Realty Income Fund",
     "status": "Acquired",
     "city": "Harvey",
@@ -351,6 +372,7 @@ export const assets = [
   {
     "id": "715-e-155th-ct-il",
     "name": "715 E 155th Ct.",
+    "address": "715 E 155th Ct, Phoenix, IL",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Phoenix",
@@ -372,6 +394,7 @@ export const assets = [
   {
     "id": "umh-citrus-circle-sc",
     "name": "UMH (Citrus Circle)",
+    "address": "Citrus Circle, Orangeburg, SC",
     "fund": "Proactive Realty Income Fund",
     "status": "Acquired",
     "city": "Orangeburg",
@@ -393,6 +416,7 @@ export const assets = [
   {
     "id": "1508-s-las-vegas-blvd-nv",
     "name": "1508 S Las Vegas Blvd",
+    "address": "1508 S Las Vegas Blvd, Las Vegas, NV",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Under Contract",
     "city": "Las Vegas",
@@ -422,6 +446,7 @@ export const assets = [
   {
     "id": "1602-us-highway-93-nv",
     "name": "1602 US Highway 93",
+    "address": "1602 US Highway 93, Jackpot, NV",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Under Contract",
     "city": "Jackpot",
@@ -443,6 +468,7 @@ export const assets = [
   {
     "id": "2952-alter-rd-mi",
     "name": "2952 Alter Rd.",
+    "address": "2952 Alter Rd, Detroit, MI",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Under Contract",
     "city": "Detroit",
@@ -472,6 +498,7 @@ export const assets = [
   {
     "id": "3203-water-ave-al",
     "name": "3203 Water Ave.",
+    "address": "3203 Water Ave, Selma, AL",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Under Contract",
     "city": "Selma",
@@ -501,6 +528,7 @@ export const assets = [
   {
     "id": "909-e-andy-devine-avenue-az",
     "name": "909 E. Andy Devine Avenue",
+    "address": "909 E Andy Devine Ave, Kingman, AZ",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Under Contract",
     "city": "Kingman",
@@ -520,6 +548,9 @@ export const assets = [
     "sdgs": []
   }
 ];
+
+// Stated once for the whole portfolio on /assets, rather than badged per asset.
+export const PORTFOLIO_SDGS = [1, 3, 5, 6, 7, 10, 11];
 
 export const SDG_LABELS = {
   1: 'No Poverty', 3: 'Good Health & Well-being', 5: 'Gender Equality',

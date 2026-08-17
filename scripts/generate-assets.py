@@ -56,6 +56,50 @@ UC_META = {
     5: ("3203-water-ave-al", "3203 Water Ave.", PRIF2),
 }
 
+# Street line for the site, normalised to one house style (Dr. Van, 17 Aug 2026):
+#   <number> <directional> <street> <Type>, <City>, <ST>   e.g.
+#   "921 N Las Vegas Blvd, Las Vegas, NV"
+# Types abbreviated with no trailing period; directionals as bare letters.
+# The workbook's own strings are inconsistent ("Ave." / "Avenue" / "Street"), and
+# four rows are multi-parcel lists rather than addresses, so the display value is
+# pinned here rather than derived — and it survives a workbook refresh.
+# City and state are appended from the sheet, so they are not repeated below.
+#
+# ⚠ Two entries below are still not real street addresses; the workbook has no
+#   house number ("Citrus Circle") or no street type ("Stilton", "Moseley").
+#   Flagged to the client — replace here when they come back with the real ones.
+ADDRESS = {
+    "252-ceceile-st-sc": "252 Ceceile St",
+    "1905-ellis-ave-sc": "1905 Ellis Ave",
+    "105-w-154-street-il": "105 W 154th St",
+    "113-w-154-street-il": "113 W 154th St",
+    "umh-citrus-circle-sc": "Citrus Circle",                     # ⚠ no house number
+    "3-wycombe-drive-in": "3 Wycombe Dr",
+    # Dr. Van's correction, 17 Aug 2026: the workbook still says "921 Las Vegas
+    # Blvd". Kept here so a refresh cannot silently revert it. Note the portfolio
+    # also holds 1508 *S* Las Vegas Blvd — the directional matters.
+    "921-las-vegas-blvd-nv": "921 N Las Vegas Blvd",
+    "14437-45-s-halsted-street-il": "14437–14445 S Halsted St",  # sheet: "14437–45"
+    "6633-mccartney-road-oh": "6633 McCartney Rd",
+    "7400-west-flamingo-road-unit-1092-nv": "7400 W Flamingo Rd, Unit 1092",
+    "2405-2407-old-edisto-drive-sc": "2405–2407 Old Edisto Dr",  # sheet: "2405 & 2407"
+    "121-fountainevue-dr-in": "121 Fountainevue Dr",
+    "50-old-train-road-sc": "50 Old Train Rd",
+    "13845-s-atlantic-ave-il": "13845 S Atlantic Ave",
+    "526-518-520-522-stilton-sc": "518–526 Stilton",             # ⚠ no street type
+    "715-e-155th-ct-il": "715 E 155th Ct",
+    "926-moseley-sc": "926 Moseley",                             # ⚠ no street type
+    "1602-us-highway-93-nv": "1602 US Highway 93",
+    "909-e-andy-devine-avenue-az": "909 E Andy Devine Ave",
+    "1508-s-las-vegas-blvd-nv": "1508 S Las Vegas Blvd",
+    "2952-alter-rd-mi": "2952 Alter Rd",
+    "3203-water-ave-al": "3203 Water Ave",
+}
+
+# Every property carries the same portfolio-level SDG alignment. Stated once on
+# /assets rather than badged per asset — see SUMMARY.md for why.
+PORTFOLIO_SDGS = [1, 3, 5, 6, 7, 10, 11]
+
 # Monthly average rent, carried over from the previous file (not in the sheet).
 AVG_RENT = {
     "252-ceceile-st-sc": 783.0,
@@ -167,6 +211,8 @@ def read(sheet, first, last, meta, status, skip=frozenset()):
         out.append({
             "id": asset_id,
             "name": name,
+            # What /assets renders: normalised street line + city + state.
+            "address": f"{ADDRESS[asset_id]}, {cell(4)}, {cell(5)}",
             "fund": fund,
             "status": status,
             "city": cell(4),
@@ -222,7 +268,13 @@ header = f"""// ----------------------------------------------------------------
 // To refresh: update the workbook, re-run `python3 scripts/generate-assets.py`,
 // then run `npm test` — tests/data.test.js pins the totals quoted on /,
 // /OurProcess, /q3-special and /ira, so it will tell you what copy to update.
-// Fields: id, name, fund, status, city, state, zip, county, units,
+// `address` is the normalised street line /assets renders (one house style, set
+// in the generator's ADDRESS table — the workbook's own strings are
+// inconsistent). `avgRent` and `estimatedValue` are NOT shown per property
+// (client request, 17 Aug 2026); estimatedValue is kept because the portfolio
+// value and the AUM figure quoted on four other pages are summed from it.
+//
+// Fields: id, name, address, fund, status, city, state, zip, county, units,
 // occupiedUnits, occupancyRate, avgRent, purchasePrice, estimatedValue,
 // purchaseDate, yearAcquired, investmentThesis, impactThesis, sdgs[]
 // ---------------------------------------------------------------------------
@@ -230,13 +282,16 @@ header = f"""// ----------------------------------------------------------------
 export const assets = [
 """
 
-footer = """];
+footer = f"""];
 
-export const SDG_LABELS = {
+// Stated once for the whole portfolio on /assets, rather than badged per asset.
+export const PORTFOLIO_SDGS = {json.dumps(PORTFOLIO_SDGS)};
+
+export const SDG_LABELS = {{
   1: 'No Poverty', 3: 'Good Health & Well-being', 5: 'Gender Equality',
   6: 'Clean Water', 7: 'Affordable & Clean Energy', 10: 'Reduced Inequalities',
   11: 'Sustainable Cities',
-};
+}};
 
 export const FUNDS = ["Proactive Realty Income Fund", "Proactive Realty Income Fund II, LLC", "Proactive QOZ Fund I, LLC"];
 export const STATUSES = ['In Review', 'Under Contract', 'Acquired', 'Sold'];

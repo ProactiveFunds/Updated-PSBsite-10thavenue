@@ -297,6 +297,18 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
     from the site — see `HELD_SKIP` in the generator. `tests/data.test.js` pins these, so a refresh that moves them fails the
     suite by design — that failure is the checklist of marketing copy to update
     (`/` hero + impact band, `/OurProcess`, `/q3-special`, `/ira`).
+  - **Do not render `estimatedValue` or `avgRent` per property** (Dr. Van, 17 Aug 2026). Both stay
+    in the data because the portfolio total and the AUM figure on four pages are summed from
+    `estimatedValue` — the instruction is about display, not deletion.
+  - **Addresses have one house style**, `<number> <directional> <street> <Type>, <City>, <ST>`.
+    Set in the generator's `ADDRESS` table, not derived from the workbook (its strings are
+    inconsistent and four rows are multi-parcel lists). `921 N Las Vegas Blvd` is a correction the
+    workbook does **not** carry — a test guards it. Three rows still lack a house number or street
+    type; they are listed in `ADDRESS_GAPS` in `tests/data.test.js`, pending the client.
+  - **SDGs are a portfolio-level statement (`PORTFOLIO_SDGS`), not a per-asset badge.** Do not
+    stamp the seven goals onto individual properties without per-asset evidence — the site badges
+    BlueMark, Sustainalytics, PRI and the ICMA Social Bond Principles, which makes a per-asset SDG
+    claim one a verifier can test. This was agreed with the client on 17 Aug 2026.
   - The workbook's *Estimated Value* column is **based on 100% occupancy** — stabilised, not
     current market value. Every page that quotes the $69M carries that caveat; keep it attached.
   - Off-site collateral (deck, cover letters, AlphaMaven email sequence) still carries the old

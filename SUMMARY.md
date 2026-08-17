@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-08-11_
+_Last updated: 2026-08-17_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -78,6 +78,8 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 - One owned row is deliberately **not** published: *906 West Main* (Peru, IN — 46 pads, $3.875M),
   which the workbook lists as "(for sale)". See `HELD_SKIP` in `scripts/generate-assets.py`; a test
   guards it. Add it back by clearing that set if it comes off the market.
+- Per-property **Est. value and Avg rent are no longer displayed** (Dr. Van, 17 Aug); the data is
+  retained because the totals depend on it.
 - Quoted on: `/` (hero stats + "Communities audited"), `/assets` (KPI strip, computed from the data),
   `/OurProcess`, `/q3-special`, `/ira`. `tests/data.test.js` pins the totals, so a data refresh that
   moves them fails the suite and tells you which copy to update.
@@ -94,6 +96,30 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ## Recent work log
 
 **August 2026**
+- **Property listings reworked to Dr. Van's brief (17 Aug).** Email "Website Property Listing
+  Updates", cc Jesse.
+  - **Est. value and Avg rent removed from every property card.** `estimatedValue` stays in the
+    data — the `$65M` portfolio KPI and the AUM figure on `/`, `/OurProcess`, `/q3-special` and
+    `/ira` are summed from it — it is simply no longer rendered per asset. Units, occupancy,
+    status, fund and acquisition date were kept (client's call: remove only what was asked).
+  - **One address house style**, `<number> <directional> <street> <Type>, <City>, <ST>` — e.g.
+    `921 N Las Vegas Blvd, Las Vegas, NV`. New `address` field, pinned in the generator's
+    `ADDRESS` table because the workbook's own strings are inconsistent (`Ave.` / `Avenue` /
+    `Street`) and four rows are multi-parcel lists rather than addresses. Rows now read
+    address / county, matching the card format in the email.
+  - **`921 Las Vegas Blvd` → `921 N Las Vegas Blvd`.** The workbook still says the old value, so
+    the correction lives in `ADDRESS` and a test fails if a refresh loses it. (The portfolio also
+    holds `1508 S Las Vegas Blvd` — the directional matters.)
+  - **SDGs stated once at portfolio level** rather than badged per asset: a band under the KPIs
+    reads "Portfolio aligned to the UN Sustainable Development Goals · SDG 1 … SDG 11", exported
+    as `PORTFOLIO_SDGS`. Dr. Van asked for all seven on every property; only 4 of 22 carried any.
+    Stamping identical badges on 22 rows would assert e.g. SDG 6 (Clean Water) and SDG 7
+    (Affordable & Clean Energy) for a 1-unit condo and a vacant 3-unit building, on a site that
+    badges BlueMark, Sustainalytics, PRI and the ICMA Social Bond Principles — a per-asset claim
+    a verifier can test. Portfolio-level wording was agreed instead.
+  - **Three addresses the workbook cannot express in the house style** are pinned in
+    `ADDRESS_GAPS` (`tests/data.test.js`) and were raised with the client: *Citrus Circle* has no
+    house number, *518–526 Stilton* and *926 Moseley* have no street type.
 - **Portfolio data re-imported from the client workbook (11 Aug).** `Proactive Realty Group -
   Property Information.xlsx` replaced the base44 export as the source of truth for every per-asset
   figure. `src/data/assets.js` is now **generated** by `scripts/generate-assets.py` from the two

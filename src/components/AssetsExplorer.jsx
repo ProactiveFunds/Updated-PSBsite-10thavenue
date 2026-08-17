@@ -1,11 +1,10 @@
 import React from 'react';
 import { Ic } from './icons.jsx';
-import { assets as ALL, SDG_LABELS, FUNDS, STATUSES } from '../data/assets.js';
+import { assets as ALL, SDG_LABELS, PORTFOLIO_SDGS, FUNDS, STATUSES } from '../data/assets.js';
 import PortfolioMap from './PortfolioMap.jsx';
 
 const { useState, useMemo } = React;
 
-const money = (n) => (n == null ? '—' : '$' + Number(n).toLocaleString());
 const moneyShort = (n) => {
   if (n == null) return '—';
   if (n >= 1e6) return '$' + (n / 1e6).toFixed(n % 1e6 ? 1 : 0) + 'M';
@@ -48,7 +47,7 @@ export default function AssetsExplorer() {
     if (fund !== 'all' && a.fund !== fund) return false;
     if (status !== 'all' && a.status !== status) return false;
     if (q) {
-      const hay = `${a.name} ${a.city} ${a.state}`.toLowerCase();
+      const hay = `${a.address} ${a.county}`.toLowerCase();
       if (!hay.includes(q.toLowerCase())) return false;
     }
     return true;
@@ -65,7 +64,7 @@ export default function AssetsExplorer() {
     const list = preState.filter((a) => stateF === 'all' || a.state === stateF);
     const dir = sort.dir === 'asc' ? 1 : -1;
     const val = (a) => ({
-      name: a.name || '', fund: a.fund || '', status: a.status || '',
+      name: a.address || '', fund: a.fund || '', status: a.status || '',
       units: a.units || 0, occupancy: a.occupancyRate || 0,
       year: a.yearAcquired || 0, value: a.estimatedValue || 0,
     }[sort.key]);
@@ -113,8 +112,6 @@ export default function AssetsExplorer() {
       ['Fund', a.fund || '—'],
       ['Acquired', a.status === 'Under Contract' ? 'Under contract — not yet closed' : (fmtDate(a.purchaseDate) || a.yearAcquired || '—')],
       ['County', a.county || '—'],
-      ['Avg rent', a.avgRent ? money(a.avgRent) + '/mo' : '—'],
-      ['Est. value', money(a.estimatedValue)],
     ];
     return (
       <div className="asset-detail">
@@ -135,14 +132,6 @@ export default function AssetsExplorer() {
         </div>
         {a.investmentThesis && (<div className="asset-thesis"><div className="data-label">Investment thesis</div><p>{a.investmentThesis}</p></div>)}
         {a.impactThesis && (<div className="asset-thesis"><div className="data-label">Impact thesis</div><p>{a.impactThesis}</p></div>)}
-        {a.sdgs && a.sdgs.length > 0 && (
-          <div style={{ marginTop: 16 }}>
-            <div className="data-label" style={{ marginBottom: 8 }}>UN Sustainable Development Goals</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {a.sdgs.map((n) => <span key={n} className="asset-sdg"><Ic name="leaf" size={13} /> SDG {n} · {SDG_LABELS[n] || ''}</span>)}
-            </div>
-          </div>
-        )}
       </div>
     );
   };
@@ -178,6 +167,18 @@ export default function AssetsExplorer() {
           )}
           Portfolio value is estimated at 100% occupancy.
         </p>
+        {/* Stated once for the whole portfolio rather than badged on every row:
+            the alignment is the same for all 22 assets, so 22 identical badge
+            rows would be noise — and a per-asset claim is a stronger one to
+            have to evidence. See SUMMARY.md. */}
+        <div className="asset-sdg-band">
+          <span className="data-label">Portfolio aligned to the UN Sustainable Development Goals</span>
+          <div className="asset-sdg-list">
+            {PORTFOLIO_SDGS.map((n) => (
+              <span key={n} className="asset-sdg"><Ic name="leaf" size={13} /> SDG {n} · {SDG_LABELS[n] || ''}</span>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Filter bar */}
@@ -226,8 +227,8 @@ export default function AssetsExplorer() {
                     <React.Fragment key={a.id}>
                       <tr className={'asset-row' + (isOpen ? ' open' : '')} onClick={() => setOpen(isOpen ? null : a.id)}>
                         <td data-label="Asset">
-                          <div className="asset-name">{a.name}</div>
-                          <div className="asset-loc">{a.city}{a.city && a.state ? ', ' : ''}{a.state}</div>
+                          <div className="asset-name">{a.address}</div>
+                          <div className="asset-loc">{a.county}</div>
                         </td>
                         <td data-label="Fund" className="asset-fund">{a.fund ? a.fund.replace(', LLC', '') : '—'}</td>
                         <td data-label="Status"><StatusPill s={a.status} /></td>
@@ -250,8 +251,8 @@ export default function AssetsExplorer() {
                   <div className="asset-tl-items">
                     {items.map((a) => (
                       <button key={a.id} className="asset-tl-item" onClick={() => { setView('table'); setOpen(a.id); }}>
-                        <span className="asset-name">{a.name}</span>
-                        <span className="asset-loc">{a.city}{a.city && a.state ? ', ' : ''}{a.state}</span>
+                        <span className="asset-name">{a.address}</span>
+                        <span className="asset-loc">{a.county}</span>
                         <StatusPill s={a.status} />
                       </button>
                     ))}
@@ -274,6 +275,8 @@ export default function AssetsExplorer() {
         .asset-kpis { display: flex; gap: 38px; margin-top: 28px; flex-wrap: wrap; }
         .asset-kpi-note { margin: 14px 0 0; font-size: var(--text-xs); color: var(--fg-3); }
         .asset-kpi-note strong { color: var(--fg-2); font-weight: 600; }
+        .asset-sdg-band { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border); }
+        .asset-sdg-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .asset-filters { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 22px; }
         .asset-search { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 220px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0 14px; }
         .asset-search input { border: none; outline: none; background: transparent; font: inherit; font-size: var(--text-sm); color: var(--fg-1); padding: 11px 0; width: 100%; }
@@ -308,7 +311,7 @@ export default function AssetsExplorer() {
         .asset-chev { width: 30px; text-align: right; }
         .asset-detail-row td { padding: 0; background: var(--surface-2); border-bottom: 1px solid var(--border); }
         .asset-detail { padding: 24px; }
-        .asset-detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+        .asset-detail-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
         .asset-thesis { margin-top: 18px; max-width: 70ch; }
         .asset-thesis p { margin: 6px 0 0; color: var(--fg-2); font-size: var(--text-sm); line-height: 1.6; }
         .asset-sdg { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 500; color: var(--forest-700); background: var(--lime-100); border-radius: 999px; padding: 5px 11px; }
