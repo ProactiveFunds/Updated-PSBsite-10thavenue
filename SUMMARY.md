@@ -90,12 +90,12 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ## Deployment
 - `render.yaml` blueprint (static): `npm install && npm run build` -> publish `dist`, `NODE_VERSION=22`.
 - Static CDN caches aggressively; hard-refresh (Cmd+Shift+R) after a deploy.
-- ⚠ **Auto-deploy may no longer be OFF.** The long-standing rule here was "pushing does not deploy;
-  run a Manual Deploy". On **17 Aug 2026** `6b7b521` was verified live on
-  `www.sustainablebonds.com` within minutes of being pushed, with no Manual Deploy run from this
-  side. Either the setting was turned on or someone deployed immediately. **Confirm in the Render
-  dashboard** and correct this section (and `rules.md` s3) either way — it changes whether a push
-  is publication.
+- **Auto-deploy is OFF — pushing is not publishing.** Settled on 19 Aug 2026: `108d748` was on
+  both remotes and `/events/self-directed-ira-recording` still 404'd on the live site minutes
+  later. (The 17 Aug observation that `6b7b521` appeared live within minutes was therefore
+  somebody running a deploy promptly, not the setting having changed.) To publish, open the
+  Render dashboard -> the `sustainablebonds` site -> **Manual Deploy** -> **Deploy latest
+  commit**.
 
 ---
 
@@ -307,8 +307,21 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 - **Project memory added:** `rules.md` (operating manual), `CLAUDE.md` (working rules), this `SUMMARY.md`,
   and a `tests/` unit-test suite (Node's built-in runner) covering the data layer and pure utilities.
 
-**Deploy status (checked 17 Aug 2026):** nothing pending. Production is live on **`6b7b521`**,
-verified by reading `www.sustainablebonds.com` directly, not by trusting the dashboard:
+**Deploy status (checked 19 Aug 2026): ONE COMMIT PENDING.** `108d748` (the SDIRA recording page)
+is on **both** remotes but **not yet live** — `www.sustainablebonds.com/events/self-directed-ira-recording`
+returned 404 and `/events` had no "Past event recordings" section minutes after the push. So
+**auto-deploy is OFF after all**, which resolves the 17 Aug uncertainty below: publishing still
+needs a **Manual Deploy** in the Render dashboard (`sustainablebonds` -> Manual Deploy -> Deploy
+latest commit). Re-verify by fetching `/events/self-directed-ira-recording` and expecting a 200
+plus the string "Play the full session".
+
+Both remotes and `main` are at `108d748`. The embedded PAT was stripped from both remote URLs on
+19 Aug (it had been revoked, and a dead secret in `.git/config` is still a secret), so pushes now
+go through the env-var credential helper in `rules.md` s2 and tracking refs are set by hand from
+the SHA that `git ls-remote` confirms.
+
+Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified by reading
+`www.sustainablebonds.com` directly, not by trusting the dashboard:
 
 | Marker | Live value |
 |---|---|
@@ -319,10 +332,8 @@ verified by reading `www.sustainablebonds.com` directly, not by trusting the das
 | `/assets` | "Portfolio aligned to the UN Sustainable Development Goals" band present |
 | Footer | "Our mission & team" present, "Investment scenarios" gone |
 
-Both remotes and `main` are at `6b7b521` with tracking refs refreshed (`git status` is trustworthy
-again — it was showing 10 phantom pending commits from stale July refs).
-
 **Recent commits:**
+- `108d748` - SDIRA webinar recording page + "Past event recordings" on /events
 - `6b7b521` - property listings: one address style, no per-asset value/rent, portfolio SDG band
 - `3c5a43f` - portfolio re-imported from the client workbook (22 properties, under-contract labels)
 - `96c3540` - calculator amount selector legibility + backtick guard

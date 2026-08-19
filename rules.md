@@ -42,10 +42,10 @@ git push client main && git push origin main
 Notes / rules:
 - Auth is via a Personal Access Token embedded in the remote URL. **Never print the
   token.** Mask it in any command output (`sed 's#https://[^@]*@#https://***@#g'`).
-- **Two** GitHub PATs have now been pasted in chat (the second on 17 Aug 2026, a classic token
-  with `repo` + `write:packages` belonging to `ihavespokennow-ops`). Both **must be
-  rotated/revoked**, and none should ever be pasted again. If a token must be used for a one-off
-  push, pass it through an env-var credential helper so it never lands in git config or a file:
+- **Three** GitHub PATs have now been pasted in chat (the second on 17 Aug 2026, the third on
+  19 Aug 2026). All **must be rotated/revoked**, and none should ever be pasted again. If a token
+  must be used for a one-off push, pass it through an env-var credential helper so it never lands
+  in git config or a file:
   `GH_PAT=… git -c credential.helper= -c credential.helper='!f() { echo username=x-access-token; echo "password=${GH_PAT}"; }; f' push <url> main:main`
 - **`-c credential.helper=…` appends to the helper list, it does not replace it.** The macOS
   keychain helper answers first and wins. This machine has a stale `github.com` entry for the
@@ -55,6 +55,17 @@ Notes / rules:
   `printf 'protocol=https\nhost=github.com\n\n' | git credential-osxkeychain erase`.
 - The GitHub REST API occasionally 404s a branch immediately after a successful push. Trust
   `git ls-remote --heads <url>` over the API when confirming a push landed.
+- **`remote: Repository not found` on a private repo means AUTH FAILED, not "repo is gone".**
+  GitHub 404s a private repository rather than admitting it exists to a caller who cannot
+  authenticate. On 19 Aug 2026 `origin` (`ihavespokennow-ops/sustainablebonds`) reported exactly
+  that with a dead token and pushed fine with a live one. Diagnose a 404 as a credentials problem
+  first; do not go looking for a deleted or renamed repo.
+- **Neither remote URL carries an embedded token any more** (stripped 19 Aug 2026, since the one
+  in there was revoked and a dead secret in `.git/config` is still a secret). Both are plain
+  HTTPS, so `fetch`/`push` need the env-var credential helper above. After a push whose tracking
+  ref cannot be refreshed by a fetch, set it by hand from the verified SHA:
+  `git update-ref refs/remotes/client/main <sha>` — otherwise `git status` reports phantom
+  pending commits.
 - Direct pushes to `main` can be blocked by the environment's auto-approval classifier
   ("Git Push to Default Branch"). That is expected; proceed only after the user explicitly
   asks to push (their "push" instruction is the authorization), then run both pushes.
