@@ -29,11 +29,13 @@ const RUNTIME = formatRuntime(REC.durationMins);
 /* ---------------------------------------------------------------- content -- */
 
 // Headline figures, drawn from the session. Kept to three so the band reads at
-// a glance; each one is something Jeff said on the night.
+// a glance; each one is something Jeff said on the night. The offer deliberately
+// is not one of them — it lives in the promo card down at Next steps, where
+// somebody who has actually watched the hour will be.
 const HERO_STATS = [
   ['Runtime', RUNTIME, 'Presentation and live Q&A'],
   ['Sitting in American IRAs', '$18.2T', 'Most of it never leaves the market'],
-  ['Your first year', '$200 off', `Code ${REC.promoCode}`],
+  ['Your IRA may not hold', '3 things', 'Everything else is fair game'],
 ];
 
 // Chapter marks are minutes into the recording, taken from the transcript. Zoom
