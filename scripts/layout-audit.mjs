@@ -32,7 +32,7 @@ const WIDTHS = opt('widths', '1440,1920,2560').split(',').map(Number);
 const PORT = Number(opt('port', 9333));
 const paths = argv.filter((a, i) => !a.startsWith('--') && !argv[i - 1]?.startsWith('--'));
 const ROUTES = paths.length ? paths : [
-  '/', '/events', '/events/self-directed-ira', '/q3-special',
+  '/', '/events', '/events/self-directed-ira', '/events/self-directed-ira-recording', '/q3-special',
   '/ira', '/team', '/verified', '/OurProcess', '/accreditation', '/assets', '/digest',
 ];
 

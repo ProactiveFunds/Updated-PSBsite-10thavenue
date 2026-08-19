@@ -2,7 +2,7 @@ import React from 'react';
 import { MktNav, MktFooter } from './MktChrome.jsx';
 import { Ic } from './icons.jsx';
 import { initInteractions } from '../lib/interactions.js';
-import { upcomingEvents, pastEvents, formatEventDate, formatEventTime, daysUntil } from '../data/events.js';
+import { upcomingEvents, pastEvents, recordedEvents, formatEventDate, formatEventTime, formatRuntime, daysUntil } from '../data/events.js';
 
 const { useEffect, useState } = React;
 
@@ -58,6 +58,37 @@ function FeaturedEvent({ event }) {
   );
 }
 
+// A finished session whose recording is published. The whole card is the link,
+// so the "Watch" button below is decoration inside it rather than a nested <a>.
+function RecordingCard({ event }) {
+  const rec = event.recording;
+  return (
+    <a className="ev-rec" href={rec.href}>
+      <div className="ev-rec-body">
+        <div className="ev-tags">
+          <span className="ev-tag ev-tag-rec"><Ic name="play" size={13} />Recording</span>
+          <span className="ev-count">{formatEventDate(event, { short: true })} · {formatRuntime(rec.durationMins)}</span>
+        </div>
+        <h3 className="ev-rec-h">{event.title}</h3>
+        <p className="ev-rec-sub">{event.subtitle}</p>
+        <p className="ev-rec-p">{rec.summary}</p>
+        <span className="ev-rec-cta">Watch the recording <Ic name="arrow-right" size={17} /></span>
+      </div>
+      <div className="ev-rec-side">
+        <img className="ev-rec-img" src={event.speaker.image} alt="" loading="lazy" />
+        <div className="ev-speaker-n">{event.speaker.name}</div>
+        <div className="ev-speaker-r">{event.speaker.org}</div>
+        <div className="ev-rec-meta">
+          <span><Ic name="clock" size={14} />{formatRuntime(rec.durationMins)}</span>
+          <span><Ic name="check-circle" size={14} />Q&amp;A included</span>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+// A finished session with no recording published — still worth listing, but it
+// only ever links back to its own landing page.
 function PastEvent({ event }) {
   return (
     <a className="ev-past" href={event.href}>
@@ -71,7 +102,10 @@ function PastEvent({ event }) {
 export default function EventsPage() {
   useEffect(() => { initInteractions(); }, []);
   const upcoming = upcomingEvents();
-  const past = pastEvents();
+  const recorded = recordedEvents();
+  // Finished sessions with nothing to watch yet keep the plain list; anything
+  // with a published recording graduates to a card above it.
+  const past = pastEvents().filter((e) => !e.recording);
 
   return (
     <React.Fragment>
@@ -112,10 +146,29 @@ export default function EventsPage() {
           )}
         </section>
 
+        {recorded.length > 0 && (
+          <section id="recordings" className="ev-sec" style={{ scrollMarginTop: 92 }}>
+            <div className="ev-sec-head ev-sec-head-split">
+              <div>
+                <span className="eyebrow">Previously</span>
+                <h2 className="ev-h2">Past event recordings</h2>
+              </div>
+              <p className="ev-sec-copy">
+                Every session is recorded and published here in full — the presentation, the
+                slides that mattered, and the live Q&amp;A, which is usually the half people
+                remember. Free to watch, no registration, no time limit.
+              </p>
+            </div>
+            <div className="ev-rec-list">
+              {recorded.map((e) => <RecordingCard key={e.slug} event={e} />)}
+            </div>
+          </section>
+        )}
+
         {past.length > 0 && (
           <section className="ev-sec">
             <div className="ev-sec-head">
-              <span className="eyebrow">Previously</span>
+              <span className="eyebrow">Also behind us</span>
               <h2 className="ev-h2">Past sessions</h2>
             </div>
             <div className="ev-past-list">
@@ -140,6 +193,13 @@ export default function EventsPage() {
       <style>{`
         .ev-sec { max-width: 1240px; margin: 0 auto; padding: 96px 22px 0; }
         .ev-sec-head { margin-bottom: 34px; }
+        /* Heading left, copy right, so the row fills instead of stranding a
+           capped paragraph in the left half. rules.md section 6 "Layout". */
+        @media (min-width: 900px) {
+          .ev-sec-head-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: clamp(36px, 5vw, 76px); align-items: end; }
+        }
+        .ev-sec-copy { margin: 0; color: var(--fg-2); line-height: 1.76; font-size: var(--text-base); }
         .ev-h2 { margin: 13px 0 0; font-family: var(--font-editorial); font-weight: 600;
           font-size: clamp(1.75rem, 3.2vw, 2.4rem); line-height: 1.12; letter-spacing: -0.022em; color: var(--forest-700); }
         [data-theme="dark"] .ev-h2 { color: var(--lime-300); }
@@ -199,6 +259,38 @@ export default function EventsPage() {
         .ev-speaker-o { color: rgba(234,243,226,0.66); font-size: var(--text-xs); margin-top: 3px; }
         .ev-speaker-note { margin: 20px 0 0; font-size: var(--text-xs); color: rgba(234,243,226,0.72); line-height: 1.6; }
 
+        /* recordings */
+        .ev-tag-rec { display: inline-flex; align-items: center; gap: 7px; background: var(--forest-600); color: #fff; }
+        [data-theme="dark"] .ev-tag-rec { background: rgba(127,178,79,0.22); color: var(--lime-300); }
+        .ev-rec-list { display: grid; gap: 16px; }
+        /* One card per row, split into two columns so it fills the container at
+           any width rather than sitting in a narrow strip on a wide monitor. */
+        .ev-rec { display: grid; grid-template-columns: minmax(0, 1fr) 280px; overflow: hidden;
+          border-radius: var(--radius-2xl); background: var(--surface); border: 1px solid var(--border);
+          text-decoration: none; color: inherit; box-shadow: var(--shadow-sm);
+          transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+        .ev-rec:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .ev-rec-body { padding: clamp(28px, 3.4vw, 42px); }
+        .ev-rec-h { margin: 0; font-family: var(--font-editorial); font-weight: 600; color: var(--fg-1);
+          font-size: clamp(1.45rem, 2.6vw, 1.95rem); line-height: 1.15; letter-spacing: -0.02em; }
+        .ev-rec-sub { margin: 8px 0 0; font-size: var(--text-base); color: var(--brand); font-weight: 500; }
+        [data-theme="dark"] .ev-rec-sub { color: var(--lime-300); }
+        .ev-rec-p { margin: 16px 0 0; color: var(--fg-2); line-height: 1.72; font-size: var(--text-sm); }
+        .ev-rec-cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px;
+          font-size: var(--text-sm); font-weight: 700; color: var(--brand); }
+        .ev-rec:hover .ev-rec-cta svg { transform: translateX(3px); }
+        .ev-rec-cta svg { transition: transform var(--dur-base) var(--ease-out); }
+        .ev-rec-side { padding: clamp(28px, 3.4vw, 38px) 28px; text-align: center;
+          background: linear-gradient(165deg, var(--forest-600), var(--forest-900)); }
+        .ev-rec-img { width: 104px; height: 104px; border-radius: 50%; object-fit: cover;
+          margin: 0 auto 14px; display: block;
+          box-shadow: 0 0 0 3px rgba(255,255,255,0.14), 0 0 0 5px var(--lime-300); }
+        .ev-rec-meta { display: grid; gap: 8px; margin-top: 20px; padding-top: 18px;
+          border-top: 1px solid rgba(255,255,255,0.14); }
+        .ev-rec-meta span { display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+          font-size: var(--text-xs); color: rgba(234,243,226,0.78); }
+        .ev-rec-meta svg { color: var(--lime-300); }
+
         /* empty + past */
         .ev-empty { border: 1px dashed var(--border-strong); border-radius: var(--radius-2xl);
           padding: 48px 36px; text-align: center; display: grid; justify-items: center; gap: 20px; }
@@ -225,6 +317,8 @@ export default function EventsPage() {
           .ev-feature { grid-template-columns: 1fr; }
           .ev-feature-side { order: -1; padding: 34px 30px; }
           .ev-speaker-img { width: 108px; height: 108px; margin-top: 12px; }
+          .ev-rec { grid-template-columns: 1fr; }
+          .ev-rec-side { order: -1; padding: 30px 28px; }
         }
         @media (max-width: 560px) {
           .ev-past { grid-template-columns: 1fr auto; }

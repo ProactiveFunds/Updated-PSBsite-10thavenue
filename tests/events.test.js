@@ -4,8 +4,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  events, getEvent, upcomingEvents, pastEvents,
-  formatEventDate, formatEventTime, daysUntil, calendarUrl,
+  events, getEvent, upcomingEvents, pastEvents, recordedEvents, getEventByRecordingSlug,
+  formatEventDate, formatEventTime, formatRuntime, daysUntil, calendarUrl,
 } from '../src/data/events.js';
 
 test('every event carries the fields both pages render', () => {
@@ -99,4 +99,69 @@ test('formatEventDate short form drops the year when asked', () => {
   const short = formatEventDate(e, { short: true, year: false });
   assert.ok(!short.includes('2026'), 'short form should omit the year');
   assert.ok(short.includes('Aug'), 'short form should abbreviate the month');
+});
+
+/* --------------------------------------------------------------- recordings */
+
+test('every published recording carries the fields both pages render', () => {
+  for (const e of events.filter((x) => x.recording)) {
+    const r = e.recording;
+    for (const key of ['slug', 'href', 'zoomUrl', 'durationMins', 'publishedAt', 'title', 'summary']) {
+      assert.ok(r[key], `${e.slug}: recording missing ${key}`);
+    }
+    assert.equal(r.href, `/events/${r.slug}`, `${e.slug}: recording href should follow its slug`);
+    assert.notEqual(r.slug, e.slug, `${e.slug}: the recording needs its own route, not the event's`);
+    assert.match(r.zoomUrl, /^https:\/\/[a-z0-9.-]+\.zoom\.us\/rec\//, `${e.slug}: zoomUrl should be a Zoom recording share link`);
+    assert.ok(r.durationMins > 0, `${e.slug}: recording needs a real runtime`);
+    assert.ok(!Number.isNaN(new Date(r.publishedAt).getTime()), `${e.slug}: publishedAt must parse`);
+    assert.match(r.publishedAt, /[+-]\d{2}:\d{2}$/, `${e.slug}: publishedAt needs an explicit UTC offset`);
+    // A recording cannot predate the session it is a recording of.
+    assert.ok(new Date(r.publishedAt) >= new Date(e.endsAt), `${e.slug}: publishedAt must be after the event ends`);
+  }
+});
+
+test('recording slugs are unique and never collide with an event slug', () => {
+  const recSlugs = events.filter((e) => e.recording).map((e) => e.recording.slug);
+  assert.equal(new Set(recSlugs).size, recSlugs.length, 'recording slugs must be unique');
+  for (const s of recSlugs) {
+    assert.ok(!events.some((e) => e.slug === s), `${s} is already an event slug`);
+  }
+});
+
+test('recordedEvents lists only finished events that have one, most recent first', () => {
+  const before = new Date('2026-08-01T00:00:00Z');
+  const after = new Date('2026-09-01T00:00:00Z');
+
+  assert.deepEqual(recordedEvents(before), [], 'nothing is watchable before the session happens');
+
+  const list = recordedEvents(after);
+  assert.ok(list.some((e) => e.slug === 'self-directed-ira'), 'the SDIRA session should be listed afterwards');
+  for (const e of list) {
+    assert.ok(e.recording, 'recordedEvents must only return events with a recording');
+    assert.ok(new Date(e.endsAt) < after, 'recordedEvents must only return finished events');
+  }
+  for (let i = 1; i < list.length; i += 1) {
+    assert.ok(new Date(list[i - 1].startsAt) >= new Date(list[i].startsAt), 'recordings must be newest first');
+  }
+});
+
+test('getEventByRecordingSlug resolves the route back to its event', () => {
+  const e = getEventByRecordingSlug('self-directed-ira-recording');
+  assert.ok(e, 'the recording route should resolve');
+  assert.equal(e.slug, 'self-directed-ira');
+  assert.equal(getEventByRecordingSlug('does-not-exist'), null);
+});
+
+test('the SDIRA recording is the 67-minute file at its own route', () => {
+  const r = getEvent('self-directed-ira').recording;
+  assert.equal(r.durationMins, 67, 'the recording runs 67 minutes, not the scheduled 60');
+  assert.equal(r.href, '/events/self-directed-ira-recording');
+  assert.equal(r.promoCode, 'PROACTIVE200', 'the code Jeff gave on the call');
+});
+
+test('formatRuntime reads as hours and minutes', () => {
+  assert.equal(formatRuntime(67), '1 hr 7 min');
+  assert.equal(formatRuntime(45), '45 min');
+  assert.equal(formatRuntime(60), '1 hr');
+  assert.equal(formatRuntime(125), '2 hr 5 min');
 });

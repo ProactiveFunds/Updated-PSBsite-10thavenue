@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-08-17_
+_Last updated: 2026-08-19_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -36,8 +36,9 @@ wired, plus conventions and gotchas), and **`CLAUDE.md`** for the working rules.
 | `/team` | `team.astro` -> `AboutTeam.jsx` | About + team as transparent-cutout photos + bios. Dr. Williams has an "Author of" book strip. (`/about` redirects to `/team`.) |
 | `/OurProcess` | how-it-works page | "How it works". |
 | `/digest`, `/digest/<slug>`, `/digest/blog[/<slug>]` | `digest/` <- `digestPages.js`, `blogPosts.js` | Editorial Digest: cover feature + 11 content pages + 27 blog posts (Markdown). |
-| `/events` | `events/index.astro` -> `EventsPage.jsx` | Events summary: upcoming sessions (featured card per event, speaker rail, countdown), past sessions, and a "keep me posted" CTA. Driven by `src/data/events.js`; renders an empty state when nothing is scheduled. |
+| `/events` | `events/index.astro` -> `EventsPage.jsx` | Events summary: upcoming sessions (featured card per event, speaker rail, countdown), **Past event recordings** (a full-width card per recorded session, linking to its recording page), any past session without a recording, and a "keep me posted" CTA. Driven by `src/data/events.js`; renders an empty state when nothing is scheduled. |
 | `/events/self-directed-ira` | `events/self-directed-ira.astro` -> `SdiraWebinarPage.jsx` | Landing page for the SDIRA webinar (Tue 18 Aug 2026, 6:30 PM ET) with guest Jeff Minnick of Directed IRA. Two-column hero with a sticky registration card, illustrative compounding comparison, agenda, speaker bio, all six team members, FAQ, sticky CTA bar. Has OG/Twitter tags plus `Event` JSON-LD. |
+| `/events/self-directed-ira-recording` | `events/self-directed-ira-recording.astro` -> `SdiraRecordingPage.jsx` | Recording page for that session (1 hr 7 min, Zoom). Hero + figure band, click-to-load Zoom player, who was on the call, 13 timestamped chapters, six takeaways, the six self-directable account types, open/fund/invest timing, Jeff's own $100k note as a case study, all ten Q&A answers, pull quotes, the `PROACTIVE200` offer, a contact form on the `ira` Tenth Avenue key, and disclosures. OG/Twitter tags plus `VideoObject` JSON-LD. |
 
 Top nav (`MktChrome.jsx` `NAV_LINKS`): Opportunities, Our Impact, ProActively Verified, How it
 works, Assets, Team, **Events**, Digest, **Contact us** (-> `#get-started`). The old "Sign in"
@@ -88,14 +89,47 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 
 ## Deployment
 - `render.yaml` blueprint (static): `npm install && npm run build` -> publish `dist`, `NODE_VERSION=22`.
-- Auto-deploy is OFF. Push to both remotes, then run a **Manual Deploy** in Render (Deploy latest commit).
-  Static CDN caches aggressively; hard-refresh (Cmd+Shift+R) after a deploy.
+- Static CDN caches aggressively; hard-refresh (Cmd+Shift+R) after a deploy.
+- ⚠ **Auto-deploy may no longer be OFF.** The long-standing rule here was "pushing does not deploy;
+  run a Manual Deploy". On **17 Aug 2026** `6b7b521` was verified live on
+  `www.sustainablebonds.com` within minutes of being pushed, with no Manual Deploy run from this
+  side. Either the setting was turned on or someone deployed immediately. **Confirm in the Render
+  dashboard** and correct this section (and `rules.md` s3) either way — it changes whether a push
+  is publication.
 
 ---
 
 ## Recent work log
 
 **August 2026**
+- **SDIRA webinar recording published (19 Aug).** The 18 Aug session is now watchable at
+  **`/events/self-directed-ira-recording`**, and `/events` gained a **"Past event recordings"**
+  section that links to it. Modelled on the format the client referenced
+  (`legacyrx.co/the-republic-recording`) but built in the Proactive design system.
+  - **Data.** `src/data/events.js` gained an optional `recording` block on an event
+    (`slug`, `href`, `zoomUrl`, `durationMins`, `publishedAt`, `title`, `summary`, `promoCode`,
+    `promoNote`) plus `recordedEvents()`, `getEventByRecordingSlug()` and `formatRuntime()`.
+    An event only appears under "Past event recordings" once it has that block, so a finished
+    session never links to a page still selling seats. `tests/events.test.js` guards the
+    invariants (own slug, Zoom share URL, publishedAt after the event ends, 67-minute runtime).
+  - **The recording runs 1 hr 7 min**, not the scheduled 60 — `recording.durationMins` is
+    deliberately separate from `event.durationMins`.
+  - **Content is drawn from the recording's own transcript** (`GMT20260818-223100_Recording.
+    transcript.vtt`): 13 timestamped chapters, six takeaways, the six self-directable account
+    types with the 2026 limits Jeff quoted, the open/fund/invest timings, his own $100,000
+    Roth-IRA-plus-HSA note, all ten Q&A exchanges attributed to who asked them, and six pull
+    quotes. Everything a speaker asserted is attributed to him and carries the "as stated on the
+    call" caveat rather than being restated as Proactive's own number.
+  - **Numbers deliberately NOT published:** Dr. Van quoted "$32M AUM" and "$8.5M assets" on the
+    call, which contradict the canonical `$65M` from the workbook. His segment is summarised
+    without figures — see "Canonical numbers currently shown".
+  - **Zoom player is click-to-load.** Zoom's recording page moves focus into itself about a
+    second after it loads, and focusing inside a frame scrolls the *parent*: mounting the iframe
+    on page load yanked the reader ~1100px down, past the whole hero. The page shows a branded
+    poster and mounts the iframe only when a "watch" control is pressed. See `rules.md` s6.
+  - **Contact form uses the existing `ira` Tenth Avenue key**, not `sdira-webinar` — that list is
+    for people awaiting a join link, and the evening has happened.
+  - `/events/self-directed-ira-recording` added to `scripts/layout-audit.mjs` ROUTES.
 - **Property listings reworked to Dr. Van's brief (17 Aug).** Email "Website Property Listing
   Updates", cc Jesse.
   - **Est. value and Avg rent removed from every property card.** `estimatedValue` stays in the
@@ -273,12 +307,27 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 - **Project memory added:** `rules.md` (operating manual), `CLAUDE.md` (working rules), this `SUMMARY.md`,
   and a `tests/` unit-test suite (Node's built-in runner) covering the data layer and pure utilities.
 
-**Pending deploy:** the following commits are on both remotes but **not yet live** - they publish
-only after a Render Manual Deploy (latest = `c4a8469`):
+**Deploy status (checked 17 Aug 2026):** nothing pending. Production is live on **`6b7b521`**,
+verified by reading `www.sustainablebonds.com` directly, not by trusting the dashboard:
+
+| Marker | Live value |
+|---|---|
+| Home hero | `$65M assets under management` · `842 units across the portfolio` |
+| Home impact band | `22` Communities |
+| `/assets` KPIs | `22 Assets · 8 States · 842 Units / pads · $65.4M · 27% Occupancy` |
+| `/assets` | "5 of these assets are under contract (293 units / pads) and have not yet closed." |
+| `/assets` | "Portfolio aligned to the UN Sustainable Development Goals" band present |
+| Footer | "Our mission & team" present, "Investment scenarios" gone |
+
+Both remotes and `main` are at `6b7b521` with tracking refs refreshed (`git status` is trustworthy
+again — it was showing 10 phantom pending commits from stale July refs).
+
+**Recent commits:**
+- `6b7b521` - property listings: one address style, no per-asset value/rent, portfolio SDG band
+- `3c5a43f` - portfolio re-imported from the client workbook (22 properties, under-contract labels)
+- `96c3540` - calculator amount selector legibility + backtick guard
 - `c4a8469` - brand logo swapped to the new lockup
 - `ad612d2` - outbound-bandwidth fixes (compressed videos, cache headers, robots.txt)
-- `a6670c1` - Contact us nav link
-- `6641184` - Alicia Galloway headshot
 
 ---
 
@@ -312,7 +361,23 @@ only after a Render Manual Deploy (latest = `c4a8469`):
 7. **Before/after impact section** stays hidden until photos are provided.
 8. **Real Leaders Real Estate Award** shown as a text ribbon on collateral (no clean badge yet); confirm exact name/logo.
 9. **Email campaign** (AlphaMaven lead-nurture) lives outside the repo; needs number alignment + compliance pass before sending.
-10. **GitHub PAT** pasted in chat should be revoked and rotated.
+10. **Two GitHub PATs have now been pasted in chat and must both be revoked and rotated.** The
+   second (17 Aug 2026) is a classic token with `repo` + `write:packages`, belonging to
+   `ihavespokennow-ops` — push on the client repo, **admin** on the mirror. Replace with a
+   fine-grained token scoped to just those two repos. It was used only for pushes and read-only
+   checks; it was never written to git config, the keychain, or any file in this repo.
+11. **Wrong git credential cached on the work machine.** A `github.com` entry for the account
+   **`Milachazak`** sits in the macOS keychain and takes precedence over any token supplied at
+   push time — it caused a `403 denied to Milachazak` on a repo the correct account can push to.
+   Clear it, then re-auth:
+   `printf 'protocol=https\nhost=github.com\n\n' | git credential-osxkeychain erase`
+   The `client` remote URL also still has a stale username embedded; resetting it to a clean
+   `https://github.com/ProactiveFunds/Updated-PSBsite-10thavenue.git` lets the keychain answer normally.
+12. **Three property addresses are still not real addresses** — raised with Dr. Van 17 Aug, tracked
+   in `ADDRESS_GAPS` (`tests/data.test.js`) with a test that fails once one is resolved:
+   *Citrus Circle* (Orangeburg, SC) has no house number and "UMH" looks like an operator name;
+   *518–526 Stilton* and *926 Moseley* have no street type. Fix them in the generator's `ADDRESS`
+   table — and ideally in the workbook — when the client confirms.
 
 ## Email campaign (separate deliverable)
 A founder-voice lead-nurture sequence for accredited/institutional leads (AlphaMaven/Greg), plus the two

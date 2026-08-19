@@ -42,7 +42,19 @@ git push client main && git push origin main
 Notes / rules:
 - Auth is via a Personal Access Token embedded in the remote URL. **Never print the
   token.** Mask it in any command output (`sed 's#https://[^@]*@#https://***@#g'`).
-- A GitHub PAT was once pasted in chat. It **must be rotated/revoked** and never pasted again.
+- **Two** GitHub PATs have now been pasted in chat (the second on 17 Aug 2026, a classic token
+  with `repo` + `write:packages` belonging to `ihavespokennow-ops`). Both **must be
+  rotated/revoked**, and none should ever be pasted again. If a token must be used for a one-off
+  push, pass it through an env-var credential helper so it never lands in git config or a file:
+  `GH_PAT=… git -c credential.helper= -c credential.helper='!f() { echo username=x-access-token; echo "password=${GH_PAT}"; }; f' push <url> main:main`
+- **`-c credential.helper=…` appends to the helper list, it does not replace it.** The macOS
+  keychain helper answers first and wins. This machine has a stale `github.com` entry for the
+  account **`Milachazak`**, which produced a baffling `403 denied to Milachazak` when pushing with
+  a token that genuinely had access. Reset the list with an empty `-c credential.helper=` *before*
+  adding your own, as above. Clear the bad entry with
+  `printf 'protocol=https\nhost=github.com\n\n' | git credential-osxkeychain erase`.
+- The GitHub REST API occasionally 404s a branch immediately after a successful push. Trust
+  `git ls-remote --heads <url>` over the API when confirming a push landed.
 - Direct pushes to `main` can be blocked by the environment's auto-approval classifier
   ("Git Push to Default Branch"). That is expected; proceed only after the user explicitly
   asks to push (their "push" instruction is the authorization), then run both pushes.
@@ -57,9 +69,17 @@ Notes / rules:
   `sustainablebonds.onrender.com`; custom domain `www.sustainablebonds.com`).
 - Config: `render.yaml` (blueprint). Build `npm install && npm run build`, publish
   `./dist`, `NODE_VERSION=22`.
-- **Auto-deploy is currently OFF.** Pushing to `main` does **not** deploy on its own.
-  To publish, the user must open the Render dashboard -> the `sustainablebonds` site ->
-  **Manual Deploy** -> **Deploy latest commit**.
+- **Auto-deploy status is UNCERTAIN as of 17 Aug 2026 — verify before relying on either answer.**
+  The long-standing rule was that auto-deploy is OFF and publishing needs a Manual Deploy
+  (Render dashboard -> the `sustainablebonds` site -> **Manual Deploy** -> **Deploy latest
+  commit**). But on 17 Aug 2026 commit `6b7b521` was confirmed live on
+  `www.sustainablebonds.com` within minutes of the push, with no Manual Deploy run. Either the
+  setting changed or someone deployed immediately. This matters because it decides whether
+  **pushing is publishing** — check the dashboard and correct this bullet.
+- **Confirm a deploy by reading the live site, not the dashboard.** Fetch
+  `www.sustainablebonds.com` and grep for a marker string unique to the commit (e.g. after
+  17 Aug: "Portfolio aligned to the UN" on `/assets`). The CDN also caches hard, so a stale page
+  is not proof a deploy failed.
 - There is **no deploy hook URL or Render API key stored** in the repo or workspace, so
   Claude cannot trigger a deploy directly. To enable that, the user can create a Deploy
   Hook (Render site -> Settings -> Deploy Hook) and paste the URL; then a single POST
@@ -98,10 +118,12 @@ platform used for the AlphaMaven campaign.
   `https://tenthavenue.io/api/forms/<form-key>/submit` targeting a hidden `<iframe>`.
 - The home page intake/contact form is the section with **`id="get-started"`**
   (heading "Tell us about your goals."). The nav "Contact us" link points to `#get-started`.
-- **Form keys in use:** `webform` (home intake), `ira` (`/ira`), `sdira-webinar`
-  (`/events/self-directed-ira` registration). Give a campaign its own key whenever the list must
-  stay separate — webinar registrants receive a Zoom link and must not land in the evergreen
-  enquiry lists.
+- **Form keys in use:** `webform` (home intake), `ira` (`/ira` **and**
+  `/events/self-directed-ira-recording`), `sdira-webinar` (`/events/self-directed-ira`
+  registration). Give a campaign its own key whenever the list must stay separate — webinar
+  registrants receive a Zoom link and must not land in the evergreen enquiry lists. The reverse
+  also holds: the recording page reuses `ira` rather than `sdira-webinar`, because that list is
+  people awaiting a join link and the evening has already happened.
 - **The success state is driven by the hidden iframe's `onLoad`, not by a real API response.** If
   a form key does not exist in Tenth Avenue the page still shows "you're in" while the submission
   goes nowhere. Confirm the key exists before launching any page that introduces a new one.
@@ -161,6 +183,26 @@ platform used for the AlphaMaven campaign.
   Note that "6:30 PM EST" in an August brief means Eastern *daylight* time (`-04:00`); labelling
   it "ET" in the UI is correct year-round. `tests/events.test.js` guards the weekday, the
   displayed time, and the UTC window in the Google-Calendar link.
+- **Event recordings:** a published recording is an optional `recording` block on its event
+  (`slug`, `href`, `zoomUrl`, `durationMins`, `publishedAt`, `title`, `summary`, plus any offer
+  fields). `recordedEvents()` drives the "Past event recordings" list on `/events`; an event with
+  no `recording` stays in the plain "Past sessions" list instead, so a finished evening never
+  links to a page still selling seats. The recording gets **its own slug and route**
+  (`/events/<event>-recording`) — never the event's — and `recording.durationMins` is the file's
+  real length, which is not the scheduled `durationMins` (the SDIRA session was booked for 60 and
+  ran 67). `publishedAt` must be after `endsAt`. Tests pin all of this.
+- **Embedding a Zoom cloud recording.** A `/rec/share/...` link frames fine at the HTTP level:
+  Zoom sends no `X-Frame-Options`, sets no CSP `frame-ancestors`, and has no frame-busting
+  script. **But its player moves focus into itself roughly a second after it loads, and focusing
+  an element inside a frame scrolls the *parent* to bring the frame into view.** Mounting the
+  iframe on page load therefore yanks the reader down the page unprompted — measured at ~1100px
+  on `/events/self-directed-ira-recording`, past the whole hero. **Mount the iframe only on a
+  click** (a branded poster button), which also keeps Zoom's cookies and consent banner off the
+  page until somebody wants to watch. Give the frame an **explicit height, not an
+  `aspect-ratio`**: Zoom's page is a title bar plus player plus transcript rail, finishing around
+  570px at a 1240px column, so a ratio leaves a growing band of Zoom's white page underneath on a
+  wide monitor. Always ship a visible "open on Zoom" escape hatch — a browser that blocks
+  third-party cookies outright can stop Zoom's session completing inside a frame.
 - **Fonts (self-hosted):** woff2 files in `public/fonts/`, declared via `@font-face` in
   `src/styles/global.css`. Families: **Hanken Grotesk** (sans/UI), **Newsreader**
   (editorial serif), **Spline Sans Mono** (numbers/labels).

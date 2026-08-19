@@ -27,6 +27,27 @@ export const events = [
     // join link, so it is the live path until our Tenth Avenue form is approved
     // for direct Zoom API registration. Tracking parameters deliberately stripped.
     zoomRegisterUrl: 'https://perspectives-studio.zoom.us/webinar/register/WN_hi3PWvB_Rra21nSHQzzuZw',
+    // Published recording. Present only once an event has one — /events keys its
+    // "Past event recordings" list off this field, and the recording page is
+    // generated from it. `durationMins` is the *recording's* length (67:11 on the
+    // file), which is not the same as the event's scheduled 60.
+    recording: {
+      slug: 'self-directed-ira-recording',
+      href: '/events/self-directed-ira-recording',
+      // Zoom cloud recording, shared publicly — no passcode. Zoom sends no
+      // X-Frame-Options and sets no CSP frame-ancestors on /rec/share, so the
+      // player frames cleanly; the page still carries a visible "open on Zoom"
+      // escape hatch for browsers that block third-party cookies outright.
+      zoomUrl: 'https://perspectives-studio.zoom.us/rec/share/rGdIIOlJTQc7AEPo_s6ZpRdrEDehsZGSPlRbx8SUjMWodUQoLpxd3AnZ6je17xMx.Y5Fy7i4-3nGZwW0G',
+      durationMins: 67,
+      publishedAt: '2026-08-19T09:00:00-04:00',
+      title: 'The Self-Directed IRA session, in full',
+      summary:
+        'The complete evening, unedited. Jeff Minnick of Directed IRA on what the account is allowed to hold, how to move money into one without a tax bill, the rules that cost people money when they learn them late, and a real deal of his own — plus every question that came in on the night.',
+      // Discount code Jeff announced on the call, at 55:50.
+      promoCode: 'PROACTIVE200',
+      promoNote: '$200 off the first year of fees on a new Directed IRA account.',
+    },
     topics: [
       'What an SDIRA can hold',
       'Rollovers without a tax bill',
@@ -62,6 +83,29 @@ export function pastEvents(now = new Date()) {
   return events
     .filter((e) => new Date(e.endsAt).getTime() < t)
     .sort((a, b) => new Date(b.startsAt) - new Date(a.startsAt));
+}
+
+/**
+ * Finished events whose recording is published, most recent first. This is what
+ * /events lists under "Past event recordings" — an event with no `recording`
+ * stays out of that list rather than linking to a landing page that still sells
+ * seats for an evening that has already happened.
+ */
+export function recordedEvents(now = new Date()) {
+  return pastEvents(now).filter((e) => e.recording);
+}
+
+/** The event a recording slug belongs to, or null. */
+export function getEventByRecordingSlug(slug) {
+  return events.find((e) => e.recording && e.recording.slug === slug) || null;
+}
+
+/** 67 -> "1 hr 7 min"; 45 -> "45 min". */
+export function formatRuntime(mins) {
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  if (!h) return `${m} min`;
+  return m ? `${h} hr ${m} min` : `${h} hr`;
 }
 
 /** "Tuesday, August 18, 2026" — always rendered in the event's own timezone. */

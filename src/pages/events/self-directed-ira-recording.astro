@@ -1,0 +1,83 @@
+---
+import '../../styles/global.css';
+import '../../styles/responsive.css';
+import '../../styles/motion.css';
+import SdiraRecordingPage from '../../components/SdiraRecordingPage.jsx';
+import { getEvent, formatEventDate, formatEventTime, formatRuntime } from '../../data/events.js';
+
+const event = getEvent('self-directed-ira');
+const rec = event.recording;
+const when = `${formatEventDate(event)} at ${formatEventTime(event)}`;
+const runtime = formatRuntime(rec.durationMins);
+const desc = `The full ${runtime} recording of our ${when} session with Jeff Minnick of Directed IRA — what a Self-Directed IRA can hold, how to transfer or roll money in without a tax bill, the rules that cost people money, a real deal done inside a Roth IRA, and every question from the live Q&A.`;
+
+// Google surfaces recordings from VideoObject structured data. Keep it in step
+// with src/data/events.js — the runtime, the date and the page URL all live there.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: `${rec.title} — Proactive Sustainable Bonds`,
+  description: rec.summary,
+  uploadDate: rec.publishedAt,
+  duration: `PT${Math.floor(rec.durationMins / 60)}H${rec.durationMins % 60}M`,
+  thumbnailUrl: ['https://www.sustainablebonds.com/img/events-sdira-og.png'],
+  contentUrl: rec.zoomUrl,
+  embedUrl: rec.zoomUrl,
+  url: `https://www.sustainablebonds.com${rec.href}`,
+  isFamilyFriendly: true,
+  inLanguage: 'en-US',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Proactive Sustainable Bonds',
+    url: 'https://www.sustainablebonds.com',
+  },
+  actor: {
+    '@type': 'Person',
+    name: event.speaker.name,
+    jobTitle: event.speaker.title,
+    worksFor: { '@type': 'Organization', name: event.speaker.org },
+  },
+  recordedAt: {
+    '@type': 'Event',
+    name: `${event.title} — ${event.subtitle}`,
+    startDate: event.startsAt,
+    endDate: event.endsAt,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+    location: {
+      '@type': 'VirtualLocation',
+      url: `https://www.sustainablebonds.com${event.href}`,
+    },
+  },
+};
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={desc} />
+    <title>Self-Directed IRA Webinar Recording — {formatEventDate(event)}</title>
+
+    <link rel="canonical" href="https://www.sustainablebonds.com/events/self-directed-ira-recording" />
+
+    <meta property="og:type" content="video.other" />
+    <meta property="og:site_name" content="Proactive Sustainable Bonds" />
+    <meta property="og:title" content="The Self-Directed IRA session. The whole hour." />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content="https://www.sustainablebonds.com/events/self-directed-ira-recording" />
+    <meta property="og:image" content="https://www.sustainablebonds.com/img/events-sdira-og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="644" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Self-Directed IRA webinar — the full recording" />
+    <meta name="twitter:description" content={desc} />
+    <meta name="twitter:image" content="https://www.sustainablebonds.com/img/events-sdira-og.png" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <SdiraRecordingPage client:load />
+  </body>
+</html>
