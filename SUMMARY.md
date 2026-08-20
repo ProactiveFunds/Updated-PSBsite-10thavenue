@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-08-19_
+_Last updated: 2026-08-20_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -102,6 +102,13 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ## Recent work log
 
 **August 2026**
+- **Recording page hero tweak + it went live (20 Aug).** The third figure in the recording
+  page's hero band was "Your first year / $200 off / Code PROACTIVE200"; client asked for the
+  offer out of the hero, so it now reads **"Your IRA may not hold / 3 things / Everything else is
+  fair game"** — the sharpest fact in the session, and it teases the content rather than a
+  discount at somebody who has not watched anything yet. `PROACTIVE200` is untouched where it
+  earns its place: the 55:50 chapter row and the promo card at **Next steps**. Shipped as
+  `a2071a8`; production confirmed live on it the same day.
 - **SDIRA webinar recording published (19 Aug).** The 18 Aug session is now watchable at
   **`/events/self-directed-ira-recording`**, and `/events` gained a **"Past event recordings"**
   section that links to it. Modelled on the format the client referenced
@@ -307,21 +314,30 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 - **Project memory added:** `rules.md` (operating manual), `CLAUDE.md` (working rules), this `SUMMARY.md`,
   and a `tests/` unit-test suite (Node's built-in runner) covering the data layer and pure utilities.
 
-**Deploy status (checked 19 Aug 2026): ONE COMMIT PENDING.** `108d748` (the SDIRA recording page)
-is on **both** remotes but **not yet live** — `www.sustainablebonds.com/events/self-directed-ira-recording`
-returned 404 and `/events` had no "Past event recordings" section minutes after the push. So
-**auto-deploy is OFF after all**, which resolves the 17 Aug uncertainty below: publishing still
-needs a **Manual Deploy** in the Render dashboard (`sustainablebonds` -> Manual Deploy -> Deploy
-latest commit). Re-verify by fetching `/events/self-directed-ira-recording` and expecting a 200
-plus the string "Play the full session".
+**Deploy status (checked 20 Aug 2026): nothing pending.** Production is live on **`a2071a8`**,
+the tip of `main`, verified by reading the live site rather than trusting the dashboard:
 
-Both remotes and `main` are at `108d748`. The embedded PAT was stripped from both remote URLs on
+| Marker | Live value |
+|---|---|
+| `/events/self-directed-ira-recording` | 200, carries "Play the full session" and "Every question. Every answer." |
+| Recording hero band, 3rd figure | "Your IRA may not hold / 3 things" — i.e. `a2071a8`, not the earlier "$200 off" |
+| `/events` | "Past event recordings" section present |
+| `PROACTIVE200` | 3 occurrences, identical to the local `dist/` build |
+
+**How it got there matters for next time: the deploy is manual.** On 19 Aug `108d748` was on both
+remotes and the recording page still 404'd minutes after the push; by 20 Aug it was live. That is
+a **Manual Deploy** having been run in between, which confirms **auto-deploy is OFF — pushing is
+not publishing.** (It also re-reads the 17 Aug "live within minutes" observation as somebody
+deploying promptly, not the setting having changed.) After any push, tell the user to run
+Render -> `sustainablebonds` -> **Manual Deploy** -> **Deploy latest commit**, then re-verify by
+fetching a string unique to the commit.
+
+Both remotes and `main` are at `a2071a8`. The embedded PAT was stripped from both remote URLs on
 19 Aug (it had been revoked, and a dead secret in `.git/config` is still a secret), so pushes now
 go through the env-var credential helper in `rules.md` s2 and tracking refs are set by hand from
 the SHA that `git ls-remote` confirms.
 
-Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified by reading
-`www.sustainablebonds.com` directly, not by trusting the dashboard:
+Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified the same way:
 
 | Marker | Live value |
 |---|---|
@@ -333,6 +349,8 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 | Footer | "Our mission & team" present, "Investment scenarios" gone |
 
 **Recent commits:**
+- `a2071a8` - recording page hero: promo code out of the figure band, "3 things" in
+- `c6a9b03` - deploy/remote notes: auto-deploy settled, PAT stripped from both remote URLs
 - `108d748` - SDIRA webinar recording page + "Past event recordings" on /events
 - `6b7b521` - property listings: one address style, no per-asset value/rent, portfolio SDG band
 - `3c5a43f` - portfolio re-imported from the client workbook (22 properties, under-contract labels)
@@ -343,11 +361,32 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 ---
 
 ## Open items / known issues
-0. **Create the `sdira-webinar` form in Tenth Avenue** before `/events/self-directed-ira` goes
-   live, and wire it to send the Zoom link + calendar hold. Until it exists the registration
-   form will post into the void (the page still shows its success state, because the confirmation
-   is driven by the hidden iframe's load event). Also decide whether Bob Totaro should join
-   `src/data/team.js` so he appears on `/team` too - he is currently only on the webinar page.
+0a. **`/events/self-directed-ira` has gone stale and is live in that state.** The webinar was
+   18 Aug 2026; the page still sells it as upcoming. Spotted 20 Aug, deliberately not fixed —
+   the brief was to add the recording, not rework this page. Three symptoms, all in
+   `SdiraWebinarPage.jsx`:
+   - the countdown reads **"Happening today" forever** — `daysUntil()` floors at 0, and the
+     component treats 0 as "today" with no past branch;
+   - body copy is future tense ("On the 18th, Jeff Minnick **will show you**…");
+   - every CTA is "Save my seat" / "Register now", pointing at `EVENT.zoomRegisterUrl` for an
+     evening that has happened.
+
+   Anyone arriving from an old email, link or search result is invited to register for a webinar
+   that is over. The fix is to branch the page on whether the event has passed and, when it has,
+   flip the CTAs to `event.recording.href` with a "watch the recording" state. The date logic and
+   the `recording` block already live in `src/data/events.js`, so this needs no new source of
+   truth. Consider the same branch for `FeaturedEvent` on `/events` if an event ever ends without
+   a recording being ready.
+0. **The `sdira-webinar` Tenth Avenue form still does not exist — dormant, not urgent.**
+   Originally a launch blocker; overtaken by events. `/events/self-directed-ira` shipped with
+   `REGISTER_MODE = 'zoom'`, so every CTA went straight to Zoom's own registration page and the
+   on-page form never rendered, and the webinar has now happened anyway. It only becomes live
+   again if `REGISTER_MODE` is flipped to `'form'` for a future event — at which point the key
+   must exist first, because **a missing form key still shows the success state** (the
+   confirmation is driven by the hidden iframe's load event, not by a real response). The
+   recording page deliberately uses the existing `ira` key instead. See `rules.md` s5.
+   Separately: decide whether Bob Totaro should join `src/data/team.js` so he appears on `/team`
+   too — he is still only on the webinar page's own team strip.
 1. ~~**Number consistency** - site/assets say 27 / 756; deck + cover letters say 22 / 647.~~
    **Done (11 Aug 2026)** — the client workbook is now the single source of truth and the site
    says **22 / 842 / $65M**. The deck, cover letters and the AlphaMaven email sequence still carry
