@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-08-20_
+_Last updated: 2026-08-25_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -65,6 +65,15 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
   `public/img/team/*.webp` (transparent cutouts).
 - **`src/data/blogPosts.js`** - 27 published posts (Markdown). **`src/data/digestPages.js`** - 11 Digest pages.
   **`src/data/digestNav.js`** - Digest nav groups/items.
+- **`src/data/events.js`** - hand-written, not generated. One record per live session, and the
+  single source of truth for `/events` and every event landing page. Timestamps are ISO strings
+  with an **explicit UTC offset**, rendered through `formatEventDate`/`formatEventTime`, which
+  pin output to `America/New_York`. An event may carry an optional **`recording`** block (its own
+  slug and route, Zoom share URL, real runtime, `publishedAt`, offer fields) — that block is what
+  moves it into "Past event recordings" on `/events` and gives it a recording page. Helpers:
+  `getEvent`, `getEventByRecordingSlug`, `upcomingEvents`, `pastEvents`, `recordedEvents`,
+  `formatRuntime`, `daysUntil`, `calendarUrl`. Guarded by `tests/events.test.js`.
+  Conventions in `rules.md` s6.
 
 ## Canonical numbers currently shown
 Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (two visible tabs —
@@ -121,12 +130,19 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
     invariants (own slug, Zoom share URL, publishedAt after the event ends, 67-minute runtime).
   - **The recording runs 1 hr 7 min**, not the scheduled 60 — `recording.durationMins` is
     deliberately separate from `event.durationMins`.
-  - **Content is drawn from the recording's own transcript** (`GMT20260818-223100_Recording.
-    transcript.vtt`): 13 timestamped chapters, six takeaways, the six self-directable account
-    types with the 2026 limits Jeff quoted, the open/fund/invest timings, his own $100,000
-    Roth-IRA-plus-HSA note, all ten Q&A exchanges attributed to who asked them, and six pull
-    quotes. Everything a speaker asserted is attributed to him and carries the "as stated on the
-    call" caveat rather than being restated as Proactive's own number.
+  - **Content is drawn from the recording's own transcript**, the Zoom VTT
+    `GMT20260818-223100_Recording.transcript.vtt`: 13 timestamped chapters, six takeaways, the six
+    self-directable account types with the 2026 limits Jeff quoted, the open/fund/invest timings,
+    his own $100,000 Roth-IRA-plus-HSA note, all ten Q&A exchanges attributed to who asked them,
+    and six pull quotes. Everything a speaker asserted is attributed to him and carries the "as
+    stated on the call" caveat rather than being restated as Proactive's own number.
+  - ⚠ **That transcript is the provenance for every quote, figure and timestamp on the page, and
+    it does not live in the repo.** It was supplied from `~/Downloads/`, which is not a durable
+    location. It is not committed because `.gitignore` deliberately keeps original source assets
+    out (`video-originals-backup/`, `Headshots/`, `/videos/`), and the same text is still readable
+    in Zoom's own transcript rail beside the player. But if the Zoom recording is ever deleted and
+    the local file is gone, nothing on the page can be re-derived or defended. **Archive a copy
+    wherever session material is kept.**
   - **Numbers deliberately NOT published:** Dr. Van quoted "$32M AUM" and "$8.5M assets" on the
     call, which contradict the canonical `$65M` from the workbook. His segment is summarised
     without figures — see "Canonical numbers currently shown".
@@ -137,6 +153,13 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
   - **Contact form uses the existing `ira` Tenth Avenue key**, not `sdira-webinar` — that list is
     for people awaiting a join link, and the evening has happened.
   - `/events/self-directed-ira-recording` added to `scripts/layout-audit.mjs` ROUTES.
+  - **To publish the next session's recording**, the shape is now reusable: add a `recording`
+    block to that event in `src/data/events.js` (it appears under "Past event recordings" on
+    `/events` automatically), add a page component modelled on `SdiraRecordingPage.jsx` plus its
+    `.astro` route with `VideoObject` JSON-LD, add the route to `scripts/layout-audit.mjs`, and
+    run `npm test` + `npm run build` + `npm run audit:layout`. The Zoom-embed traps — click-to-load,
+    explicit frame height, visible escape hatch — are written up in `rules.md` s6; read them
+    before wiring a new player.
 - **Property listings reworked to Dr. Van's brief (17 Aug).** Email "Website Property Listing
   Updates", cc Jesse.
   - **Est. value and Avg rent removed from every property card.** `estimatedValue` stays in the
@@ -201,8 +224,10 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
   agenda, speaker, hosts, FAQ, final CTA) but rebuilt in the Proactive design system.
   - `src/data/events.js` is the single source of truth for both pages (ISO timestamps with
     explicit offsets, `formatEventDate/Time`, `daysUntil`, `calendarUrl`). Covered by
-    `tests/events.test.js` (12 cases, incl. that the date really is a Tuesday and that the
-    Google-Calendar window is 22:30-23:30 UTC).
+    `tests/events.test.js` (**16 cases** as of 19 Aug 2026, incl. that the date really is a
+    Tuesday, that the Google-Calendar window is 22:30-23:30 UTC, and — added with the recording
+    page — that a recording keeps its own slug, that `publishedAt` lands after the event ends,
+    and that the file's 67-minute runtime is not confused with the scheduled 60).
   - **Registration posts to a dedicated Tenth Avenue form key, `sdira-webinar`** (constant
     `TA_FORM` in `SdiraWebinarPage.jsx`). This form must exist in Tenth Avenue before launch -
     it is deliberately separate from `ira`/`webform` so the Zoom link only goes to registrants.
