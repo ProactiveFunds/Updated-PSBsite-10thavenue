@@ -42,8 +42,8 @@ git push client main && git push origin main
 Notes / rules:
 - Auth is via a Personal Access Token embedded in the remote URL. **Never print the
   token.** Mask it in any command output (`sed 's#https://[^@]*@#https://***@#g'`).
-- **Three** GitHub PATs have now been pasted in chat (the second on 17 Aug 2026, the third on
-  19 Aug 2026). All **must be rotated/revoked**, and none should ever be pasted again. If a token
+- **Four** GitHub PATs have now been pasted in chat (the second on 17 Aug 2026, the third on
+  19 Aug 2026, the fourth on 11 Sep 2026). All **must be rotated/revoked**, and none should ever be pasted again. If a token
   must be used for a one-off push, pass it through an env-var credential helper so it never lands
   in git config or a file:
   `GH_PAT=… git -c credential.helper= -c credential.helper='!f() { echo username=x-access-token; echo "password=${GH_PAT}"; }; f' push <url> main:main`
@@ -294,6 +294,11 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
 
 ## 8. Verification / preview quirks (learned)
 
+- **`node`/`npm` may not be on `PATH` on this Mac** (true on 11 Sep 2026: no Homebrew, nvm,
+  or Volta). Do not skip `npm test` / `npm run build` for that reason — download the official
+  standalone build into the session scratchpad and prepend its `bin` to `PATH`:
+  `curl -sSL -o node.tar.gz https://nodejs.org/dist/v22.19.0/node-v22.19.0-darwin-arm64.tar.gz && tar xzf node.tar.gz`.
+  `node_modules/` is already installed in the repo, so no `npm install` is needed.
 - Use the **Claude Preview** tools (dev server on port 4321), not Bash, to run/inspect the site.
 - **Screenshots are unreliable on deep scroll** (blank/misaligned). Prefer DOM/`eval`
   measurements (`scrollHeight`, `getBoundingClientRect`) and `preview_snapshot`.
@@ -346,7 +351,10 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
   `scripts/generate-assets.py` — **do not hand-edit that data file**; fix the workbook, or the
   carried-over prose tables in the generator, and re-run it.
   - Current set: **22 communities / 842 units / 8 states / $65M / 27% occupancy** (17 owned +
-    5 under contract). *906 West Main* is on the owned tab but marked "(for sale)" and is withheld
+    5 under contract). **Except units in copy: the client set the quoted figure to 810 on
+    11 Sep 2026** without a new workbook, so `/`, `/OurProcess` and `/q3-special` say 810 while
+    `/assets` (summed from the rows) says 842. `tests/data.test.js` pins both; reconcile via the
+    workbook, not by editing `assets.js`. *906 West Main* is on the owned tab but marked "(for sale)" and is withheld
     from the site — see `HELD_SKIP` in the generator. `tests/data.test.js` pins these, so a refresh that moves them fails the
     suite by design — that failure is the checklist of marketing copy to update
     (`/` hero + impact band, `/OurProcess`, `/q3-special`, `/ira`).

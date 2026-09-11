@@ -282,7 +282,7 @@ function ProvenPerformance() {
             Proven Performance You Can Trust
           </h2>
           <p style={{ margin: 0, fontSize: 'var(--text-base)', color: 'rgba(234,243,226,.82)', lineHeight: 1.6 }}>
-            22 communities across 8 states — 842 units and pads — transformed with 20%+ average returns, delivering consistent cash flow while creating lasting social impact across America.
+            22 communities across 8 states — 810 units and pads — transformed with 20%+ average returns, delivering consistent cash flow while creating lasting social impact across America.
           </p>
         </div>
 

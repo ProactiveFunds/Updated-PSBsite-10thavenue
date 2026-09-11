@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-08-25_
+_Last updated: 2026-09-11_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -79,7 +79,14 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
 Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (two visible tabs —
 *Property Information* = owned, *In Contract* = under contract), imported 11 Aug 2026.
 
-- **22 communities · 842 units/pads · 8 states · $65M AUM · 27% occupancy · 15% (target) annual interest.**
+- **22 communities · 810 units/pads · 8 states · $65M AUM · 27% occupancy · 15% (target) annual interest.**
+- **Units are split (11 Sep 2026).** The client set the site-wide figure to **810**; the workbook
+  still sums to **842**, and the workbook has not been re-sent. The marketing copy (`/` hero,
+  `/OurProcess`, `/q3-special`) says 810; `/assets` sums the per-property rows and therefore still
+  shows **842 Units / pads** in its KPI strip and table. `tests/data.test.js` pins both numbers
+  (`QUOTED_UNITS = 810`, workbook total 842) so a change to either is deliberate. To close the
+  gap, get the corrected per-property counts from the client (32 units, no single row matches),
+  update the workbook, re-run `scripts/generate-assets.py`, and re-pin the test.
 - Split: **17 owned** (549 units, 5 states, $40.2M, 40% occupancy) + **5 under contract**
   (293 units, 3 further states, $25.2M, not yet closed).
 - "$65M" is the workbook's *Estimated Value* column, footnoted there as **based on 100% occupancy**
@@ -109,6 +116,18 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+
+**September 2026**
+- **Hero eyebrow removed + unit count to 810 (11 Sep).** Client request. The home hero's
+  "OPEN · Proactive QOZ Fund · accredited & institutional" pill above the headline is gone
+  (`Hero.jsx`; the `.eyebrow-pill` style is still used nowhere else on `/` but stays in
+  `global.css`). The portfolio unit figure quoted in copy went **842 → 810** in the hero stat,
+  `/OurProcess` and `/q3-special`. `/assets` was *not* touched — it computes its KPI from the
+  per-property data, which still sums to 842; see "Canonical numbers" for the split and how to
+  reconcile it. Tests: the totals test now pins the workbook at 842 and a new `copy:` test keeps
+  the three quoted 810s in step. 49/49 green, build clean.
+  - Environment note: this Mac had no `node` on `PATH`; a standalone Node 22 tarball unpacked
+    into the session scratchpad ran the suite and build. See `rules.md` s8.
 
 **August 2026**
 - **Recording page hero tweak + it went live (20 Aug).** The third figure in the recording
@@ -386,6 +405,10 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 ---
 
 ## Open items / known issues
+0. **Unit count split: copy says 810, data says 842.** See "Canonical numbers" above. `/assets`
+   shows 842 until the client supplies corrected per-property counts and the workbook is
+   regenerated. Also: a **fourth PAT was pasted in chat on 11 Sep 2026** — it must be revoked
+   after the push it was used for.
 0a. **`/events/self-directed-ira` has gone stale and is live in that state.** The webinar was
    18 Aug 2026; the page still sells it as upcoming. Spotted 20 Aug, deliberately not fixed —
    the brief was to add the recording, not rework this page. Three symptoms, all in

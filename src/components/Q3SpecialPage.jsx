@@ -136,7 +136,7 @@ function Performance() {
         <div style={{ position: 'relative', textAlign: 'center', maxWidth: '46rem', margin: '0 auto 42px' }}>
           <span className="eyebrow" style={{ color: 'var(--lime-300)' }}>Proven performance</span>
           <h2 style={{ margin: '14px 0 12px', color: '#fff', fontSize: 'clamp(1.7rem,3.2vw,2.4rem)', letterSpacing: '-0.02em', fontWeight: 700 }}>A track record you can verify.</h2>
-          <p style={{ margin: 0, color: 'rgba(234,243,226,.82)', lineHeight: 1.6, fontSize: 'var(--text-base)' }}>22 communities across 8 states — 842 units and pads — transformed with 20%+ average returns, consistent cash flow alongside lasting social impact across America.</p>
+          <p style={{ margin: 0, color: 'rgba(234,243,226,.82)', lineHeight: 1.6, fontSize: 'var(--text-base)' }}>22 communities across 8 states — 810 units and pads — transformed with 20%+ average returns, consistent cash flow alongside lasting social impact across America.</p>
         </div>
         <div className="q3-perf-grid">
           {PERF.map(([n, l, d]) => (

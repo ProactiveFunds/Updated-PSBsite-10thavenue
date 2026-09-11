@@ -51,9 +51,6 @@ function Hero({ onInvest }) {
     <section style={{ maxWidth: 1240, margin: '0 auto', padding: '30px 22px 0' }}>
       <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: 46, alignItems: 'center' }}>
         <div className="rise">
-          <span className="eyebrow-pill" style={{ marginBottom: 24 }}>
-            <span className="badge badge-forest">Open</span> Proactive QOZ Fund · accredited &amp; institutional
-          </span>
           <h1 style={{ fontSize: 'var(--text-4xl)', lineHeight: 1.04, letterSpacing: '-0.025em', margin: '0 0 22px', maxWidth: '14ch' }}>
             The bond that <FlipWord />.
           </h1>
@@ -65,7 +62,7 @@ function Hero({ onInvest }) {
             <button className="btn btn-ghost btn-lg">View our impact</button>
           </div>
           <div className="hero-stats" style={{ display: 'flex', gap: 38, marginTop: 40 }}>
-            {[['15%', 'annual interest', true], ['$65M', 'assets under management'], ['842', 'units across the portfolio']].map(([n, l, hl]) => (
+            {[['15%', 'annual interest', true], ['$65M', 'assets under management'], ['810', 'units across the portfolio']].map(([n, l, hl]) => (
               <div key={l}>
                 <div className="figure" style={{ fontSize: 'var(--text-2xl)', color: hl ? 'var(--brand)' : 'var(--fg-1)' }}>{n}</div>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', marginTop: 2 }}>{l}</div>

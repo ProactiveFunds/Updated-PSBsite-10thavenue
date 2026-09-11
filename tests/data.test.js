@@ -3,6 +3,8 @@
 // duplicate slugs/ids, and enum drift. Cheap to run, high signal.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 import { team } from '../src/data/team.js';
 import { assets, SDG_LABELS, PORTFOLIO_SDGS, FUNDS, STATUSES } from '../src/data/assets.js';
@@ -61,16 +63,31 @@ test('assets: ids are unique', () => {
 // and /ira. They come from "Proactive Realty Group - Property Information.xlsx".
 // If this test fails after a data refresh, the marketing copy needs updating too
 // — see SUMMARY.md "Canonical numbers currently shown".
+//
+// Units are the one known split: the client set the site-wide copy to 810
+// (11 Sep 2026) while the workbook still sums to 842, so /assets — which sums
+// the per-property rows — still shows 842 until the workbook is reconciled.
+// Both numbers are pinned so a change to either side is deliberate.
+const QUOTED_UNITS = 810;
+
 test('assets: portfolio totals match the canonical numbers quoted site-wide', () => {
   const sum = (f) => assets.reduce((s, a) => s + (a[f] || 0), 0);
   assert.equal(assets.length, 22, 'asset count drifted from the 22 quoted site-wide');
   assert.equal(assets.filter((a) => a.status === 'Acquired').length, 17, 'owned-asset count drifted');
   assert.equal(assets.filter((a) => a.status === 'Under Contract').length, 5, 'under-contract count drifted');
-  assert.equal(sum('units'), 842, 'total units drifted from the 842 quoted site-wide');
+  assert.equal(sum('units'), 842, 'workbook unit total drifted from 842 — if it now matches the quoted copy, drop the split note in SUMMARY.md');
   assert.equal(sum('occupiedUnits'), 227, 'occupied units drifted');
   assert.equal(sum('estimatedValue'), 65377060, 'estimated value drifted from the $65M quoted site-wide');
   assert.equal(new Set(assets.map((a) => a.state)).size, 8, 'state count drifted from the 8 quoted site-wide');
   assert.equal(Math.round((sum('occupiedUnits') / sum('units')) * 100), 27, 'portfolio occupancy drifted');
+});
+
+// The marketing copy quotes one unit figure in three places; keep them in step.
+test('copy: the unit count quoted on /, /OurProcess and /q3-special agree', () => {
+  const src = (rel) => readFileSync(fileURLToPath(new URL(`../src/${rel}`, import.meta.url)), 'utf8');
+  assert.ok(src('components/Hero.jsx').includes(`['${QUOTED_UNITS}', 'units across the portfolio']`), 'home hero unit stat');
+  assert.ok(src('components/ProcessPage.jsx').includes(`${QUOTED_UNITS} units and pads`), '/OurProcess unit copy');
+  assert.ok(src('components/Q3SpecialPage.jsx').includes(`${QUOTED_UNITS} units and pads`), '/q3-special unit copy');
 });
 
 // 906 West Main is on the workbook's owned tab as "(for sale)" and is
