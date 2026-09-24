@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-09-11_
+_Last updated: 2026-09-24_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -32,7 +32,7 @@ wired, plus conventions and gotchas), and **`CLAUDE.md`** for the working rules.
 | `/` | `index.astro` -> `App.jsx` | Marketing home: hero ("The bond that builds"), calculator, partners, comparison table of opportunities, social proof, intake/contact form (`id="get-started"`). The "See the IMPACT" before/after section is temporarily hidden pending photos. |
 | `/q3-special` | `q3-special.astro` -> `Q3SpecialPage.jsx` | Story-led landing page for the Q3 2026 Impact Bridge offering (hero video, story, tiers, past performance, verifications, team, CTA -> the Q3-only Tenth Avenue portal link, see "Invest CTA routing"). Has OG/Twitter tags for LinkedIn link cards. |
 | `/verified` | `verified.astro` -> `VerifiedPage.jsx` | ProActively Verified: the third-party verification story. |
-| `/assets` | `assets.astro` -> `AssetsExplorer.jsx` | Portfolio Explorer: filters + Leaflet map + sortable table with inline-expand rows + Table/Timeline toggle. |
+| `/assets` | `assets.astro` -> `AssetsExplorer.jsx` | Portfolio Explorer: filters + Leaflet map + sortable table with inline-expand rows + Table/Timeline toggle. Columns are Asset (county beneath), Fund, Status, Units, Acquired; occupancy and the investment thesis are deliberately not shown (see `rules.md` s10). |
 | `/team` | `team.astro` -> `AboutTeam.jsx` | About + team as transparent-cutout photos + bios. Dr. Williams has an "Author of" book strip. (`/about` redirects to `/team`.) |
 | `/OurProcess` | how-it-works page | "How it works". |
 | `/digest`, `/digest/<slug>`, `/digest/blog[/<slug>]` | `digest/` <- `digestPages.js`, `blogPosts.js` | Editorial Digest: cover feature + 11 content pages + 27 blog posts (Markdown). |
@@ -80,6 +80,7 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 *Property Information* = owned, *In Contract* = under contract), imported 11 Aug 2026.
 
 - **22 communities · 810 units/pads · 8 states · $65M AUM · 27% occupancy · 15% (target) annual interest.**
+  Occupancy is still a data fact but is **no longer displayed on `/assets`** (client, 24 Sep 2026).
 - **Units are split (11 Sep 2026).** The client set the site-wide figure to **810**; the workbook
   still sums to **842**, and the workbook has not been re-sent. The marketing copy (`/` hero,
   `/OurProcess`, `/q3-special`) says 810; `/assets` sums the per-property rows and therefore still
@@ -118,6 +119,36 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ## Recent work log
 
 **September 2026**
+- **`/assets` slimmed down (24 Sep).** Client asked for occupancy off the portfolio explorer and
+  the investment thesis out of the expanded row. Removed: the **Occupancy** KPI, the sortable
+  **Occupancy** column (and its bar), the occupancy block in the expanded detail, and the
+  **Investment thesis** paragraph. The expanded row now reads **Units / pads · Fund · Acquired ·
+  County** and keeps the impact thesis. The `Bar` component went with it, and the page's lead and
+  meta description no longer promise occupancy. Data is untouched: `occupancyRate`,
+  `occupiedUnits` and `investmentThesis` stay in `src/data/assets.js` and are still pinned by the
+  data tests. New guard test fails if any of those names returns to `AssetsExplorer.jsx`.
+  50/50 green, build clean, `audit:layout` passes on all 10 routes.
+- **Climate Week NYC 2026 investor one-pager (21 Sep).** Dr. Van sent a number-led flyer for
+  distribution at Climate Week (Sept 20 to 27); Addie wanted an outcome-led hook and the site logo.
+  Rebuilt as a print-ready Letter PDF matching the site: serif hook "The climate transition needs
+  somewhere to live", a house/solar/tree illustration, three icon tiles (buy existing communities,
+  cut energy and water costs, pay investors quarterly), a Sustainalytics proof band (4,122 / $3.99M /
+  926), a portfolio strip ($26.5M AUM, 810 units, $7.5M returned, 9% to 15%) with term chips, and a
+  meeting CTA with Dr. Van's cutout portrait and a QR code. Source and render script live in
+  **`collateral/climate-week-nyc-2026/`** (`one-pager.html` + `build.py`); output copied to the
+  Desktop. Not committed.
+  - **Figures are Dr. Van's, not the site's.** He chose to keep **$26.5M AUM** (site says $65M),
+    **9% to 15%** (site says 15%) and **$7.5M returned to debt investors** (not on the site). The
+    flyer's QR lands on a site that disagrees with it; flagged to Addie.
+  - **QR and button point at Dr. Van's Tenth Avenue booking page**
+    `https://tenthavenue.io/book/canaan?e=30-minute-call` (set as `DEFAULT_QR` in `build.py`;
+    the old flyer's Calendly link is retired).
+  - Tooling: `segno` (QR) and `pymupdf` were pip-installed into the session scratchpad; see
+    `rules.md` s7 for the one-liner.
+- **Writing rule added (14 Sep).** `rules.md` s13: no fragment-comma-tag constructions
+  ("The numbers, up front"), and no em dashes anywhere; write full sentences and get emphasis
+  from structure or word choice. Applies to all site copy, headings, and the project docs. Existing copy has not yet been
+  audited against it — do that when a section is next touched.
 - **Hero eyebrow removed + unit count to 810 (11 Sep).** Client request. The home hero's
   "OPEN · Proactive QOZ Fund · accredited & institutional" pill above the headline is gone
   (`Hero.jsx`; the `.eyebrow-pill` style is still used nowhere else on `/` but stays in

@@ -258,7 +258,14 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
   `.page` `scrollHeight` == 1056 to catch overflow before rendering.
 - WEBP does **not** render as an image fill in some contexts (e.g. Figma fills); convert to
   JPEG/PNG when a fill fails to appear.
-- Inspect rendered PDFs with PyMuPDF (`fitz`) - it is available (`pip`/`python3 -c "import fitz"`).
+- Inspect rendered PDFs with PyMuPDF (`fitz`). It is **not** installed system-wide on this Mac
+  (checked 21 Sep 2026); install it and the QR library into the scratchpad instead:
+  `python3 -m pip install --target <scratch>/pylib segno pymupdf` then `PYTHONPATH=<scratch>/pylib`.
+- **Collateral source lives in `collateral/<piece>/`** (template `one-pager.html` referencing
+  `/fonts` and `/img`, plus `build.py` that inlines everything, renders via Chrome, and asserts one
+  page). The Impact Overview's source was left in a scratchpad and is gone; don't repeat that.
+- QR codes: `segno.make(url).svg_data_uri(...)` as an `<img src>`. `svg_inline()` lacks the xmlns
+  and renders as a broken image.
 - LinkedIn Featured image size used: **1200 x 644**. OG/Twitter preview tags matter for link
   cards; refresh via LinkedIn Post Inspector after changing them.
 
@@ -361,6 +368,15 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
   - **Do not render `estimatedValue` or `avgRent` per property** (Dr. Van, 17 Aug 2026). Both stay
     in the data because the portfolio total and the AUM figure on four pages are summed from
     `estimatedValue` — the instruction is about display, not deletion.
+  - **Do not render occupancy or the investment thesis anywhere on `/assets`** (client, 24 Sep
+    2026). That means the `Occupancy` KPI, the table column, the per-asset figure and bar in the
+    expanded row, and the `investmentThesis` paragraph. The explorer now shows **units, fund,
+    status, acquired, county** plus the impact thesis. `occupancyRate`, `occupiedUnits` and
+    `investmentThesis` stay in `src/data/assets.js` (the data tests pin them) — again display,
+    not deletion. `tests/data.test.js` fails if any of the three names reappears in
+    `AssetsExplorer.jsx`.
+  - The one occupancy mention that **stays** is the valuation caveat "Portfolio value is estimated
+    at 100% occupancy", which has to travel with the $65M figure.
   - **Addresses have one house style**, `<number> <directional> <street> <Type>, <City>, <ST>`.
     Set in the generator's `ADDRESS` table, not derived from the workbook (its strings are
     inconsistent and four rows are multi-parcel lists). `921 N Las Vegas Blvd` is a correction the
@@ -413,3 +429,21 @@ design agent builds new PSB screens from our real components rather than generic
   API keys). Mask credentials in command output.
 - Rotate any secret that has been exposed (the pasted GitHub PAT).
 - Do not enter credentials into forms/sites on the user's behalf; direct the user to do it.
+
+---
+
+## 13. Writing rules (site copy, page headings, SUMMARY/rules prose, emails)
+
+- **Never write a noun phrase or fragment followed by a comma and a short emphatic tag.**
+  Examples of the banned shape: *"The numbers, up front."* / *"We passed on a lot of deals.
+  Here's what cleared the bar."* / *"Real housing, real returns."* This covers every
+  construction where a comma stands in for a verb to manufacture a dramatic pause before a
+  punchy payoff word or phrase. Write complete, grammatically full sentences instead. If
+  something needs emphasis, get it from sentence structure or word choice, never from a comma
+  splice used for rhetorical effect.
+- **No em dashes, ever.** Not in copy, headings, stat labels, docs, commit messages, or
+  anything else written for this project. Split the thought into two sentences, or use a
+  comma, colon, or parentheses where the grammar genuinely calls for one. (This also rules out
+  an em dash as the fix for the rule above.)
+- Both rules apply to headings, eyebrows, stat labels, pull quotes, CTAs, and Digest/blog
+  prose, not only body paragraphs. Check existing copy against them when touching a section.

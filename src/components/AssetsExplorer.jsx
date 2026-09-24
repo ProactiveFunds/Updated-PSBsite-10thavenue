@@ -25,14 +25,6 @@ const STATUS_TONE = {
   'Sold': { bg: 'var(--surface-2)', fg: 'var(--fg-3)' },
 };
 
-function Bar({ pct }) {
-  return (
-    <span style={{ display: 'inline-block', width: 54, height: 6, borderRadius: 4, background: 'var(--surface-2)', overflow: 'hidden', verticalAlign: 'middle' }}>
-      <span style={{ display: 'block', height: '100%', width: (pct || 0) + '%', background: 'var(--brand)' }} />
-    </span>
-  );
-}
-
 export default function AssetsExplorer() {
   const [q, setQ] = useState('');
   const [fund, setFund] = useState('all');
@@ -65,7 +57,7 @@ export default function AssetsExplorer() {
     const dir = sort.dir === 'asc' ? 1 : -1;
     const val = (a) => ({
       name: a.address || '', fund: a.fund || '', status: a.status || '',
-      units: a.units || 0, occupancy: a.occupancyRate || 0,
+      units: a.units || 0,
       year: a.yearAcquired || 0, value: a.estimatedValue || 0,
     }[sort.key]);
     return [...list].sort((a, b) => {
@@ -78,15 +70,10 @@ export default function AssetsExplorer() {
   const kpis = useMemo(() => {
     const states = new Set(rows.map((r) => r.state).filter(Boolean));
     const units = rows.reduce((s, r) => s + (r.units || 0), 0);
-    const occupied = rows.reduce((s, r) => s + (r.occupiedUnits || 0), 0);
     const value = rows.reduce((s, r) => s + (r.estimatedValue || 0), 0);
     const uc = rows.filter((r) => r.status === 'Under Contract');
     return {
       count: rows.length, states: states.size, units, value,
-      // Unit-weighted, not an average of per-asset rates, so a 1-unit condo at
-      // 100% cannot outweigh a 176-pad park at 34%. This is the figure quoted
-      // as portfolio occupancy elsewhere on the site.
-      occ: units ? Math.round((occupied / units) * 100) : null,
       ucCount: uc.length,
       ucUnits: uc.reduce((s, r) => s + (r.units || 0), 0),
     };
@@ -107,30 +94,23 @@ export default function AssetsExplorer() {
     return <span className="asset-pill" style={{ background: t.bg, color: t.fg }}>{s || '—'}</span>;
   };
 
+  // Occupancy and the investment thesis are deliberately not shown (client
+  // request, 24 Sep 2026). The fields stay in src/data/assets.js because the
+  // data tests pin them; this is about display only.
   const Detail = ({ a }) => {
     const facts = [
+      ['Units / pads', a.units ?? '—'],
       ['Fund', a.fund || '—'],
-      ['Acquired', a.status === 'Under Contract' ? 'Under contract — not yet closed' : (fmtDate(a.purchaseDate) || a.yearAcquired || '—')],
+      ['Acquired', a.status === 'Under Contract' ? 'Under contract (not yet closed)' : (fmtDate(a.purchaseDate) || a.yearAcquired || '—')],
       ['County', a.county || '—'],
     ];
     return (
       <div className="asset-detail">
         <div className="asset-detail-grid">
-          <div>
-            <div className="data-label">Occupancy</div>
-            {a.occupancyRate != null ? (
-              <div style={{ marginTop: 6 }}>
-                <span className="figure" style={{ fontSize: 'var(--text-xl)', fontWeight: 600 }}>{a.occupancyRate}%</span>
-                <div style={{ marginTop: 6 }}><Bar pct={a.occupancyRate} /></div>
-                {a.units != null && <div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', marginTop: 6 }}>{a.occupiedUnits ?? '—'} of {a.units} units occupied</div>}
-              </div>
-            ) : <div style={{ color: 'var(--fg-3)', marginTop: 6 }}>—</div>}
-          </div>
           {facts.map(([l, v]) => (
             <div key={l}><div className="data-label">{l}</div><div className="figure" style={{ marginTop: 6, fontWeight: 500 }}>{v}</div></div>
           ))}
         </div>
-        {a.investmentThesis && (<div className="asset-thesis"><div className="data-label">Investment thesis</div><p>{a.investmentThesis}</p></div>)}
         {a.impactThesis && (<div className="asset-thesis"><div className="data-label">Impact thesis</div><p>{a.impactThesis}</p></div>)}
       </div>
     );
@@ -145,7 +125,7 @@ export default function AssetsExplorer() {
             <span className="eyebrow">Portfolio</span>
             <h1 style={{ margin: '12px 0 0', fontSize: 'var(--text-4xl)', letterSpacing: '-0.025em', lineHeight: 1.05 }}>The portfolio, in detail.</h1>
           </div>
-          <p className="lead" style={{ margin: 0, fontSize: 'var(--text-base)' }}>Every community we hold, plus the acquisitions currently under contract — filter, compare, and open any asset to see occupancy, thesis, and impact without leaving the page.</p>
+          <p className="lead" style={{ margin: 0, fontSize: 'var(--text-base)' }}>Every community we hold, plus the acquisitions currently under contract. Filter, compare, and open any asset to see its fund, acquisition date, and impact without leaving the page.</p>
         </div>
         <div className="asset-kpis">
           {[
@@ -153,7 +133,6 @@ export default function AssetsExplorer() {
             ['States', kpis.states],
             ['Units / pads', kpis.units || '—'],
             ['Portfolio value', kpis.value ? moneyShort(kpis.value) : '—'],
-            ['Occupancy', kpis.occ != null ? kpis.occ + '%' : '—'],
           ].map(([l, v]) => (
             <div key={l} className="asset-kpi"><div className="figure" style={{ fontSize: 'var(--text-2xl)', fontWeight: 600 }}>{v}</div><div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', marginTop: 2 }}>{l}</div></div>
           ))}
@@ -214,13 +193,12 @@ export default function AssetsExplorer() {
                   <th onClick={() => sortBy('fund')} className="sortable">Fund <Arrow k="fund" /></th>
                   <th onClick={() => sortBy('status')} className="sortable">Status <Arrow k="status" /></th>
                   <th onClick={() => sortBy('units')} className="sortable num">Units <Arrow k="units" /></th>
-                  <th onClick={() => sortBy('occupancy')} className="sortable">Occupancy <Arrow k="occupancy" /></th>
                   <th onClick={() => sortBy('year')} className="sortable num">Acquired <Arrow k="year" /></th>
                   <th aria-label="expand"></th>
                 </tr>
               </thead>
               <tbody>
-                {rows.length === 0 && <tr><td colSpan="7" style={{ textAlign: 'center', color: 'var(--fg-3)', padding: 40 }}>No assets match these filters.</td></tr>}
+                {rows.length === 0 && <tr><td colSpan="6" style={{ textAlign: 'center', color: 'var(--fg-3)', padding: 40 }}>No assets match these filters.</td></tr>}
                 {rows.map((a) => {
                   const isOpen = open === a.id;
                   return (
@@ -233,11 +211,10 @@ export default function AssetsExplorer() {
                         <td data-label="Fund" className="asset-fund">{a.fund ? a.fund.replace(', LLC', '') : '—'}</td>
                         <td data-label="Status"><StatusPill s={a.status} /></td>
                         <td data-label="Units" className="figure num">{a.units ?? '—'}</td>
-                        <td data-label="Occupancy">{a.occupancyRate != null ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><span className="figure">{a.occupancyRate}%</span><Bar pct={a.occupancyRate} /></span> : <span style={{ color: 'var(--fg-3)' }}>—</span>}</td>
                         <td data-label="Acquired" className="figure num">{a.yearAcquired ?? '—'}</td>
                         <td className="asset-chev"><Ic name={isOpen ? 'chevron-down' : 'chevron-right'} size={18} style={{ color: 'var(--fg-3)' }} /></td>
                       </tr>
-                      {isOpen && <tr className="asset-detail-row"><td colSpan="7"><Detail a={a} /></td></tr>}
+                      {isOpen && <tr className="asset-detail-row"><td colSpan="6"><Detail a={a} /></td></tr>}
                     </React.Fragment>
                   );
                 })}

@@ -90,6 +90,16 @@ test('copy: the unit count quoted on /, /OurProcess and /q3-special agree', () =
   assert.ok(src('components/Q3SpecialPage.jsx').includes(`${QUOTED_UNITS} units and pads`), '/q3-special unit copy');
 });
 
+// The client asked for occupancy and the investment thesis to come off the
+// portfolio explorer (24 Sep 2026). Both fields stay in src/data/assets.js and
+// are still pinned by the tests below; this guards the display decision only.
+test('/assets: occupancy and the investment thesis are not rendered', () => {
+  const code = readFileSync(fileURLToPath(new URL('../src/components/AssetsExplorer.jsx', import.meta.url)), 'utf8');
+  for (const field of ['occupancyRate', 'occupiedUnits', 'investmentThesis']) {
+    assert.ok(!code.includes(field), `${field} is back on the portfolio explorer`);
+  }
+});
+
 // 906 West Main is on the workbook's owned tab as "(for sale)" and is
 // deliberately excluded — see HELD_SKIP in scripts/generate-assets.py.
 test('assets: the property being marketed for sale is not published', () => {
