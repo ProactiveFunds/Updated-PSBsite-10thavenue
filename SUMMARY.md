@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-09-24_
+_Last updated: 2026-09-25_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -119,6 +119,23 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ## Recent work log
 
 **September 2026**
+- **Home calculator slider now lines up with its own labels (25 Sep).** Jesse reported that the
+  numbers under the slider did not match the handle. Cause: the slider mapped amount to position
+  **logarithmically** while the tick labels were laid out with `justify-content: space-between`,
+  so $100K put the handle at 25.9% while its label sat near 20%. Two fixes, both needed:
+  1. The scale is now **piecewise linear across the marks**, which are exactly the five bond-band
+     boundaries ($20K / $100K / $250K / $1M / $2M / $10M). Each band owns 20% of the track, so the
+     "Bond Option N available" badge flips precisely as the handle crosses a labelled tick. The
+     spread of the popular $20K to $250K range is barely changed (40% of the track versus 40.6%
+     under the log scale).
+  2. Labels are **absolutely positioned at each mark's own thumb-centre**, not spread evenly, and
+     the track fill uses the same expression. A native range thumb's centre travels from
+     `thumb/2` to `width - thumb/2`, never the full width, so a bare percentage drifts by up to
+     half a thumb at the ends; `thumbCenter()` compensates. The thumb is now explicitly styled
+     (18px) so that geometry is known rather than browser-dependent.
+  - Maths moved to **`src/lib/investmentScale.js`** and pinned by **`tests/calculator.test.js`**
+    (marks land on exact positions, round-trip, clamping, monotonicity both ways). 57/57 green.
+  - Also removed the em dashes from this section's copy while in the file, per `rules.md` s13.
 - **`/assets` slimmed down (24 Sep).** Client asked for occupancy off the portfolio explorer and
   the investment thesis out of the expanded row. Removed: the **Occupancy** KPI, the sortable
   **Occupancy** column (and its bar), the occupancy block in the expanded detail, and the

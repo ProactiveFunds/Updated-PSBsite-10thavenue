@@ -301,6 +301,13 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
 
 ## 8. Verification / preview quirks (learned)
 
+- **A range slider's labels must be positioned at the thumb centre, never spread with
+  `space-between`.** Two separate traps, both hit on 25 Sep 2026 in the home calculator:
+  the value-to-position mapping has to match where the labels are drawn (a log scale under
+  evenly spaced labels is always wrong), and the thumb's centre travels only from `thumb/2` to
+  `width - thumb/2`, so a label at a bare percentage drifts by up to half a thumb at the ends.
+  Style the thumb explicitly so its width is known, then place labels and any track fill with
+  the same `thumbCenter()` helper in `src/lib/investmentScale.js`.
 - **`node`/`npm` may not be on `PATH` on this Mac** (true on 11 Sep 2026: no Homebrew, nvm,
   or Volta). Do not skip `npm test` / `npm run build` for that reason — download the official
   standalone build into the session scratchpad and prepend its `bin` to `PATH`:

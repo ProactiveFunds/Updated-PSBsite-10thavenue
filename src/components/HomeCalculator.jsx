@@ -1,6 +1,7 @@
 import React from 'react';
 import { Ic } from './icons.jsx';
-// HomeCalculator.jsx — dynamic investment calculator (sits under the hero)
+import { MARKS, MIN, MAX, toAmount, toPos, thumbCenter } from '../lib/investmentScale.js';
+// HomeCalculator.jsx: dynamic investment calculator (sits under the hero)
 // Suggests the best bond option from investor status + amount + hold duration.
 const { useState: useCalc, useMemo } = React;
 
@@ -8,8 +9,8 @@ const { useState: useCalc, useMemo } = React;
 // matching the legacy StepInvestmentConfirmation math:
 //   annual% = quarterlyRate + maturityRate
 //   total%  = annual% × years ; total$ = amount × total%
-// Rapid Housing (30% over ~2yr) and Side Letter (45% over ~3yr) are also 15%/yr —
-// their headline numbers are TOTAL returns over the hold, not annual rates.
+// Rapid Housing (30% over ~2yr) and Side Letter (45% over ~3yr) are also 15%/yr.
+// Their headline numbers are TOTAL returns over the hold, not annual rates.
 const BANDS = [
   { id: 'b1', name: 'Bond Option 1', min: 20000,   max: 99999,    annual: 0.09, note: '6% paid quarterly + 3% per year at maturity', range: '$20K–$99K' },
   { id: 'b2', name: 'Bond Option 2', min: 100000,  max: 249999,   annual: 0.12, note: '7% paid quarterly + 5% per year at maturity', range: '$100K–$249K' },
@@ -23,14 +24,9 @@ const STATUSES = [
   { id: 'institutional', label: 'Institutional',    ok: true },
   { id: 'retail',     label: 'Not yet accredited',  ok: false },
 ];
-const MARKS = [
-  { v: 20000, l: '$20K' }, { v: 100000, l: '$100K' }, { v: 250000, l: '$250K' },
-  { v: 1000000, l: '$1M' }, { v: 2000000, l: '$2M' }, { v: 10000000, l: '$10M' },
-];
-const MIN = 20000, MAX = 10000000;
-// log mapping between slider 0..1 and amount
-const toAmount = (t) => Math.round((MIN * Math.pow(MAX / MIN, t)) / 1000) * 1000;
-const toPos = (a) => Math.log(a / MIN) / Math.log(MAX / MIN);
+// Slider scale lives in src/lib/investmentScale.js so the maths can be tested.
+// THUMB must match the width set on the thumb in the style block below.
+const THUMB = 18;
 const fmt = (n) => '$' + Math.round(n).toLocaleString();
 
 function HomeCalculator({ onStart }) {
@@ -44,6 +40,8 @@ function HomeCalculator({ onStart }) {
   const totalPct = annual * years;
   const totalUsd = amount * totalPct;
 
+  const fill = thumbCenter(toPos(amount), THUMB);
+
   const metrics = [
     ['Annual return', (annual * 100).toFixed(0) + '%', 'var(--lime-300)'],
     ['Total return %', (totalPct * 100).toFixed(0) + '%', '#e7c982'],
@@ -55,8 +53,8 @@ function HomeCalculator({ onStart }) {
     <section id="calculator" style={{ maxWidth: 1240, margin: '64px auto 0', padding: '0 22px', scrollMarginTop: 90 }}>
       <div style={{ textAlign: 'center', maxWidth: '80ch', margin: '0 auto 22px' }}>
         <span className="eyebrow">Model your investment</span>
-        <h2 style={{ margin: '10px 0 0', fontSize: 'var(--text-2xl)', letterSpacing: '-0.02em', color: 'var(--fg-1)', fontWeight: 700 }}>See what your capital returns — before you commit.</h2>
-        <p className="lead" style={{ margin: '8px auto 0', maxWidth: '78ch', fontSize: 'var(--text-sm)', lineHeight: 1.55, color: 'var(--fg-2)' }}>Every tier pays differently. Set your amount, investor type, and hold period to preview your projected income — and find the bond option matched to your profile.</p>
+        <h2 style={{ margin: '10px 0 0', fontSize: 'var(--text-2xl)', letterSpacing: '-0.02em', color: 'var(--fg-1)', fontWeight: 700 }}>See what your capital returns before you commit.</h2>
+        <p className="lead" style={{ margin: '8px auto 0', maxWidth: '78ch', fontSize: 'var(--text-sm)', lineHeight: 1.55, color: 'var(--fg-2)' }}>Every tier pays differently. Set your amount, investor type, and hold period to preview your projected income and find the bond option matched to your profile.</p>
         <a
           href="#opportunities"
           className="btn btn-ghost btn-sm"
@@ -122,11 +120,18 @@ function HomeCalculator({ onStart }) {
                 onChange={(e) => { const n = +e.target.value.replace(/[^0-9]/g, ''); if (!isNaN(n)) setAmount(Math.min(MAX, Math.max(MIN, n))); }}
                 style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 'var(--text-2xl)', color: 'var(--fg-1)', fontWeight: 600, width: '100%' }} />
             </div>
-            <input type="range" min="0" max="1000" value={Math.round(toPos(amount) * 1000)}
-              onChange={(e) => setAmount(toAmount(+e.target.value / 1000))}
-              style={{ width: '100%', margin: '18px 0 6px', accentColor: 'var(--accent)' }} />
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              {MARKS.map((m) => <span key={m.l} style={{ fontSize: 10, color: 'var(--fg-3)', fontFamily: 'var(--font-mono)' }}>{m.l}</span>)}
+            <div className="calc-slider">
+              <input type="range" min="0" max="1000" value={Math.round(toPos(amount) * 1000)}
+                onChange={(e) => setAmount(toAmount(+e.target.value / 1000))}
+                aria-label="Investment amount"
+                style={{ background: 'linear-gradient(to right, var(--accent) 0, var(--accent) ' + fill + ', var(--border-strong) ' + fill + ', var(--border-strong) 100%)' }} />
+              {/* Labels are positioned at the thumb centre for their own value,
+                  not spread evenly, so each one sits under its own tick. */}
+              <div className="calc-marks">
+                {MARKS.map((m) => (
+                  <span key={m.l} style={{ left: thumbCenter(toPos(m.v), THUMB) }}>{m.l}</span>
+                ))}
+              </div>
             </div>
             <div className="badge badge-open" style={{ marginTop: 14, textTransform: 'none', fontSize: 'var(--text-xs)', whiteSpace: 'nowrap' }}>
               <Ic name="check-circle" size={13} /> {band.name} available ({band.range})
@@ -148,7 +153,7 @@ function HomeCalculator({ onStart }) {
             </div>
             <div className="card" style={{ marginTop: 16, borderRadius: 'var(--radius-md)', padding: 16, boxShadow: 'none', background: 'var(--surface-2)' }}>
               <div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-2)', lineHeight: 1.5 }}>{band.note}</div>
-              {!st.ok && <div style={{ marginTop: 8, fontSize: 'var(--text-xs)', color: 'var(--amber-500)', display: 'flex', gap: 6, alignItems: 'flex-start' }}><Ic name="shield-check" size={14} /> Most options require accreditation — we'll help you check eligibility.</div>}
+              {!st.ok && <div style={{ marginTop: 8, fontSize: 'var(--text-xs)', color: 'var(--amber-500)', display: 'flex', gap: 6, alignItems: 'flex-start' }}><Ic name="shield-check" size={14} /> Most options require accreditation. We'll help you check eligibility.</div>}
             </div>
             <button className="btn btn-accent btn-lg" style={{ width: '100%', justifyContent: 'center', marginTop: 14 }} onClick={st.ok ? () => { window.location.href = 'https://tier2.sustainablebonds.com'; } : () => { window.location.href = '/accreditation'; }}>
               {st.ok ? 'Start investing' : 'Check my eligibility'} <Ic name="arrow-right" size={18} />
@@ -156,6 +161,33 @@ function HomeCalculator({ onStart }) {
           </div>
         </div>
       </div>
+
+      <style>{`
+        .calc-slider { position: relative; }
+        .calc-slider input[type=range] {
+          -webkit-appearance: none; appearance: none;
+          display: block; width: 100%; height: 6px; border-radius: 999px;
+          margin: 18px 0 9px; outline: none; cursor: pointer;
+        }
+        .calc-slider input[type=range]::-webkit-slider-thumb {
+          -webkit-appearance: none; appearance: none;
+          width: ${THUMB}px; height: ${THUMB}px; border-radius: 50%; box-sizing: border-box;
+          background: var(--accent); border: 2px solid var(--surface);
+          box-shadow: var(--shadow-sm), 0 0 0 1px var(--border); cursor: grab;
+        }
+        .calc-slider input[type=range]::-moz-range-thumb {
+          width: ${THUMB}px; height: ${THUMB}px; border-radius: 50%; box-sizing: border-box;
+          background: var(--accent); border: 2px solid var(--surface);
+          box-shadow: var(--shadow-sm), 0 0 0 1px var(--border); cursor: grab;
+        }
+        .calc-slider input[type=range]::-moz-range-track { height: 6px; border-radius: 999px; background: transparent; }
+        .calc-slider input[type=range]:focus-visible { box-shadow: 0 0 0 3px var(--ring); }
+        .calc-marks { position: relative; height: 13px; }
+        .calc-marks span {
+          position: absolute; top: 0; transform: translateX(-50%);
+          font-size: 10px; color: var(--fg-3); font-family: var(--font-mono); white-space: nowrap;
+        }
+      `}</style>
     </section>
   );
 }
