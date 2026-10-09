@@ -33,14 +33,6 @@ export const team = [
     ]
   },
   {
-    "name": "Greg C. Simonian",
-    "role": "Senior Vice President",
-    "bio": "20+ years of experience is an alternative investment distribution executive, raising over $4.5 billion across hedge funds, private equity, managed futures, and real estate strategies.",
-    "image": "/img/team/greg.webp",
-    "linkedin": "https://www.linkedin.com/in/gregorycsimonian/",
-    "email": "greg@sustainablebonds.com"
-  },
-  {
     "name": "Tony Lawrence",
     "role": "Director of Operations",
     "bio": "Tony Lawrence is a multidisciplinary professional in Client Services, Operations, and Marketing, driven by a commitment to give back through domestic and global philanthropy.",

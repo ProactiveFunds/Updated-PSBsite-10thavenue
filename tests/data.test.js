@@ -39,6 +39,15 @@ test('team: Alicia Galloway present with the updated cutout headshot', () => {
   assert.equal(alicia.image, '/img/team/alicia.webp', 'Alicia headshot path regressed');
 });
 
+test('team: Greg Simonian removed site-wide (client request, Oct 2026)', () => {
+  assert.ok(!team.some((m) => /simonian/i.test(m.name)), 'Greg is back in src/data/team.js');
+  // The Q3 special and both SDIRA pages keep their own team lists, so check those too.
+  for (const f of ['Q3SpecialPage.jsx', 'SdiraWebinarPage.jsx', 'SdiraRecordingPage.jsx']) {
+    const src = readFileSync(fileURLToPath(new URL(`../src/components/${f}`, import.meta.url)), 'utf8');
+    assert.doesNotMatch(src, /simonian|greg\.webp/i, `${f} still references Greg`);
+  }
+});
+
 test('assets: records well-formed and enums consistent', () => {
   assert.ok(Array.isArray(assets) && assets.length > 0, 'assets should be a non-empty array');
   assert.ok(Array.isArray(FUNDS) && FUNDS.length === 3, 'expected 3 FUNDS');

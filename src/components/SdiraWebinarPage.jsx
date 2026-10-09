@@ -69,7 +69,6 @@ const FOR_YOU = [
 
 const TEAM = [
   { img: '/img/team/canaan.webp', name: 'Dr. Canaan Van Williams', title: 'Impact CEO & Managing Founder' },
-  { img: '/img/team/greg.webp', name: 'Greg C. Simonian', title: 'Senior Vice President' },
   { img: '/img/team/bob.webp', name: 'Bob Totaro', title: 'Vice President of Sales' },
   { img: '/img/team/tony.webp', name: 'Tony Lawrence', title: 'Director of Operations' },
   { img: '/img/team/jesse.webp', name: 'Jesse Hollander', title: 'Director' },
@@ -834,7 +833,7 @@ export default function SdiraWebinarPage() {
           place-items: center; background: var(--accent); color: #fff; margin-top: 2px; }
 
         /* ---- hosts ---- */
-        .sd-team { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
+        .sd-team { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
         .sd-team-card { text-align: center; }
         .sd-team-photo { width: 100%; max-width: 128px; aspect-ratio: 1; border-radius: 50%; object-fit: cover;
           margin: 0 auto 14px; background: var(--bg-sunken); box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--lime-300); }

@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-10-09_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -79,8 +79,15 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
 Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (two visible tabs —
 *Property Information* = owned, *In Contract* = under contract), imported 11 Aug 2026.
 
-- **22 communities · 810 units/pads · 8 states · $65M AUM · 27% occupancy · 15% (target) annual interest.**
+- **22 communities · 810 units/pads · 8 states · $65M AUM · 27% occupancy · 15% annual interest.**
   Occupancy is still a data fact but is **no longer displayed on `/assets`** (client, 24 Sep 2026).
+- **Returns are contractual and net of fees, not targets** (Dr. Van to Sequence Financial
+  Specialists, 28 Sep 2026). That covers the 15% rate and Bond Option 2. The site still calls them
+  "targeted/projected, shown gross of fees" in places; see open item 0e.
+- **Track-record figures have no source of truth yet.** `/` says a 12-year operating track record
+  and an 8.2% average net investor yield. `/OurProcess` and `/q3-special` say 5+ years and a 20%+
+  average annual return. Sequence wants a year-by-year breakdown, so the client must supply the
+  real figures (open item 0e).
 - **Units are split (11 Sep 2026).** The client set the site-wide figure to **810**; the workbook
   still sums to **842**, and the workbook has not been re-sent. The marketing copy (`/` hero,
   `/OurProcess`, `/q3-special`) says 810; `/assets` sums the per-property rows and therefore still
@@ -118,7 +125,127 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 
 ## Recent work log
 
+**October 2026**
+- **Dr. Van profiles: 25 properties + Impact Management bio (9 Oct).** Jesse: count 25 properties (Stilton is
+  one). Source: live deck `map.js`, `Updated_Locations_100726.xlsx` (7 Oct 2026): 25 properties / 1,012 units /
+  8 states (SC 8, IL 5, NV 4, IN 3, CA 2, OH 1, AZ 1, AL 1), 18 owned + 7 in contract. Sponsor profile updated
+  (units, states, chips, footnote saying 7 are under contract). New `impact-bio.html` (`build.py --doc impact`)
+  -> `../Dr_Canaan_Van_Williams_Impact_Management_Bio.pdf`, 3 pages, for a CDFI impact-verification contract:
+  capabilities, engagement steps, deliverables, competencies, practitioner experience + review logos, SDGs,
+  credentials (adds the mediation certificate), contact. Shared CSS moved to `profile.css`. Do not write
+  `/*SHARED*/` inside a CSS comment there: it ends the comment early and drops `@page` (margins came back).
+  Still on 23 / 810 / 7: the investor overview brochures, 3-page flyer, pop-up banner, corrected SOCAP decks,
+  and the live deck's own "Cross-collateralized across 23 NOAH communities" line.
+- **Greg Simonian removed from the website (9 Oct, client request).** Off `/team` (`src/data/team.js`), the
+  `/q3-special` team grid (now 4 columns), the `/events/self-directed-ira` team row (now 5 columns) and the
+  recording page's "From Proactive" hosts rail. On the recording page his three Q&A questions now read
+  "Asked during the webinar" and the 29:08 chapter no longer names him; the video itself still includes him.
+  `public/img/team/greg.webp` deleted (the URL now 404s). Test `team: Greg Simonian removed site-wide` guards
+  all four files. The live investor deck (offering.sustainablebonds.com) does not name him.
+- **Sponsor profile for banks and lenders (9 Oct).** `collateral/sponsor-profile/profile.html` + `build.py`:
+  3-page Letter PDF (page 3, added on request: UN SDG goals 1/3/5/6/7/10/11 in official colours + indirect
+  goals, how impact is measured, contact + QR; "Author" added to his titles; no "lender" wording anywhere
+  in the PDF, client request). Pages 1-2 as first built: 2-page Letter PDF on Dr. Van from `Dr_Canaan_Van_Williams_Impact_Manager_Resume_Bio.docx`. Page 1: portrait
+  hero, 25+ yrs / $42M+ / 810 units / $26.5M (footnoted), profile, six lender-relevant capabilities. Page 2:
+  Hammonds and Rancho (purchase, improvement, sale; no return %), 921 N Las Vegas, 23 properties by state
+  (deck map.js), review logos without dates, education, books, contact + booking QR. Track record is kept here
+  because the audience is lenders, not investors; Jesse withheld these case studies from SOCAP investor
+  materials. Copied to `../Dr_Canaan_Van_Williams_Sponsor_Profile.pdf`. Open: resume says 186 homesites at
+  Hammonds, /Verified says 187; licensure and bios still flagged for verification in CORRECTIONS.md.
+- **Investor Overview, "Sustainable Living" edition (8 Oct).** `build_print.py --edition sustainable` adds a
+  Sustainable living section on page 3 ("Upgrades designed to lower residents' utility bills": efficient
+  doors, low-E windows, high R-value insulation, low-flow toilets and fixtures, efficient HVAC and LED,
+  ENERGY STAR homes; savings framed as intended, not guaranteed). The 4 pages are full, so this edition
+  drops the upgrade chips and the Las Vegas case study, which stay in the standard edition. Separate files
+  with a `_Sustainable-Living` suffix, also in `../SOCAP/`. Both editions build from `overview-print.html`.
+- **SOCAP26 table tent (8 Oct).** `collateral/socap-2026/table-tent.html` + `build_tent.py`: 4 x 6 in vertical,
+  two identical sides, QR to the SOCAP lead form `https://tenthavenue.io/f/socapproactive` ("a team member
+  will contact you after the conference"). Writes a trim-size and a 0.125 in bleed PDF (2 pages each),
+  all vector; the build checks size and that every side's QR decodes. Copied to `../SOCAP/Table Tent/`.
+- **Investor Overview, 4-page print brochure (8 Oct).** `collateral/investor-overview-flyer/overview-print.html`
+  + `build_print.py`. FedEx Office's "Brochures" product is 8.5 x 11 paper only, so the 4-pager prints
+  through **Copies & Custom Documents: 11 x 17, double-sided, half-fold** (finished 8.5 x 11). Default
+  `--size brochure` writes `*_Brochure_Pages_8.5x11.pdf` (reading order, for proofs) and
+  `*_Brochure_11x17_HalfFold.pdf` (2 sheets: outside = back | cover, inside = page 2 | page 3), both in
+  `../SOCAP/`. The 8 in layout is scaled to 8.5 in with CSS zoom; `--size 8x10` still builds the 8 x 10. New cover: Dr. Van's 2048 px portrait (334 DPI at size), vector logo, headline "Invest to
+  build wealth while preserving affordable homes." Jesse's changes (8 Oct): Tiers 1 and 2 are **2 to 4
+  years**; Tier 5 pays **6%, 8%, 8%** quarterly in years 1 to 3 plus **23% at maturity** (same 45% total).
+  Memo D01-D12 applied: risk line beside the rate band, sourced market figures, "intended" language,
+  platform scope and as-of on $26.5M, other-allocations sentence, scheduled vs collected rent, secured
+  wording, net of fees kept (Jesse), small print raised to about 7pt, live links. All logos vector except
+  the IEL seal; `build_print.py` checks page fit, 4 pages at 8 x 10, every raster at 300 DPI or better, and
+  that the QR decodes (it now carries a proper 4-module quiet zone). Impact reviews: all renewed (Addie,
+  8 Oct); **show no review dates** by request. Trim size only; no bleed yet.
+  - The corrected decks still show Tiers 1-2 as 2 years and Tier 5 deferred as 9% / 7%; update them to
+    Jesse's terms before they go out.
+
+- **SOCAP26 banners (6 Oct).** SOCAP26 is in **Chicago, Oct 12-14, 2026** (Convene Willis Tower), not
+  San Francisco. Built in **`collateral/socap-2026/`** (`build.py` makes vector QR codes, runs
+  `render.mjs` over CDP, and checks sizes and raster DPI):
+  - `LinkedIn Banner - Permanent.png` and `LinkedIn Banner - SOCAP26.png`, 3168 x 792 (1584 x 396 at 2x).
+    The permanent one replaces `../Dr-Van-LinkedIn-Banner.png`, which said "above-market fixed income",
+    "$7.5MM returns delivered", "Trusted by" and "Proactive Real Estate Group".
+  - `Pop-up Banner 32x80 - SOCAP26.pdf`: FedEx Office retractable size (32 x 80 in). Vector throughout
+    except the portrait (`Headshots ignored/Cannan.png`, 855 DPI at size). Hook: "Invest in fixed income that
+    keeps families housed." A "What our investors are getting" panel shows 9% · 12% · 15% annual
+    contractual interest by tier, quarterly current interest, 2-4 year terms and the $20,000 minimum, with the
+    payment-risk line directly beneath (memo D01). QR codes ("Invest with us" -> booking page, "Learn more" ->
+    www.sustainablebonds.com) decode correctly (checked with OpenCV). An "Independently reviewed" strip
+    carries Sustainalytics, BlueMark, the Impact Evaluation Lab seal and PRI. Sustainalytics, BlueMark
+    (official SVG from bluemark.co) and PRI (SVG from Wikimedia Commons; matches PRI's signatory letter)
+    are vector; the IEL seal prints at 471 DPI. `build.py` fails if any raster drops below 300 DPI.
+  - The real vector logo comes from `Logos/Proactive Sustainable Bonds PNG/Proactive New Logo.ai`
+    (PDF-compatible; recoloured white for dark backgrounds). The EPS files can't be read here (no
+    Ghostscript). The SVGs in `../../06-Brand-System/` are a different, draft brand, not this logo.
+  Copied to `../SOCAP/Banners/`. Not committed.
+- **SOCAP investor decks corrected (6 Oct).** Dr. Van sent three decks (361 Firm, Accredited,
+  Institutional) plus a 65-item compliance memo (`../SOCAP/PSB_Investor_Material_Corrections_2026-10-05.docx`).
+  Jesse's deck repo was not available, so the public deck at `offering.sustainablebonds.com` was
+  copied into **`collateral/investor-decks/site/`** and every fix lives in `site/corrections.js`,
+  tagged with memo codes. `node render.mjs` prints the three variants; `CORRECTIONS.md` maps codes to
+  changes and lists what is still open. Output: `collateral/investor-decks/output/`, copied to
+  `../SOCAP/Corrected 2026-10-06/` (23 / 26 / 27 pages). Not committed.
+  - Jesse (6 Oct): the Notes are **secured** (the Q3 subscription agreement's "unsecured" wording is
+    wrong and is being updated); interest is paid **net of all fees** (not yet in the offering
+    documents); drop the investor track record and the Hammonds / Rancho case studies for SOCAP.
+  - The deck's `$26.5M` does not reconcile with its own property data ($19.0M cost, $63.0M
+    estimated value across 23 properties in three entities). Flagged to Dr. Van.
+  - The live deck is still uncorrected, so the corrected PDFs' QR codes point to the booking page.
+  - Still to do: the Investor Overview flyer corrections (memo D01-D12).
+
+- **Three-page investor overview flyer (2 Oct).** Addie asked for a 3-page PDF in the style of
+  the Impact & Investment Overview, built from `Presentations/Proactive_Sustainable_Bonds_Two_Page_Investor_Overview.docx`
+  and the Institutional Investor Presentation (11). Message order: the housing gap and why NOAH is
+  worth preserving (p1), what the Fund owns, how capital becomes rental income and repayment, and
+  the 921 N Las Vegas Blvd case study (p2), then the tier table, the bondholder position, a
+  meeting CTA with QR, and disclosures (p3). Source and render script are in
+  **`collateral/investor-overview-flyer/`** (`flyer.html` + `build.py`, photos extracted from the
+  deck into `img/`). `build.py` refuses em dashes, measures every page against 1056px before
+  printing, and asserts 3 pages. Output: `Proactive_Sustainable_Bonds_Investor_Overview.pdf`, also
+  copied to `Presentations/`. Not committed.
+  - Applies Sequence's copy rules: no "stable", no "Invest now", tier rates shown individually
+    rather than as a range, rates labelled contractual and net of fees, no testimonials or
+    realized-return figures, and the Sequence statement on every page.
+  - **Figures are the docx/deck's, not the site's:** $26.5M reported AUM, 23 properties, 810
+    units, 7 states (the site says $65M / 22 / 8 states).
+  - **Open before distribution:** Jack's every-page footnote (its text is not in the project),
+    Sequence sign-off. (Security conflict resolved 6 Oct: Jesse confirmed the Notes are secured and
+    the Q3 subscription agreement is being corrected.)
+
 **September 2026**
+- **FINRA compliance review of the site copy (29 Sep).** Jack Hughes of Sequence Financial
+  Specialists (a FINRA broker-dealer) reviewed the investor deck on 27 Sep and raised nine points.
+  Dr. Van replied on 28 Sep that the returns are contractual and net of fees, and agreed to apply
+  the notes to the deck and the website. Jack then sent a testimonial disclosure, a full legal
+  disclaimer, a footnote for every page, and the Sequence statement ("Securities offered through
+  Sequence Financial Specialists LLC, Member FINRA/SIPC. Proactive Funds and Sequence Financial are
+  not affiliates."). The thread came in pasted, because the Gmail connector failed its auth check.
+  - The whole site was audited against the nine points, and **all nine apply**, most in several
+    places. The findings and the open questions are written up in
+    **`../Website Compliance Review - Findings and Questions.pdf`** (9 pages, written for the
+    client, so it has no file paths). Its HTML source was built in a session scratchpad and was
+    not kept, so the PDF is the record.
+  - **No site copy has changed yet.** The work is tracked as open item 0e.
 - **Home calculator slider now lines up with its own labels (25 Sep).** Jesse reported that the
   numbers under the slider did not match the handle. Cause: the slider mapped amount to position
   **logarithmically** while the tick labels were laid out with `justify-content: space-between`,
@@ -424,10 +551,15 @@ deploying promptly, not the setting having changed.) After any push, tell the us
 Render -> `sustainablebonds` -> **Manual Deploy** -> **Deploy latest commit**, then re-verify by
 fetching a string unique to the commit.
 
-Both remotes and `main` are at `a2071a8`. The embedded PAT was stripped from both remote URLs on
-19 Aug (it had been revoked, and a dead secret in `.git/config` is still a secret), so pushes now
-go through the env-var credential helper in `rules.md` s2 and tracking refs are set by hand from
-the SHA that `git ls-remote` confirms.
+Both remotes and `main` are at **`9b99edc`** (27 Sep 2026). The embedded PAT was stripped from
+both remote URLs on 19 Aug (it had been revoked, and a dead secret in `.git/config` is still a
+secret), so pushes go through the env-var credential helper in `rules.md` s2 and tracking refs are
+set by hand from the SHA that `git ls-remote` confirms.
+
+**Three commits are pushed but NOT yet published** (no Manual Deploy has been run since):
+`7d9d294`, `37259c6`, `9b99edc`. Until one is run, production still serves the older build, so the
+live site still shows the hero pill, 842 units, the `/assets` occupancy column, and the misaligned
+calculator slider.
 
 Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified the same way:
 
@@ -441,6 +573,9 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 | Footer | "Our mission & team" present, "Investment scenarios" gone |
 
 **Recent commits:**
+- `9b99edc` - calculator slider aligned with its tick labels (piecewise scale + thumb-centre marks)
+- `37259c6` - occupancy and the investment thesis removed from `/assets`
+- `7d9d294` - hero eyebrow pill removed; quoted unit count 842 -> 810
 - `a2071a8` - recording page hero: promo code out of the figure band, "3 things" in
 - `c6a9b03` - deploy/remote notes: auto-deploy settled, PAT stripped from both remote URLs
 - `108d748` - SDIRA webinar recording page + "Past event recordings" on /events
@@ -453,10 +588,58 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 ---
 
 ## Open items / known issues
-0. **Unit count split: copy says 810, data says 842.** See "Canonical numbers" above. `/assets`
+0. **Three commits are awaiting a Manual Deploy.** `7d9d294`, `37259c6`, `9b99edc`. Nothing from
+   September is live yet. See "Deployment".
+0a. **Unit count split: copy says 810, data says 842.** See "Canonical numbers" above. `/assets`
    shows 842 until the client supplies corrected per-property counts and the workbook is
-   regenerated. Also: a **fourth PAT was pasted in chat on 11 Sep 2026** — it must be revoked
-   after the push it was used for.
+   regenerated. No single property accounts for the 32-unit difference, so it cannot be guessed.
+0b. **The fourth PAT is still live and must be rotated.** Pasted in chat on 11 Sep 2026 and
+   confirmed still working on 25 Sep. Three earlier PATs were also pasted (17 Aug, 19 Aug).
+   None should ever be pasted again; see `rules.md` s2 for the env-var credential helper.
+0c. **Jesse's `offering.sustainablebonds.com` is down, and he proposes folding it into the main
+   domain** (22 Sep 2026). His decks and an `/admin` live in a separate repo,
+   `github.com/Austinjh1234/offering-sustainablebonds`, which Addie cannot yet access (the invite
+   went to the wrong account; Addie's git commit label `ihavespokennow-ops` is *not* the GitHub
+   account he signs into). Checked from here on 22 Sep: the `offering` subdomain has **no DNS
+   record at all**, but the zone is already live at GoDaddy (`ns49/ns50.domaincontrol.com`, serial
+   bumped that day) and the apex plus `www` resolve to Render, so a new CNAME should take effect
+   in minutes rather than the 24 hours Jesse expected. On the slug idea: this site is a **static**
+   Render build, so decks could move in as pages but an admin that saves data cannot. Options put
+   to him were redirects from `render.yaml` (fast, and it decouples the printed URL from the
+   hosting), a rewrite if Render supports an external destination (unverified), or moving the
+   decks into this repo at the cost of his self-serve updates. **Awaiting a call and repo access.**
+0d. **Climate Week one-pager is not in git.** Source and build script are in
+   `collateral/climate-week-nyc-2026/` but uncommitted, and the PDF lives on the Desktop. Decide
+   whether collateral belongs in this repo (the earlier Impact Overview's source was left in a
+   scratchpad and is now gone, which is the argument for committing it).
+0e. **FINRA compliance pass is pending (Sequence review, 29 Sep 2026).** The full list, page by
+   page, is in `../Website Compliance Review - Findings and Questions.pdf`. Sequence's rules for
+   copy are: no promissory headlines ("The bond that pays"); no "stable returns" (though "Our goal
+   is to achieve stable returns" is allowed); "Invest" or "Invest Here" rather than "Invest now";
+   no return ranges; a description of each vehicle in any comparison; a testimonial disclosure; and
+   a full risk disclosure with the Sequence statement.
+   - **Can change now (wording only):** the three "Invest now" buttons (`HomeSections.jsx`), the
+     rotating hero word list (`Hero.jsx` `FLIP_WORDS`), the "stable / consistent / reliable /
+     proven" copy (footer tagline, home meta description, `/OurProcess`, `/q3-special`, `/ira`,
+     the FAQ, and several blog posts), a testimonial disclosure under the resident videos, renaming
+     the footer link "Investor testimonials", and dropping the "Start your investment today"
+     urgency on `/q3-special`.
+   - **Blocked on the client:** the track-record figures (see "Canonical numbers"), whether
+     distributions are monthly or quarterly (`/OurProcess` says monthly and everything else says
+     quarterly), whether residents were paid for their testimonials, whether QOZ Fund I's 8% is
+     contractual or a target, and each tier's rate checked against the subscription agreement
+     (15% starts at $250K in the calculator and the FAQ but at $1M in the home opportunities
+     table).
+   - **Blocked on Jack:** wording for contractual returns (Dr. Van asked for it and it was not in
+     Jack's reply), a website version of his disclaimer (it is written for a memorandum), whether
+     Sequence offers every product on the site, whether "Start investing" is acceptable, and
+     whether "not FDIC- or SIPC-insured" still holds once "Member FINRA/SIPC" is added.
+   - Once that is resolved: reword "targeted/projected, gross of fees" everywhere (the home
+     opportunities footnote, the Digest footer, the calculator, `/OurProcess`); remove the ranges
+     from the comparison chart and the opportunities table; add a disclosure to the calculator
+     (it has none); add the Sequence statement and the every-page footnote to `MktFooter`; and
+     replace `/digest/disclosure-terms`, keeping the SMS terms. Then add the adopted rules to
+     `rules.md` s13. The investor deck needs the same pass.
 0a. **`/events/self-directed-ira` has gone stale and is live in that state.** The webinar was
    18 Aug 2026; the page still sells it as upcoming. Spotted 20 Aug, deliberately not fixed —
    the brief was to add the recording, not rework this page. Three symptoms, all in
@@ -496,8 +679,9 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 2b. **"38 Communities audited · Verified · Deloitte"** on the homepage now reads **22**, tracking the
    portfolio. The attribution was never re-verified — confirm the audited count with Deloitte, since
    the label makes it a third-party claim.
-3. **Greg's headshot** is cropped tighter than the others; a re-export with more headroom would make all five uniform.
+3. ~~**Greg's headshot** is cropped tighter than the others.~~ **Moot (9 Oct 2026)**: Greg removed from the site.
 4. **FAQ** (Digest) still uses the old "Bond Option 1-4 / Rapid Housing 45% total" framing; reconcile with corrected wording.
+   Now part of the compliance pass (0e): the rates are contractual, so they must match the subscription agreement exactly.
 5. **Video Library** is a "coming soon" placeholder.
 6. ~~**Footer links** are still placeholder `#` anchors.~~ **Done (Aug 2026)** — wired in
    `src/data/footerLinks.js` and guarded by `tests/footer-links.test.js`. Two labels still have no
@@ -507,6 +691,7 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 7. **Before/after impact section** stays hidden until photos are provided.
 8. **Real Leaders Real Estate Award** shown as a text ribbon on collateral (no clean badge yet); confirm exact name/logo.
 9. **Email campaign** (AlphaMaven lead-nurture) lives outside the repo; needs number alignment + compliance pass before sending.
+   Apply Sequence's copy rules from 0e to it as well.
 10. **Two GitHub PATs have now been pasted in chat and must both be revoked and rotated.** The
    second (17 Aug 2026) is a classic token with `repo` + `write:packages`, belonging to
    `ihavespokennow-ops` — push on the client repo, **admin** on the mirror. Replace with a

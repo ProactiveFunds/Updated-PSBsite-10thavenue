@@ -48,7 +48,7 @@ const CHAPTERS = [
   ['12:22', 'Six accounts you can self-direct', 'Traditional and Roth IRAs, SEP IRAs, the solo 401(k), the HSA with its three-way tax break, and the Coverdell education account almost nobody mentions.'],
   ['21:53', 'Why a private fund suits a retirement account', 'Passive by construction, genuinely uncorrelated to the market, compounding untaxed inside the account, and — unusually — with the rate disclosed before you invest.'],
   ['25:48', 'The rules that cost people money', 'Your IRA cannot transact with you, your spouse, your parents, your children, or your in-laws. Your brother, your aunt and your friends are all fine.'],
-  ['29:08', 'Can you mix alternatives and the market?', 'Greg Simonian asks whether a self-directed account has to be all-in on alternatives, and how quickly money can move between them.'],
+  ['29:08', 'Can you mix alternatives and the market?', 'Whether a self-directed account has to be all-in on alternatives, and how quickly money can move between them.'],
   ['34:09', 'Getting started: open, fund, invest', 'Five minutes to open. Five to seven business days to transfer, two to three weeks to roll over. The one paperwork mistake that sends a transfer back to the start.'],
   ['43:19', 'Direction of Investment, and how to title it', 'The form that authorises your custodian to wire, the supporting document that goes with it, and the vesting title that keeps the whole thing tax-sheltered.'],
   ['48:17', 'A real deal: Jeff’s own $100,000 note', 'His Roth IRA and his HSA lending together against a rehab, at 10% with two points — and exactly how the interest came back tax-free.'],
@@ -142,7 +142,7 @@ const QA = [
   {
     n: '02',
     q: 'Are your clients all-in on alternatives, or do they mix in the market? And how quickly can money move between the two?',
-    who: 'Asked by Greg Simonian',
+    who: 'Asked during the webinar',
     a: [
       'You can still hold stocks, bonds, mutual funds and ETFs here. Most clients are in alternatives — that is why they opened the account — and we are not a discount brokerage, so we will not be the cheapest place to trade the market.',
       'What I mostly see is investors taking returns from an alternative and, if there is not enough to do another one yet, parking it in a stock or a bond so it keeps working. You can also transfer it back to a Schwab IRA if you would rather invest it there. Both roads are open.',
@@ -151,7 +151,7 @@ const QA = [
   {
     n: '03',
     q: 'Can one account hold several different alternative investments at the same time?',
-    who: 'Asked by Greg Simonian',
+    who: 'Asked during the webinar',
     a: ['Yes. A private fund, a rental property and some precious metals can all sit in a single self-directed IRA, and you can move between asset types as opportunities come up.'],
   },
   {
@@ -187,7 +187,7 @@ const QA = [
   {
     n: '09',
     q: 'Is anyone at Directed IRA watching these investments and warning people when something goes wrong?',
-    who: 'Asked by Greg Simonian',
+    who: 'Asked during the webinar',
     a: [
       'Directed IRA is a passive custodian. We do not recommend investments and we do not review them for merit — the due diligence sits with the account owner, and I would keep saying that.',
       'What we do review is whether an asset is approved for custody: whether the documentation is there to hold it properly, and whether there is anything about the parties involved — a history of fraud, say — that means we would rather not hold it. Being founded by a tax attorney, we have a robust compliance department behind that review. It is a real check, but it is not a substitute for your own research.',
@@ -212,7 +212,6 @@ const QUOTES = [
 
 const HOSTS = [
   ['/img/team/canaan.webp', 'Dr. Canaan Van Williams', 'Impact CEO & Managing Founder'],
-  ['/img/team/greg.webp', 'Greg C. Simonian', 'Senior Vice President'],
   ['/img/team/jesse.webp', 'Jesse Hollander', 'Director'],
 ];
 

@@ -40,7 +40,6 @@ const TRUST = [
 
 const TEAM = [
   { img: '/img/team/canaan.webp', name: 'Dr. Canaan Van Williams', title: 'Founder & Managing Partner', bio: '25+ years in real estate investment; an industry leader in sourcing, revitalizing, and managing Class B and C value-add properties. Author of Driving Social Impact Investment.' },
-  { img: '/img/team/greg.webp', name: 'Greg C. Simonian', title: 'Senior Vice President', bio: '20+ years as an alternative-investment distribution executive, raising over $4.5 billion across hedge funds, private equity, managed futures, and real estate strategies.' },
   { img: '/img/team/tony.webp', name: 'Tony Lawrence', title: 'Director of Operations', bio: 'Operations-focused leader managing investor relations, portfolio operations, and scalable systems that align financial returns with measurable outcomes.' },
   { img: '/img/team/jesse.webp', name: 'Jesse Hollander', title: 'Director', bio: '20+ years in financial services across private equity, venture capital, and mission-driven philanthropy, specializing in values-aligned fund structuring.' },
   { img: '/img/team/alicia.webp', name: 'Alicia Galloway', title: 'Investor Relations Manager', bio: '15+ years working with high-net-worth investors, supporting the raise of tens of millions of dollars across multifamily real estate acquisitions.' },
@@ -279,7 +278,7 @@ export default function Q3SpecialPage() {
         .q3-verify-link:hover { text-decoration: underline; }
 
         /* Team */
-        .q3-team { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; }
+        .q3-team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
         .q3-team-card { text-align: center; }
         .q3-team-photo { width: 116px; height: 116px; border-radius: 50%; object-fit: cover; margin: 0 auto 14px; box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--lime-300); }
         .q3-team-name { font-size: var(--text-base); font-weight: 700; color: var(--forest-700); line-height: 1.2; }
