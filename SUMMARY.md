@@ -128,6 +128,8 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
   centred, and on the right the theme toggle plus two large rounded-rectangle buttons (**Contact us**,
   **Start investing**, 48px tall, 14px radius). Contact us moved out of the link row into those buttons (it is
   still a link inside the mobile menu). The burger breakpoint is now **1080px** so the big buttons fit.
+  Contact us is an outlined rounded rectangle (2px green border, fills green on hover); Start investing is a
+  flat solid-green rounded rectangle. The groups sit on the pill's exact centre (symmetric padding).
   At the very top of the page the pill drops its shadow, border and fill so it blends in
   (`.nav-pill-top`, toggled by a scroll listener at 8px); it fades back in once scrolled.
 - **13 Oct 2026 (third follow-up): grouped header and impact thesis removed.**

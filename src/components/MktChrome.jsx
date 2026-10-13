@@ -101,9 +101,9 @@ function MktNav({ onInvest }) {
         <div className="nav-actions" style={{ display: 'flex', gap: 10, alignItems: 'center', justifyContent: 'flex-end' }}>
           <ThemeToggle />
           {NAV_TOP.map((l) => (
-            <a key={l.label} href={l.href || ('#' + l.id)} className="btn btn-glass nav-cta nav-cta-contact" onClick={go(l)}>{l.label}</a>
+            <a key={l.label} href={l.href || ('#' + l.id)} className="btn nav-cta nav-cta-contact" onClick={go(l)}>{l.label}</a>
           ))}
-          <button className="btn btn-accent nav-cta" onClick={goToCalculator}>Start investing</button>
+          <button className="btn btn-accent nav-cta nav-cta-start" onClick={goToCalculator}>Start investing</button>
           <button className="btn btn-icon btn-glass nav-burger" aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                   aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>
             <Ic name={menuOpen ? 'x' : 'menu'} size={20} />

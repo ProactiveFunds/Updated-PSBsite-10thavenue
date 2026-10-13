@@ -706,7 +706,19 @@ small, .caption { font-size: var(--text-sm); color: var(--fg-2); }
 .nav-pill > a:first-child { justify-self: start; }
 /* Large rounded-rectangle buttons (not pills) for Contact us and Start investing. */
 .nav-cta { height: 48px; padding: 0 26px; border-radius: 14px; font-size: var(--text-sm); display: inline-flex; align-items: center; justify-content: center; text-decoration: none; white-space: nowrap; }
-.nav-cta-contact { color: var(--fg-1); border: 1px solid var(--glass-border); }
+.btn.nav-cta-contact {
+  background: transparent; color: var(--fg-1); border: 2px solid var(--brand); box-shadow: none;
+  transition: background var(--dur-base), color var(--dur-base), transform var(--dur-base), box-shadow var(--dur-base);
+}
+.btn.nav-cta-contact:hover, .btn.nav-cta-contact:focus-visible {
+  background: var(--brand); color: #fff; transform: translateY(-1px); box-shadow: var(--shadow-sm);
+}
+[data-theme="dark"] .btn.nav-cta-contact:hover, [data-theme="dark"] .btn.nav-cta-contact:focus-visible { color: var(--fg-on-accent); }
+/* Start investing: one flat, solid green rounded rectangle. */
+.btn.nav-cta-start { background: var(--accent); color: var(--fg-on-accent); box-shadow: none; }
+.btn.nav-cta-start:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+/* Symmetric padding so the centred groups sit on the pill's true centre. */
+@media (min-width: 1081px) { .nav-pill { padding-inline: 1em; } }
 .nav-group { position: relative; }
 .nav-trigger {
   display: inline-flex; align-items: center; gap: 4px; padding: 0; background: none; border: 0;
