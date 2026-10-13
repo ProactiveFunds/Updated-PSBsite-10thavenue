@@ -51,8 +51,8 @@ function MktNav({ onInvest }) {
   const groupCurrent = (g) => g.items.some((l) => l.href && isCurrent(l));
   const renderLink = (link, withDesc) => (
     <a key={link.label} href={link.href || ('#' + link.id)} aria-current={isCurrent(link) ? 'page' : undefined} onClick={go(link)}>
-      <span>{link.label}</span>
-      {withDesc && <small>{link.desc}</small>}
+      {withDesc && link.icon && <span className="nav-ico" aria-hidden="true"><Ic name={link.icon} size={18} /></span>}
+      {withDesc ? <span className="nav-txt"><span className="nav-name">{link.label}</span><small>{link.desc}</small></span> : <span>{link.label}</span>}
     </a>
   );
 
@@ -80,7 +80,7 @@ function MktNav({ onInvest }) {
     <header style={{ position: 'sticky', top: 0, zIndex: 50, padding: '18px 22px' }}>
       <div className={'nav-pill glass lit' + (atTop ? ' nav-pill-top' : '')} style={{ maxWidth: 1240, margin: '0 auto' }}>
         <a href="/" onClick={(e) => { if (window.location.pathname === '/') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }} style={{ display: 'inline-flex', flex: 'none' }} aria-label="Proactive Sustainable Bonds home">
-          <img src={"/img/logo.png"} alt="Proactive Sustainable Bonds" style={{ height: 30 }} />
+          <img src={"/img/logo.png"} alt="Proactive Sustainable Bonds" style={{ height: 42 }} />
         </a>
         <nav className="nav-links" ref={barRef} aria-label="Main">
           {NAV_GROUPS.map((g) => {
@@ -91,9 +91,21 @@ function MktNav({ onInvest }) {
                 <button type="button" className="nav-trigger" aria-expanded={open} aria-haspopup="true"
                         aria-current={groupCurrent(g) ? 'true' : undefined}
                         onClick={() => setOpenGroup(open ? null : g.label)}>
-                  {g.label}<Ic name="chevron-down" size={14} />
+                  {g.label}<Ic name="chevron-down" size={16} />
                 </button>
-                {open && <div className="nav-panel glass" role="menu">{g.items.map((l) => renderLink(l, true))}</div>}
+                {open && (
+                  <div className={'nav-panel' + (g.feature ? ' nav-panel-wide' : '')} role="menu">
+                    <div className="nav-panel-links">{g.items.map((l) => renderLink(l, true))}</div>
+                    {g.feature && (
+                      <a className="nav-feature" href={g.feature.href} onClick={go(g.feature)}>
+                        <span className="nav-feature-eyebrow">{g.feature.eyebrow}</span>
+                        <span className="nav-feature-title">{g.feature.title}</span>
+                        <span className="nav-feature-desc">{g.feature.desc}</span>
+                        <span className="nav-feature-cta">{g.feature.cta} <Ic name="arrow-right" size={16} /></span>
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
