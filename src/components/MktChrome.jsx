@@ -8,7 +8,8 @@ import { NAV_GROUPS, NAV_TOP } from '../data/navLinks.js';
 const { useState, useEffect } = React;
 
 function ThemeToggle() {
-  const [dark, setDark] = useState(typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark');
+  const [dark, setDark] = useState(true); // dark is the default; synced from the page below
+  useEffect(() => { setDark(document.documentElement.getAttribute('data-theme') === 'dark'); }, []);
   const toggle = () => { const n = !dark; setDark(n); PSB.setTheme(n ? 'dark' : 'light'); };
   return (
     <button className="btn btn-icon btn-glass" onClick={toggle} aria-label="Toggle theme" title="Toggle theme">
@@ -18,7 +19,7 @@ function ThemeToggle() {
 }
 
 function MktNav({ onInvest }) {
-  const [active, setActive] = useState('opportunities');
+  const [active, setActive] = useState(null); // set when an on-page anchor is clicked
   const [menuOpen, setMenuOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState(null);
   const [atTop, setAtTop] = useState(true);

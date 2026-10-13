@@ -220,7 +220,7 @@ platform used for the AlphaMaven campaign.
   (editorial serif), **Spline Sans Mono** (numbers/labels).
 - **Brand tokens** (in `global.css :root`): forest scale (primary `--forest-600 #1f5e2e`,
   deep `--forest-900 #0d2a17`), lime accent (`--lime-500 #7fb24f`, on-dark `--lime-300 #aed079`),
-  warm paper `--paper #f7f8f4`, ink `#1a1d18`. Light/dark theme via `data-theme` on `<html>`.
+  warm paper `--paper #f7f8f4`, ink `#1a1d18`. Light/dark theme via `data-theme` on `<html>`. **Dark is the default (13 Oct 2026):** every page's `<html>` tag says `data-theme="dark"`; a saved `psb-theme` choice overrides it through an inline head script.
 - **Team photos** are **transparent cutout** `.webp` files in `public/img/team/` shared by
   the team page and the Q3 landing collage. A matching cutout can be produced from a
   white-background photo with Pillow flood-fill keying (threshold tuned per image, then a
