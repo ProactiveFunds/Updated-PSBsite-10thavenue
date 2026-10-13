@@ -124,6 +124,17 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **13 Oct 2026 (third follow-up): grouped header and impact thesis removed.**
+  - Header is now **Invest ▾ · Impact ▾ · Learn ▾ · About ▾ · Contact us** plus "Start investing"
+    (was nine flat links). Source of truth is `src/data/navLinks.js`; `tests/nav-links.test.js` checks every
+    destination resolves. Invest: Compare opportunities, Q3 Special, How it works, Self-Directed IRA,
+    Accreditation. Impact: Our impact, ProActively Verified. Learn: Digest, Events. About: Team, Our assets
+    (Assets moved from Impact to About so About is not a one-item menu once Contact us became a top-level link).
+    Dropdowns open on hover or click and close on Escape or an outside click; the mobile menu uses expandable
+    groups. The burger now appears at 980px (was 1180px). `.nav-pill.lit` no longer clips (overflow visible),
+    which the dropdown panels need. `npm run audit:layout` passes on all 12 routes. When running as root, point
+    `CHROME_PATH` at a wrapper script that adds `--no-sandbox`.
+  - `/assets` no longer shows the "Impact thesis" on any asset; `impactThesis` is removed from the data too.
 - **13 Oct 2026 (second follow-up): four new rows dropped.** Client said to leave out 906 West Main, 5755 and
   5865 Old Hwy 53 and 406 Malibu Dr, and to keep the $65M AUM copy. The site now shows **21 communities
   (17 owned + 4 under contract), 7 states (no California), 809 units on `/assets`** (copy still quotes 810).

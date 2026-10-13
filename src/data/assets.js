@@ -13,11 +13,10 @@
 // deliberately left out at the client's request (13 Oct 2026): 906 West Main,
 // 5755 and 5865 Old Hwy 53, and 406 Malibu Dr. Per client request NO financials
 // live here: no purchase price, estimated value, rent or occupancy, and no
-// investment thesis (it quoted prices). Narrative impactThesis and sdgs are
-// carried over from the earlier file.
+// investment thesis (it quoted prices) and no impact thesis (removed 13 Oct 2026).
 //
 // Fields: id, name, address, fund, status, city, state, zip, county, units,
-// purchaseDate, yearAcquired, impactThesis, sdgs[]
+// purchaseDate, yearAcquired, sdgs[]
 // ---------------------------------------------------------------------------
 
 export const assets = [
@@ -34,7 +33,6 @@ export const assets = [
     "units": 66,
     "purchaseDate": "2026-01-16",
     "yearAcquired": 2026,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -50,7 +48,6 @@ export const assets = [
     "units": 30,
     "purchaseDate": "2025-06-13",
     "yearAcquired": 2025,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -66,7 +63,6 @@ export const assets = [
     "units": 7,
     "purchaseDate": "2025-01-07",
     "yearAcquired": 2025,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -82,7 +78,6 @@ export const assets = [
     "units": 89,
     "purchaseDate": "2025-04-24",
     "yearAcquired": 2025,
-    "impactThesis": "The Glen at Stateline features newly remodelled mobile homes on lease-to-own terms. One home has 3 bedrooms, 2 baths and about 980 sq ft with new flooring, deck and fresh paint.",
     "sdgs": []
   },
 {
@@ -98,7 +93,6 @@ export const assets = [
     "units": 1,
     "purchaseDate": "2025-03-01",
     "yearAcquired": 2025,
-    "impactThesis": "Condominium unit acquired for $275K in March 2025; built in 1995 with 2 bedrooms and 2 bathrooms across 959 sq ft. The home features updated wood-tile floors and modernised kitchen and bathrooms.",
     "sdgs": []
   },
 {
@@ -114,7 +108,6 @@ export const assets = [
     "units": 180,
     "purchaseDate": "2024-11-27",
     "yearAcquired": 2024,
-    "impactThesis": "Fountainvue Mobile Home Park is anchored by a 1,599-sq-ft, 3-bed, 1.5-bath single-family home built in 1972 on 41.6 acres. The park provides a rural community setting.",
     "sdgs": []
   },
 {
@@ -130,7 +123,6 @@ export const assets = [
     "units": 14,
     "purchaseDate": "2024-01-08",
     "yearAcquired": 2024,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -146,7 +138,6 @@ export const assets = [
     "units": 14,
     "purchaseDate": "2024-08-30",
     "yearAcquired": 2024,
-    "impactThesis": "Mobile home property in Greeleyville, SC with multiple mobile home units on land. A 1979 manufactured home sits on the site.",
     "sdgs": []
   },
 {
@@ -162,7 +153,6 @@ export const assets = [
     "units": 3,
     "purchaseDate": "2023-09-02",
     "yearAcquired": 2023,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -178,7 +168,6 @@ export const assets = [
     "units": 4,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "impactThesis": "Rental property that includes four addresses. 526 Silton is a rented brick ranch home; 522 and 520 are new single-wide 2-bed, 1-bath homes; and 518 is a new 2-bed, 2-bath single-wide. The brick home has been remodelled with varnished pine floors and new ceiling fans. A fenced common area with picnic tables sits between the units.",
     "sdgs": []
   },
 {
@@ -194,7 +183,6 @@ export const assets = [
     "units": 1,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "impactThesis": "Single-family home built in 1957 featuring three bedrooms, one bathroom and approximately 1,020 sq ft of living space. The house sits on a 4,440-sq-ft lot and has an attached garage and stone exterior.",
     "sdgs": []
   },
 {
@@ -210,7 +198,6 @@ export const assets = [
     "units": 43,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "impactThesis": "",
     "sdgs": [
       1,
       3,
@@ -234,7 +221,6 @@ export const assets = [
     "units": 46,
     "purchaseDate": "2022-09-01",
     "yearAcquired": 2022,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -250,7 +236,6 @@ export const assets = [
     "units": 40,
     "purchaseDate": "2022-09-01",
     "yearAcquired": 2022,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -266,7 +251,6 @@ export const assets = [
     "units": 6,
     "purchaseDate": "2020-09-02",
     "yearAcquired": 2020,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -282,7 +266,6 @@ export const assets = [
     "units": 6,
     "purchaseDate": "2020-08-19",
     "yearAcquired": 2020,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -298,7 +281,6 @@ export const assets = [
     "units": 6,
     "purchaseDate": "2018-11-01",
     "yearAcquired": 2018,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -314,7 +296,6 @@ export const assets = [
     "units": 41,
     "purchaseDate": null,
     "yearAcquired": null,
-    "impactThesis": "",
     "sdgs": [
       1,
       3,
@@ -338,7 +319,6 @@ export const assets = [
     "units": 113,
     "purchaseDate": null,
     "yearAcquired": null,
-    "impactThesis": "",
     "sdgs": []
   },
 {
@@ -354,7 +334,6 @@ export const assets = [
     "units": 53,
     "purchaseDate": null,
     "yearAcquired": null,
-    "impactThesis": "",
     "sdgs": [
       1,
       3,
@@ -378,7 +357,6 @@ export const assets = [
     "units": 46,
     "purchaseDate": null,
     "yearAcquired": null,
-    "impactThesis": "",
     "sdgs": []
   }
 ];

@@ -100,10 +100,10 @@ test('copy: the unit count quoted on /, /OurProcess and /q3-special agree', () =
 // Client requests (24 Sep, 13 Oct 2026): no financials, occupancy or investment
 // thesis. The fields are gone from the data, so nothing can render them.
 test('assets: no financial fields in the data or on /assets', () => {
-  const banned = ['purchasePrice', 'estimatedValue', 'avgRent', 'occupiedUnits', 'occupancyRate', 'investmentThesis'];
+  const banned = ['purchasePrice', 'estimatedValue', 'avgRent', 'occupiedUnits', 'occupancyRate', 'investmentThesis', 'impactThesis'];
   for (const a of assets) for (const f of banned) assert.ok(!(f in a), `${a.name} still carries ${f}`);
   const code = readFileSync(fileURLToPath(new URL('../src/components/AssetsExplorer.jsx', import.meta.url)), 'utf8');
-  for (const f of [...banned, 'Portfolio value']) assert.ok(!code.includes(f), `${f} is back on the portfolio explorer`);
+  for (const f of [...banned, 'Portfolio value', 'Impact thesis']) assert.ok(!code.includes(f), `${f} is back on the portfolio explorer`);
 });
 
 test('home: the Deloitte "Communities audited" stat is gone', () => {
@@ -198,16 +198,6 @@ test('assets: SDG alignment is stated once for the portfolio', () => {
   assert.deepEqual(PORTFOLIO_SDGS, [1, 3, 5, 6, 7, 10, 11], 'portfolio SDG set changed');
   for (const n of PORTFOLIO_SDGS) {
     assert.ok(isNonEmptyString(SDG_LABELS[n]), `SDG ${n} has no label to render`);
-  }
-});
-
-// A previous import left OpenAI-style citation markers (【…†…】) in two impact
-// theses; they rendered verbatim on /assets. Guard against that coming back.
-test('assets: prose carries no citation artefacts', () => {
-  for (const a of assets) {
-    for (const field of ['investmentThesis', 'impactThesis']) {
-      assert.ok(!/[【】]/.test(a[field] || ''), `${a.name} ${field} contains a citation artefact`);
-    }
   }
 });
 

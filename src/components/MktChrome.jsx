@@ -3,22 +3,9 @@ import { Ic } from './icons.jsx';
 import { PSB } from '../lib/interactions.js';
 import { goToCalculator } from '../lib/cta.js';
 import { FOOTER_COLS, FOOTER_LEGAL } from '../data/footerLinks.js';
+import { NAV_GROUPS, NAV_TOP } from '../data/navLinks.js';
 // MktChrome.jsx — marketing nav + footer + theme toggle
 const { useState, useEffect } = React;
-
-// Nav links: `id` = on-page section anchor (HomeSections.jsx / Hero.jsx);
-// `href` = a separate page. Anchors fall back to /#id when off the home page.
-const NAV_LINKS = [
-  { label: 'Opportunities', id: 'opportunities' },
-  { label: 'Our Impact', id: 'impact' },
-  { label: 'ProActively Verified™', href: '/verified' },
-  { label: 'How it works', href: '/OurProcess' },
-  { label: 'Assets', href: '/assets' },
-  { label: 'Team', href: '/team' },
-  { label: 'Events', href: '/events' },
-  { label: 'Digest', href: '/digest' },
-  { label: 'Contact us', id: 'get-started' },
-];
 
 function ThemeToggle() {
   const [dark, setDark] = useState(typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark');
@@ -33,28 +20,43 @@ function ThemeToggle() {
 function MktNav({ onInvest }) {
   const [active, setActive] = useState('opportunities');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState(null);
   const [path, setPath] = useState('/');
+  const barRef = React.useRef(null);
   useEffect(() => { setPath(window.location.pathname); }, []);
 
   // Anchor links scroll on the home page; off-page they navigate to /#id.
   const go = (link) => (e) => {
     setMenuOpen(false);
-    if (link.href) return; // real page link — let the browser navigate
+    setOpenGroup(null);
+    if (link.href) return; // real page link: let the browser navigate
     e.preventDefault();
     setActive(link.id);
     const el = document.getElementById(link.id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     else window.location.assign('/#' + link.id);
   };
-  const renderLink = (link) => {
-    // Sub-pages (e.g. /events/self-directed-ira) keep their section's nav link lit.
-    const isActive = link.href
-      ? (path === link.href || path.startsWith(link.href + '/'))
-      : (path === '/' && active === link.id);
-    return (
-      <a key={link.label} href={link.href || ('#' + link.id)} aria-current={isActive ? 'page' : undefined} onClick={go(link)}>{link.label}</a>
-    );
-  };
+  // Sub-pages (e.g. /events/self-directed-ira) keep their section's link lit.
+  const isCurrent = (link) => (link.href
+    ? (path === link.href || path.startsWith(link.href + '/'))
+    : (path === '/' && active === link.id));
+  const groupCurrent = (g) => g.items.some((l) => l.href && isCurrent(l));
+  const renderLink = (link, withDesc) => (
+    <a key={link.label} href={link.href || ('#' + link.id)} aria-current={isCurrent(link) ? 'page' : undefined} onClick={go(link)}>
+      <span>{link.label}</span>
+      {withDesc && <small>{link.desc}</small>}
+    </a>
+  );
+
+  // Close the desktop dropdown on Escape or a click elsewhere.
+  useEffect(() => {
+    if (!openGroup) return;
+    const onKey = (e) => { if (e.key === 'Escape') setOpenGroup(null); };
+    const onDown = (e) => { if (barRef.current && !barRef.current.contains(e.target)) setOpenGroup(null); };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('mousedown', onDown);
+    return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('mousedown', onDown); };
+  }, [openGroup]);
 
   // Close the mobile menu on Escape and when the viewport grows past mobile.
   useEffect(() => {
@@ -69,11 +71,25 @@ function MktNav({ onInvest }) {
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 50, padding: '18px 22px' }}>
       <div className="nav-pill glass lit" style={{ maxWidth: 1240, margin: '0 auto' }}>
-        <a href="/" onClick={(e) => { if (window.location.pathname === '/') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }} style={{ display: 'inline-flex', flex: 'none' }} aria-label="Proactive Sustainable Bonds — home">
+        <a href="/" onClick={(e) => { if (window.location.pathname === '/') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }} style={{ display: 'inline-flex', flex: 'none' }} aria-label="Proactive Sustainable Bonds home">
           <img src={"/img/logo.png"} alt="Proactive Sustainable Bonds" style={{ height: 30 }} />
         </a>
-        <nav className="nav-links" style={{ marginLeft: 24 }}>
-          {NAV_LINKS.map(renderLink)}
+        <nav className="nav-links" ref={barRef} style={{ marginLeft: 24 }} aria-label="Main">
+          {NAV_GROUPS.map((g) => {
+            const open = openGroup === g.label;
+            return (
+              <div key={g.label} className="nav-group" data-open={open ? 'true' : undefined}
+                   onMouseEnter={() => setOpenGroup(g.label)} onMouseLeave={() => setOpenGroup(null)}>
+                <button type="button" className="nav-trigger" aria-expanded={open} aria-haspopup="true"
+                        aria-current={groupCurrent(g) ? 'true' : undefined}
+                        onClick={() => setOpenGroup(open ? null : g.label)}>
+                  {g.label}<Ic name="chevron-down" size={14} />
+                </button>
+                {open && <div className="nav-panel glass" role="menu">{g.items.map((l) => renderLink(l, true))}</div>}
+              </div>
+            );
+          })}
+          {NAV_TOP.map((l) => renderLink(l, false))}
         </nav>
         <div className="nav-actions" style={{ marginLeft: 'auto', display: 'flex', gap: 10, alignItems: 'center' }}>
           <ThemeToggle />
@@ -87,7 +103,13 @@ function MktNav({ onInvest }) {
 
       {menuOpen && (
         <div className="nav-mobile glass" role="dialog" aria-label="Menu">
-          {NAV_LINKS.map(renderLink)}
+          {NAV_GROUPS.map((g) => (
+            <details key={g.label} open={groupCurrent(g) || undefined}>
+              <summary>{g.label}<Ic name="chevron-down" size={16} /></summary>
+              {g.items.map((l) => renderLink(l, false))}
+            </details>
+          ))}
+          {NAV_TOP.map((l) => renderLink(l, false))}
           <div className="nav-mobile-actions">
             <button className="btn btn-accent btn-sm" onClick={() => { setMenuOpen(false); goToCalculator(); }}>Start investing</button>
           </div>

@@ -87,7 +87,7 @@ export default function AssetsExplorer() {
     return <span className="asset-pill" style={{ background: t.bg, color: t.fg }}>{s || '—'}</span>;
   };
 
-  // No financials, occupancy or investment thesis anywhere (client requests,
+  // No financials, occupancy, investment thesis or impact thesis anywhere (client requests,
   // 24 Sep and 13 Oct 2026). The fields were removed from src/data/assets.js.
   const Detail = ({ a }) => {
     const facts = [
@@ -103,7 +103,6 @@ export default function AssetsExplorer() {
             <div key={l}><div className="data-label">{l}</div><div className="figure" style={{ marginTop: 6, fontWeight: 500 }}>{v}</div></div>
           ))}
         </div>
-        {a.impactThesis && (<div className="asset-thesis"><div className="data-label">Impact thesis</div><p>{a.impactThesis}</p></div>)}
       </div>
     );
   };
@@ -279,8 +278,6 @@ export default function AssetsExplorer() {
         .asset-detail-row td { padding: 0; background: var(--surface-2); border-bottom: 1px solid var(--border); }
         .asset-detail { padding: 24px; }
         .asset-detail-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
-        .asset-thesis { margin-top: 18px; max-width: 70ch; }
-        .asset-thesis p { margin: 6px 0 0; color: var(--fg-2); font-size: var(--text-sm); line-height: 1.6; }
         .asset-sdg { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 500; color: var(--forest-700); background: var(--lime-100); border-radius: 999px; padding: 5px 11px; }
         [data-theme="dark"] .asset-sdg { color: var(--lime-300); background: color-mix(in srgb, var(--brand) 16%, transparent); }
         .asset-timeline { padding: 12px 22px 22px; }
