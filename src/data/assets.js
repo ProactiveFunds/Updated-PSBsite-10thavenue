@@ -6,33 +6,17 @@
 //
 // Totals implied by this file — keep SUMMARY.md "Canonical numbers" in sync:
 //   25 assets (18 owned + 7 under contract)
-//   1,012 units / pads
-//   8 states (AL, AZ, CA, IL, IN, NV, OH, SC)
-//   (estimated value and occupancy are carried over per property; the 4 newest rows have none yet)
+//   1,012 units / pads · 8 states (AL, AZ, CA, IL, IN, NV, OH, SC)
 //
-// Estimated value is the workbook's "Estimated Value" column, footnoted there
-// as "based on 100% occupancy" — i.e. stabilised, not current market value.
-//
-// Narrative fields (investmentThesis, impactThesis, sdgs, avgRent) are not in
-// the workbook; they are carried over from the previous file and corrected
-// where the workbook contradicted them.
-//
-// Locations, addresses, unit counts, status and dates were reset from the client's
-// "Updated Locations" sheet (7 Oct 2026, 25 rows). Fund, value, purchase price and
-// occupancy are null where that sheet does not carry them.
-//
-// To refresh: update the workbook, re-run `python3 scripts/generate-assets.py`,
-// then run `npm test` — tests/data.test.js pins the totals quoted on /,
-// /OurProcess, /q3-special and /ira, so it will tell you what copy to update.
-// `address` is the normalised street line /assets renders (one house style, set
-// in the generator's ADDRESS table — the workbook's own strings are
-// inconsistent). `avgRent` and `estimatedValue` are NOT shown per property
-// (client request, 17 Aug 2026); estimatedValue is kept because the portfolio
-// value and the AUM figure quoted on four other pages are summed from it.
+// Source: the client's "Updated Locations" sheet (7 Oct 2026, 25 rows) for
+// address, city, state, zip, units, status and acquisition date. Per client
+// request (13 Oct 2026) NO financials live here: no purchase price, estimated
+// value, rent or occupancy, and no investment thesis (it quoted prices).
+// `fund` is null where the sheet does not carry it. Narrative impactThesis and
+// sdgs are carried over from the earlier file.
 //
 // Fields: id, name, address, fund, status, city, state, zip, county, units,
-// occupiedUnits, occupancyRate, avgRent, purchasePrice, estimatedValue,
-// purchaseDate, yearAcquired, investmentThesis, impactThesis, sdgs[]
+// purchaseDate, yearAcquired, impactThesis, sdgs[]
 // ---------------------------------------------------------------------------
 
 export const assets = [
@@ -47,14 +31,8 @@ export const assets = [
     "zip": "46970",
     "county": "Miami County",
     "units": 66,
-    "occupiedUnits": 18,
-    "occupancyRate": 27,
-    "avgRent": 800,
-    "purchasePrice": 300000,
-    "estimatedValue": 4389560,
     "purchaseDate": "2026-01-16",
     "yearAcquired": 2026,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -69,14 +47,8 @@ export const assets = [
     "zip": "46970",
     "county": "Miami County",
     "units": 48,
-    "occupiedUnits": null,
-    "occupancyRate": null,
-    "avgRent": null,
-    "purchasePrice": null,
-    "estimatedValue": null,
     "purchaseDate": "2026-01-16",
     "yearAcquired": 2026,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -91,14 +63,8 @@ export const assets = [
     "zip": "60426",
     "county": "Cook County",
     "units": 30,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 900,
-    "purchasePrice": 950000,
-    "estimatedValue": 3100000,
     "purchaseDate": "2025-06-13",
     "yearAcquired": 2025,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -113,14 +79,8 @@ export const assets = [
     "zip": "29115",
     "county": "Orangeburg County",
     "units": 7,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 950,
-    "purchasePrice": 120000,
-    "estimatedValue": 485000,
     "purchaseDate": "2025-01-07",
     "yearAcquired": 2025,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -135,14 +95,8 @@ export const assets = [
     "zip": "44436",
     "county": "Mahoning County",
     "units": 89,
-    "occupiedUnits": 25,
-    "occupancyRate": 28,
-    "avgRent": 381,
-    "purchasePrice": 642000,
-    "estimatedValue": 6023500,
     "purchaseDate": "2025-04-24",
     "yearAcquired": 2025,
-    "investmentThesis": "",
     "impactThesis": "The Glen at Stateline features newly remodelled mobile homes on lease-to-own terms. One home has 3 bedrooms, 2 baths and about 980 sq ft with new flooring, deck and fresh paint.",
     "sdgs": []
   },
@@ -157,14 +111,8 @@ export const assets = [
     "zip": "89147",
     "county": "Clark County",
     "units": 1,
-    "occupiedUnits": 1,
-    "occupancyRate": 100,
-    "avgRent": 1620,
-    "purchasePrice": 275000,
-    "estimatedValue": 315000,
     "purchaseDate": "2025-03-01",
     "yearAcquired": 2025,
-    "investmentThesis": "",
     "impactThesis": "Condominium unit acquired for $275K in March 2025; built in 1995 with 2 bedrooms and 2 bathrooms across 959 sq ft. The home features updated wood-tile floors and modernised kitchen and bathrooms.",
     "sdgs": []
   },
@@ -179,14 +127,8 @@ export const assets = [
     "zip": "46940",
     "county": "Wabash County",
     "units": 180,
-    "occupiedUnits": 59,
-    "occupancyRate": 33,
-    "avgRent": 563,
-    "purchasePrice": 2500000,
-    "estimatedValue": 11150000,
     "purchaseDate": "2024-11-27",
     "yearAcquired": 2024,
-    "investmentThesis": "",
     "impactThesis": "Fountainvue Mobile Home Park is anchored by a 1,599-sq-ft, 3-bed, 1.5-bath single-family home built in 1972 on 41.6 acres. The park provides a rural community setting.",
     "sdgs": []
   },
@@ -201,14 +143,8 @@ export const assets = [
     "zip": "29042",
     "county": "Bamberg County",
     "units": 14,
-    "occupiedUnits": 12,
-    "occupancyRate": 86,
-    "avgRent": 783,
-    "purchasePrice": 105000,
-    "estimatedValue": 850000,
     "purchaseDate": "2024-01-08",
     "yearAcquired": 2024,
-    "investmentThesis": "This 14-unit property in Denmark, SC represents a strong value-add opportunity with significant income potential. Acquired at $105K against an estimated stabilised value of $850K, the property demonstrates strong cash-on-cash returns. Located in an underserved rural market, this investment provides quality affordable housing while generating consistent returns for investors.",
     "impactThesis": "",
     "sdgs": []
   },
@@ -223,14 +159,8 @@ export const assets = [
     "zip": "29056",
     "county": "Williamsburg County",
     "units": 14,
-    "occupiedUnits": 12,
-    "occupancyRate": 86,
-    "avgRent": 1156,
-    "purchasePrice": 1400000,
-    "estimatedValue": 1780000,
     "purchaseDate": "2024-08-30",
     "yearAcquired": 2024,
-    "investmentThesis": "",
     "impactThesis": "Mobile home property in Greeleyville, SC with multiple mobile home units on land. A 1979 manufactured home sits on the site.",
     "sdgs": []
   },
@@ -245,14 +175,8 @@ export const assets = [
     "zip": "60827",
     "county": "Cook County",
     "units": 3,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 950,
-    "purchasePrice": 110000,
-    "estimatedValue": 348000,
     "purchaseDate": "2023-09-02",
     "yearAcquired": 2023,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -267,14 +191,8 @@ export const assets = [
     "zip": "29115",
     "county": "Orangeburg County",
     "units": 4,
-    "occupiedUnits": 4,
-    "occupancyRate": 100,
-    "avgRent": 1156,
-    "purchasePrice": 80000,
-    "estimatedValue": 328000,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "investmentThesis": "",
     "impactThesis": "Rental property that includes four addresses. 526 Silton is a rented brick ranch home; 522 and 520 are new single-wide 2-bed, 1-bath homes; and 518 is a new 2-bed, 2-bath single-wide. The brick home has been remodelled with varnished pine floors and new ceiling fans. A fenced common area with picnic tables sits between the units.",
     "sdgs": []
   },
@@ -289,14 +207,8 @@ export const assets = [
     "zip": "60426",
     "county": "Cook County",
     "units": 1,
-    "occupiedUnits": 1,
-    "occupancyRate": 100,
-    "avgRent": 1450,
-    "purchasePrice": 81000,
-    "estimatedValue": 268000,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "investmentThesis": "",
     "impactThesis": "Single-family home built in 1957 featuring three bedrooms, one bathroom and approximately 1,020 sq ft of living space. The house sits on a 4,440-sq-ft lot and has an attached garage and stone exterior.",
     "sdgs": []
   },
@@ -311,14 +223,8 @@ export const assets = [
     "zip": "89101",
     "county": "Clark County",
     "units": 43,
-    "occupiedUnits": 30,
-    "occupancyRate": 70,
-    "avgRent": 1050,
-    "purchasePrice": 3960000,
-    "estimatedValue": 6160000,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": [
       1,
@@ -341,14 +247,8 @@ export const assets = [
     "zip": "29118",
     "county": "Orangeburg County",
     "units": 46,
-    "occupiedUnits": 15,
-    "occupancyRate": 33,
-    "avgRent": 353,
-    "purchasePrice": 610000,
-    "estimatedValue": 1610000,
     "purchaseDate": "2022-09-01",
     "yearAcquired": 2022,
-    "investmentThesis": "Located in Orangeburg, SC, this 46-unit property offers exceptional value appreciation potential with an estimated value of $1.61M on a $610K acquisition. This investment targets economic revitalisation in underserved communities while delivering superior returns.",
     "impactThesis": "",
     "sdgs": []
   },
@@ -363,14 +263,8 @@ export const assets = [
     "zip": "29115",
     "county": "Orangeburg County",
     "units": 40,
-    "occupiedUnits": 36,
-    "occupancyRate": 90,
-    "avgRent": 500,
-    "purchasePrice": 1150000,
-    "estimatedValue": 2365000,
     "purchaseDate": "2022-09-01",
     "yearAcquired": 2022,
-    "investmentThesis": "This flagship 40-unit property in Orangeburg, SC represents the fund's largest single-asset investment. At 90% occupancy it demonstrates institutional-quality operations. The property serves as a cornerstone investment in the Qualified Opportunity Zone fund, providing both strong cash flow and long-term tax-advantaged appreciation.",
     "impactThesis": "",
     "sdgs": []
   },
@@ -385,14 +279,8 @@ export const assets = [
     "zip": "60426",
     "county": "Cook County",
     "units": 6,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 900,
-    "purchasePrice": 40000,
-    "estimatedValue": 175000,
     "purchaseDate": "2020-09-02",
     "yearAcquired": 2020,
-    "investmentThesis": "This Harvey, IL property demonstrates the fund's commitment to neighbourhood stabilisation in challenged markets. Acquired at $40K with an estimated value of $175K, it offers both strong cash flow and appreciation potential. The investment supports community revitalisation while generating attractive risk-adjusted returns.",
     "impactThesis": "",
     "sdgs": []
   },
@@ -407,14 +295,8 @@ export const assets = [
     "zip": "60426",
     "county": "Cook County",
     "units": 6,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 900,
-    "purchasePrice": 17800,
-    "estimatedValue": 175000,
     "purchaseDate": "2020-08-19",
     "yearAcquired": 2020,
-    "investmentThesis": "Adjacent acquisition to 105 W. 154 Street, this 6-unit property represents a strategic portfolio consolidation opportunity in Harvey, IL. Purchased at $17.8K with redevelopment potential, it offers significant value-add through unit improvements and occupancy stabilisation. The investment creates scale economies and enhances neighbourhood impact.",
     "impactThesis": "",
     "sdgs": []
   },
@@ -429,14 +311,8 @@ export const assets = [
     "zip": "29115",
     "county": "Orangeburg County",
     "units": 6,
-    "occupiedUnits": 6,
-    "occupancyRate": 100,
-    "avgRent": 813,
-    "purchasePrice": 400000,
-    "estimatedValue": 700000,
     "purchaseDate": "2018-11-01",
     "yearAcquired": 2018,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -451,14 +327,8 @@ export const assets = [
     "zip": "89104",
     "county": "Clark County",
     "units": 41,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 1050,
-    "purchasePrice": 4100000,
-    "estimatedValue": 7350000,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": [
       1,
@@ -481,14 +351,8 @@ export const assets = [
     "zip": "89825",
     "county": "Elko County",
     "units": 113,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": null,
-    "purchasePrice": 305000,
-    "estimatedValue": 5265000,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -503,14 +367,8 @@ export const assets = [
     "zip": "36703",
     "county": "Dallas County",
     "units": 53,
-    "occupiedUnits": 8,
-    "occupancyRate": 15,
-    "avgRent": 700,
-    "purchasePrice": 380000,
-    "estimatedValue": 4275000,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": [
       1,
@@ -533,14 +391,8 @@ export const assets = [
     "zip": "29115",
     "county": "Orangeburg County",
     "units": 73,
-    "occupiedUnits": null,
-    "occupancyRate": null,
-    "avgRent": null,
-    "purchasePrice": null,
-    "estimatedValue": null,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -555,14 +407,8 @@ export const assets = [
     "zip": "95422",
     "county": "Lake County",
     "units": 22,
-    "occupiedUnits": null,
-    "occupancyRate": null,
-    "avgRent": null,
-    "purchasePrice": null,
-    "estimatedValue": null,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -577,14 +423,8 @@ export const assets = [
     "zip": "95422",
     "county": "Lake County",
     "units": 60,
-    "occupiedUnits": null,
-    "occupancyRate": null,
-    "avgRent": null,
-    "purchasePrice": null,
-    "estimatedValue": null,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   },
@@ -599,14 +439,8 @@ export const assets = [
     "zip": "86401",
     "county": "Mohave County",
     "units": 46,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": null,
-    "purchasePrice": 825000,
-    "estimatedValue": 4765000,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
     "impactThesis": "",
     "sdgs": []
   }

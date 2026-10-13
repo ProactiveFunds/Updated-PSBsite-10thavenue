@@ -375,6 +375,9 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
     from the site — see `HELD_SKIP` in the generator. `tests/data.test.js` pins these, so a refresh that moves them fails the
     suite by design — that failure is the checklist of marketing copy to update
     (`/` hero + impact band, `/OurProcess`, `/q3-special`, `/ira`).
+  - **13 Oct 2026: no financial fields exist in `assets.js` at all** (purchase price, estimated value, rent,
+    occupancy, investment thesis were removed on client request). Units stay. The bullets below describe the
+    superseded display-only rule.
   - **Do not render `estimatedValue` or `avgRent` per property** (Dr. Van, 17 Aug 2026). Both stay
     in the data because the portfolio total and the AUM figure on four pages are summed from
     `estimatedValue` — the instruction is about display, not deletion.

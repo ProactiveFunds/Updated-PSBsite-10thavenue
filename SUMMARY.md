@@ -124,6 +124,13 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **13 Oct 2026 (follow-up): financials out.** Client asked for no financials in the data. Removed
+  `purchasePrice`, `estimatedValue`, `avgRent`, `occupiedUnits`, `occupancyRate` and `investmentThesis` from
+  `assets.js` (units kept), dropped the "Portfolio value" KPI and the 100%-occupancy caveat from `/assets`,
+  and removed the "22 Communities audited · Deloitte" stat from the home page. Banashee Cir confirmed as the
+  old Citrus Circle and carries the sheet date (2018-11-01). The hard-coded "$65M" copy on `/`, `/OurProcess`,
+  `/q3-special` and `/ira` is untouched and no longer has data behind it. Also pending: "2402 Crescent Drive"
+  was named for removal but is not in the data or the sheet.
 - **13 Oct 2026: Alicia's title and the location list.**
   - Alicia Galloway's title is now **Impact & Operations Compliance Officer** (`team.js`, `Q3SpecialPage`,
     `SdiraWebinarPage`; a test pins all three).
@@ -604,7 +611,7 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 ## Open items / known issues
 0. **Three commits are awaiting a Manual Deploy.** `7d9d294`, `37259c6`, `9b99edc`. Nothing from
    September is live yet. See "Deployment".
-0aa. **Client to supply** fund, purchase price, estimated value and occupancy for 906 West Main, 5755 and 5865 Old Hwy 53, and 406 Malibu Dr; confirm the $65M figure now that Alter Rd (MI) is gone and four properties were added; confirm Banashee Cir is the old Citrus Circle.
+0aa. **Client to supply** the fund for 906 West Main, 5755 and 5865 Old Hwy 53, and 406 Malibu Dr; decide what to do with the hard-coded $65M AUM copy now that the data carries no values.
 0a. **Unit count split: copy says 810, the location sheet sums to 1,012.** See "Canonical numbers" above. `/assets`
    shows 1,012 until the client supplies corrected per-property counts and the workbook is
    regenerated. No single property accounts for the 32-unit difference, so it cannot be guessed.

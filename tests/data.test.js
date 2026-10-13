@@ -97,14 +97,18 @@ test('copy: the unit count quoted on /, /OurProcess and /q3-special agree', () =
   assert.ok(src('components/Q3SpecialPage.jsx').includes(`${QUOTED_UNITS} units and pads`), '/q3-special unit copy');
 });
 
-// The client asked for occupancy and the investment thesis to come off the
-// portfolio explorer (24 Sep 2026). Both fields stay in src/data/assets.js and
-// are still pinned by the tests below; this guards the display decision only.
-test('/assets: occupancy and the investment thesis are not rendered', () => {
+// Client requests (24 Sep, 13 Oct 2026): no financials, occupancy or investment
+// thesis. The fields are gone from the data, so nothing can render them.
+test('assets: no financial fields in the data or on /assets', () => {
+  const banned = ['purchasePrice', 'estimatedValue', 'avgRent', 'occupiedUnits', 'occupancyRate', 'investmentThesis'];
+  for (const a of assets) for (const f of banned) assert.ok(!(f in a), `${a.name} still carries ${f}`);
   const code = readFileSync(fileURLToPath(new URL('../src/components/AssetsExplorer.jsx', import.meta.url)), 'utf8');
-  for (const field of ['occupancyRate', 'occupiedUnits', 'investmentThesis']) {
-    assert.ok(!code.includes(field), `${field} is back on the portfolio explorer`);
-  }
+  for (const f of [...banned, 'Portfolio value']) assert.ok(!code.includes(f), `${f} is back on the portfolio explorer`);
+});
+
+test('home: the Deloitte "Communities audited" stat is gone', () => {
+  const src = readFileSync(fileURLToPath(new URL('../src/components/HomeSections.jsx', import.meta.url)), 'utf8');
+  assert.doesNotMatch(src, /Communities audited|Deloitte/);
 });
 
 // The 7 Oct 2026 "Updated Locations" sheet lists 906 West Main as plain Owned
@@ -115,18 +119,14 @@ test('assets: the 7 Oct 2026 location sheet is reflected', () => {
     assert.ok(ids.has(id), `${id} missing`);
   }
   assert.ok(!ids.has('2952-alter-rd-mi'), '2952 Alter Rd is no longer on the location sheet');
-  assert.ok(assets.some((a) => a.address === '100 Banashee Cir, Orangeburg, SC'), 'Banashee Circle address missing');
+  const b = assets.find((a) => a.address === '100 Banashee Cir, Orangeburg, SC');
+  assert.ok(b, 'Banashee Circle address missing');
+  assert.equal(b.purchaseDate, '2018-11-01', 'Banashee Circle should carry the sheet acquisition date');
 });
 
-test('assets: per-asset occupancy is internally consistent', () => {
+test('assets: every asset has units and a county', () => {
   for (const a of assets) {
-    // The four rows added on 7 Oct 2026 carry null financials until the client supplies them.
-    if (a.occupiedUnits == null) { assert.equal(a.occupancyRate, null, `${a.name}: occupancyRate without occupiedUnits`); continue; }
-    assert.ok(a.occupiedUnits <= a.units, `${a.name}: ${a.occupiedUnits} occupied > ${a.units} units`);
-    assert.equal(a.occupancyRate, Math.round((a.occupiedUnits / a.units) * 100),
-      `${a.name}: occupancyRate ${a.occupancyRate}% does not match ${a.occupiedUnits}/${a.units}`);
-    assert.ok(Number.isFinite(a.estimatedValue) && a.estimatedValue > 0, `${a.name} missing estimatedValue`);
-    assert.ok(Number.isFinite(a.purchasePrice) && a.purchasePrice > 0, `${a.name} missing purchasePrice`);
+    assert.ok(a.units > 0, `${a.name} missing units`);
     assert.ok(isNonEmptyString(a.county), `${a.name} missing county`);
   }
 });
