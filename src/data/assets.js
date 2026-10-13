@@ -5,15 +5,16 @@
 // every per-asset figure below; the earlier base44 export is superseded.
 //
 // Totals implied by this file — keep SUMMARY.md "Canonical numbers" in sync:
-//   25 assets (18 owned + 7 under contract)
-//   1,012 units / pads · 8 states (AL, AZ, CA, IL, IN, NV, OH, SC)
+//   21 assets (17 owned + 4 under contract)
+//   809 units / pads · 7 states (AL, AZ, IL, IN, NV, OH, SC)
 //
-// Source: the client's "Updated Locations" sheet (7 Oct 2026, 25 rows) for
-// address, city, state, zip, units, status and acquisition date. Per client
-// request (13 Oct 2026) NO financials live here: no purchase price, estimated
-// value, rent or occupancy, and no investment thesis (it quoted prices).
-// `fund` is null where the sheet does not carry it. Narrative impactThesis and
-// sdgs are carried over from the earlier file.
+// Source: the client's "Updated Locations" sheet (7 Oct 2026) for address, city,
+// state, zip, units, status and acquisition date. Four rows on that sheet are
+// deliberately left out at the client's request (13 Oct 2026): 906 West Main,
+// 5755 and 5865 Old Hwy 53, and 406 Malibu Dr. Per client request NO financials
+// live here: no purchase price, estimated value, rent or occupancy, and no
+// investment thesis (it quoted prices). Narrative impactThesis and sdgs are
+// carried over from the earlier file.
 //
 // Fields: id, name, address, fund, status, city, state, zip, county, units,
 // purchaseDate, yearAcquired, impactThesis, sdgs[]
@@ -36,23 +37,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
-    "id": "906-west-main-in",
-    "name": "906 West Main",
-    "address": "906 W Main, Peru, IN",
-    "fund": null,
-    "status": "Acquired",
-    "city": "Peru",
-    "state": "IN",
-    "zip": "46970",
-    "county": "Miami County",
-    "units": 48,
-    "purchaseDate": "2026-01-16",
-    "yearAcquired": 2026,
-    "impactThesis": "",
-    "sdgs": []
-  },
-  {
+{
     "id": "14437-45-s-halsted-street-il",
     "name": "14437-45 S. Halsted Street",
     "address": "14437–14445 S Halsted St, Harvey, IL",
@@ -68,7 +53,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "2405-2407-old-edisto-drive-sc",
     "name": "2405 & 2407 Old Edisto Drive",
     "address": "2405–2407 Old Edisto Dr, Orangeburg, SC",
@@ -84,7 +69,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "6633-mccartney-road-oh",
     "name": "6633 McCartney Road",
     "address": "6633 McCartney Rd, Lowellville, OH",
@@ -100,7 +85,7 @@ export const assets = [
     "impactThesis": "The Glen at Stateline features newly remodelled mobile homes on lease-to-own terms. One home has 3 bedrooms, 2 baths and about 980 sq ft with new flooring, deck and fresh paint.",
     "sdgs": []
   },
-  {
+{
     "id": "7400-west-flamingo-road-unit-1092-nv",
     "name": "7400 West Flamingo Road, Unit 1092",
     "address": "7400 W Flamingo Rd, Unit 1092, Spring Valley, NV",
@@ -116,7 +101,7 @@ export const assets = [
     "impactThesis": "Condominium unit acquired for $275K in March 2025; built in 1995 with 2 bedrooms and 2 bathrooms across 959 sq ft. The home features updated wood-tile floors and modernised kitchen and bathrooms.",
     "sdgs": []
   },
-  {
+{
     "id": "121-fountainevue-dr-in",
     "name": "121 Fountainvue Dr",
     "address": "121 Fountainvue Dr, La Fontaine, IN",
@@ -132,7 +117,7 @@ export const assets = [
     "impactThesis": "Fountainvue Mobile Home Park is anchored by a 1,599-sq-ft, 3-bed, 1.5-bath single-family home built in 1972 on 41.6 acres. The park provides a rural community setting.",
     "sdgs": []
   },
-  {
+{
     "id": "252-ceceile-st-sc",
     "name": "252 Ceceile St",
     "address": "252 Ceceile St, Denmark, SC",
@@ -148,7 +133,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "50-old-train-road-sc",
     "name": "50 Old Train Road",
     "address": "50 Old Train Rd, Greeleyville, SC",
@@ -164,7 +149,7 @@ export const assets = [
     "impactThesis": "Mobile home property in Greeleyville, SC with multiple mobile home units on land. A 1979 manufactured home sits on the site.",
     "sdgs": []
   },
-  {
+{
     "id": "13845-s-atlantic-ave-il",
     "name": "13845 S. Atlantic Ave.",
     "address": "13845 S Atlantic Ave, Riverdale, IL",
@@ -180,7 +165,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "526-518-520-522-stilton-sc",
     "name": "518, 520, 522, 526 Silton",
     "address": "518–526 Silton, Orangeburg, SC",
@@ -196,7 +181,7 @@ export const assets = [
     "impactThesis": "Rental property that includes four addresses. 526 Silton is a rented brick ranch home; 522 and 520 are new single-wide 2-bed, 1-bath homes; and 518 is a new 2-bed, 2-bath single-wide. The brick home has been remodelled with varnished pine floors and new ceiling fans. A fenced common area with picnic tables sits between the units.",
     "sdgs": []
   },
-  {
+{
     "id": "715-e-155th-ct-il",
     "name": "715 E 155th Ct.",
     "address": "715 E 155th Ct, Phoenix, IL",
@@ -212,7 +197,7 @@ export const assets = [
     "impactThesis": "Single-family home built in 1957 featuring three bedrooms, one bathroom and approximately 1,020 sq ft of living space. The house sits on a 4,440-sq-ft lot and has an attached garage and stone exterior.",
     "sdgs": []
   },
-  {
+{
     "id": "921-las-vegas-blvd-nv",
     "name": "921 N Las Vegas Blvd",
     "address": "921 N Las Vegas Blvd, Las Vegas, NV",
@@ -236,7 +221,7 @@ export const assets = [
       11
     ]
   },
-  {
+{
     "id": "1905-ellis-ave-sc",
     "name": "1905 Ellis Ave",
     "address": "1905 Ellis Ave, Orangeburg, SC",
@@ -252,7 +237,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "926-moseley-sc",
     "name": "926 Moseley",
     "address": "926 Moseley, Orangeburg, SC",
@@ -268,7 +253,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "105-w-154-street-il",
     "name": "105 W. 154 Street",
     "address": "105 W 154th St, Harvey, IL",
@@ -284,7 +269,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "113-w-154-street-il",
     "name": "113 W. 154 Street",
     "address": "113 W 154th St, Harvey, IL",
@@ -300,7 +285,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "umh-citrus-circle-sc",
     "name": "100 Banashee Circle",
     "address": "100 Banashee Cir, Orangeburg, SC",
@@ -316,7 +301,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "1508-s-las-vegas-blvd-nv",
     "name": "1508 S Las Vegas Blvd",
     "address": "1508 S Las Vegas Blvd, Las Vegas, NV",
@@ -340,7 +325,7 @@ export const assets = [
       11
     ]
   },
-  {
+{
     "id": "1602-us-highway-93-nv",
     "name": "1602 US Highway 93",
     "address": "1602 US Highway 93, Jackpot, NV",
@@ -356,7 +341,7 @@ export const assets = [
     "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "3203-water-ave-al",
     "name": "3203 Water Ave.",
     "address": "3203 Water Ave, Selma, AL",
@@ -380,55 +365,7 @@ export const assets = [
       11
     ]
   },
-  {
-    "id": "406-malibu-drive-sc",
-    "name": "406 Malibu Drive",
-    "address": "406 Malibu Dr, Orangeburg, SC",
-    "fund": null,
-    "status": "Under Contract",
-    "city": "Orangeburg",
-    "state": "SC",
-    "zip": "29115",
-    "county": "Orangeburg County",
-    "units": 73,
-    "purchaseDate": null,
-    "yearAcquired": null,
-    "impactThesis": "",
-    "sdgs": []
-  },
-  {
-    "id": "5755-old-hwy-53-ca",
-    "name": "5755 Old Hwy 53 (Twin Oaks)",
-    "address": "5755 Old Hwy 53, Clearlake, CA",
-    "fund": null,
-    "status": "Under Contract",
-    "city": "Clearlake",
-    "state": "CA",
-    "zip": "95422",
-    "county": "Lake County",
-    "units": 22,
-    "purchaseDate": null,
-    "yearAcquired": null,
-    "impactThesis": "",
-    "sdgs": []
-  },
-  {
-    "id": "5865-old-hwy-53-ca",
-    "name": "5865 Old Hwy 53 (Trombettas)",
-    "address": "5865 Old Hwy 53, Clearlake, CA",
-    "fund": null,
-    "status": "Under Contract",
-    "city": "Clearlake",
-    "state": "CA",
-    "zip": "95422",
-    "county": "Lake County",
-    "units": 60,
-    "purchaseDate": null,
-    "yearAcquired": null,
-    "impactThesis": "",
-    "sdgs": []
-  },
-  {
+{
     "id": "909-e-andy-devine-avenue-az",
     "name": "909 E. Andy Devine Avenue",
     "address": "909 E Andy Devine Ave, Kingman, AZ",

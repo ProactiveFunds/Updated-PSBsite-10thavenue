@@ -82,11 +82,11 @@ const QUOTED_UNITS = 810;
 
 test('assets: portfolio totals match the canonical numbers quoted site-wide', () => {
   const sum = (f) => assets.reduce((s, a) => s + (a[f] || 0), 0);
-  assert.equal(assets.length, 25, 'asset count drifted from the 25 quoted site-wide');
-  assert.equal(assets.filter((a) => a.status === 'Acquired').length, 18, 'owned-asset count drifted');
-  assert.equal(assets.filter((a) => a.status === 'Under Contract').length, 7, 'under-contract count drifted');
-  assert.equal(sum('units'), 1012, 'location-sheet unit total drifted from 1,012 (the copy still quotes 810, see SUMMARY.md)');
-  assert.equal(new Set(assets.map((a) => a.state)).size, 8, 'state count drifted from the 8 quoted site-wide');
+  assert.equal(assets.length, 21, 'asset count drifted from the 21 quoted site-wide');
+  assert.equal(assets.filter((a) => a.status === 'Acquired').length, 17, 'owned-asset count drifted');
+  assert.equal(assets.filter((a) => a.status === 'Under Contract').length, 4, 'under-contract count drifted');
+  assert.equal(sum('units'), 809, 'unit total drifted from 809 (the copy quotes 810, see SUMMARY.md)');
+  assert.equal(new Set(assets.map((a) => a.state)).size, 7, 'state count drifted from the 7 quoted site-wide');
 });
 
 // The marketing copy quotes one unit figure in three places; keep them in step.
@@ -111,14 +111,15 @@ test('home: the Deloitte "Communities audited" stat is gone', () => {
   assert.doesNotMatch(src, /Communities audited|Deloitte/);
 });
 
-// The 7 Oct 2026 "Updated Locations" sheet lists 906 West Main as plain Owned
-// (the old workbook marked it for sale and it was withheld), so it is published.
-test('assets: the 7 Oct 2026 location sheet is reflected', () => {
+// The 7 Oct 2026 "Updated Locations" sheet has 25 rows; the client asked (13 Oct
+// 2026) to leave out the four that are new to the site, so 21 are published.
+test('assets: the 7 Oct 2026 location sheet is reflected, minus the four excluded rows', () => {
   const ids = new Set(assets.map((a) => a.id));
   for (const id of ['906-west-main-in', '5755-old-hwy-53-ca', '5865-old-hwy-53-ca', '406-malibu-drive-sc']) {
-    assert.ok(ids.has(id), `${id} missing`);
+    assert.ok(!ids.has(id), `${id} was excluded by the client and is back`);
   }
   assert.ok(!ids.has('2952-alter-rd-mi'), '2952 Alter Rd is no longer on the location sheet');
+  assert.ok(!assets.some((a) => a.state === 'CA'), 'California rows are excluded');
   const b = assets.find((a) => a.address === '100 Banashee Cir, Orangeburg, SC');
   assert.ok(b, 'Banashee Circle address missing');
   assert.equal(b.purchaseDate, '2018-11-01', 'Banashee Circle should carry the sheet acquisition date');
@@ -147,7 +148,6 @@ test('assets: under-contract deals are not dated as acquired', () => {
 const ADDRESS_GAPS = new Set([
   '526-518-520-522-stilton-sc',  // no street type ("518–526 Silton")
   '926-moseley-sc',              // no street type ("926 Moseley")
-  '906-west-main-in',            // no street type ("906 W Main")
 ]);
 
 test('team: Alicia Galloway is the Impact & Operations Compliance Officer everywhere', () => {

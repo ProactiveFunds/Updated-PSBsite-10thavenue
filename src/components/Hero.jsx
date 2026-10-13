@@ -128,8 +128,8 @@ function ImpactBand() {
   const items = [
     ['sprout', '4,200', 'Homes funded'],
     ['users', '11,800', 'Residents housed'],
-    ['building', '25', 'Communities'],
-    ['map-pin', '8', 'States'],
+    ['building', '21', 'Communities'],
+    ['map-pin', '7', 'States'],
   ];
   return (
     <section style={{ maxWidth: 1240, margin: '64px auto 0', padding: '0 22px' }}>

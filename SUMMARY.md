@@ -79,7 +79,7 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
 Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (two visible tabs —
 *Property Information* = owned, *In Contract* = under contract), imported 11 Aug 2026.
 
-- **25 communities · 810 units/pads (quoted) · 8 states · $65M AUM · 15% annual interest.** (Locations
+- **21 communities · 810 units/pads (quoted) · 7 states · $65M AUM · 15% annual interest.** (Locations
   moved from 22 to 25 on 13 Oct 2026, see the work log; units and $65M were not re-quoted.)
   Occupancy is still a data fact but is **no longer displayed on `/assets`** (client, 24 Sep 2026).
 - **Returns are contractual and net of fees, not targets** (Dr. Van to Sequence Financial
@@ -96,7 +96,7 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
   (`QUOTED_UNITS = 810`, workbook total 842) so a change to either is deliberate. To close the
   gap, get the corrected per-property counts from the client (32 units, no single row matches),
   update the workbook, re-run `scripts/generate-assets.py`, and re-pin the test.
-- Split: **18 owned** + **7 under contract**; the location sheet sums to **1,012 units** (see work log).
+- Split: **17 owned** + **4 under contract**; `/assets` sums to **809 units** (copy says 810).
 - "$65M" is the workbook's *Estimated Value* column, footnoted there as **based on 100% occupancy**
   — stabilised, not current market value. Purchase price across the 22 is $18.7M. Pages that quote
   the figure now carry that caveat; keep it attached if you move the number.
@@ -124,6 +124,12 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **13 Oct 2026 (second follow-up): four new rows dropped.** Client said to leave out 906 West Main, 5755 and
+  5865 Old Hwy 53 and 406 Malibu Dr, and to keep the $65M AUM copy. The site now shows **21 communities
+  (17 owned + 4 under contract), 7 states (no California), 809 units on `/assets`** (copy still quotes 810).
+  Counts and states updated on `/`, `/OurProcess`, `/q3-special`, `/ira`. Every remaining row was checked
+  against the sheet (address number, city, zip, units, status, date); 921 keeps the "N" the sheet lacks.
+  "2402 Crescent Drive" was withdrawn by the client.
 - **13 Oct 2026 (follow-up): financials out.** Client asked for no financials in the data. Removed
   `purchasePrice`, `estimatedValue`, `avgRent`, `occupiedUnits`, `occupancyRate` and `investmentThesis` from
   `assets.js` (units kept), dropped the "Portfolio value" KPI and the 100%-occupancy caveat from `/assets`,
@@ -319,7 +325,7 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
   (`Hero.jsx`; the `.eyebrow-pill` style is still used nowhere else on `/` but stays in
   `global.css`). The portfolio unit figure quoted in copy went **842 → 810** in the hero stat,
   `/OurProcess` and `/q3-special`. `/assets` was *not* touched — it computes its KPI from the
-  per-property data, which still sums to 842; see "Canonical numbers" for the split and how to
+  per-property data (809 now); see "Canonical numbers" for the split and how to
   reconcile it. Tests: the totals test now pins the workbook at 842 and a new `copy:` test keeps
   the three quoted 810s in step. 49/49 green, build clean.
   - Environment note: this Mac had no `node` on `PATH`; a standalone Node 22 tarball unpacked
@@ -611,9 +617,9 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 ## Open items / known issues
 0. **Three commits are awaiting a Manual Deploy.** `7d9d294`, `37259c6`, `9b99edc`. Nothing from
    September is live yet. See "Deployment".
-0aa. **Client to supply** the fund for 906 West Main, 5755 and 5865 Old Hwy 53, and 406 Malibu Dr; decide what to do with the hard-coded $65M AUM copy now that the data carries no values.
-0a. **Unit count split: copy says 810, the location sheet sums to 1,012.** See "Canonical numbers" above. `/assets`
-   shows 1,012 until the client supplies corrected per-property counts and the workbook is
+0aa. The $65M AUM copy is kept by client decision (13 Oct 2026) but has no data behind it.
+0a. **Unit count: copy says 810, `/assets` sums to 809.** See "Canonical numbers" above. `/assets`
+   shows 809 until the client supplies corrected per-property counts and the workbook is
    regenerated. No single property accounts for the 32-unit difference, so it cannot be guessed.
 0b. **The fourth PAT is still live and must be rotated.** Pasted in chat on 11 Sep 2026 and
    confirmed still working on 25 Sep. Three earlier PATs were also pasted (17 Aug, 19 Aug).

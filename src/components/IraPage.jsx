@@ -44,7 +44,7 @@ const REASONS = [
   {
     icon: 'building',
     title: 'Diversification Beyond Wall Street',
-    body: 'The whole point of a Self-Directed IRA is to go beyond conventional markets. Our portfolio of 25 affordable housing communities across eight states offers geographic and asset-class diversification unavailable through traditional retirement vehicles.',
+    body: 'The whole point of a Self-Directed IRA is to go beyond conventional markets. Our portfolio of 21 affordable housing communities across seven states offers geographic and asset-class diversification unavailable through traditional retirement vehicles.',
   },
 ];
 
@@ -177,7 +177,7 @@ function IraHero() {
         }}>
           {[
             ['$65M', 'In Affordable Housing Assets'],
-            ['25', 'Communities Managed'],
+            ['21', 'Communities Managed'],
             ['$4M+', 'In Beneficiary Savings'],
             ['7', 'UN SDGs Addressed'],
           ].map(([n, l]) => (
