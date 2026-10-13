@@ -50,7 +50,7 @@ export const team = [
   },
   {
     "name": "Alicia Galloway",
-    "role": "Investor Relations Manager",
+    "role": "Impact & Operations Compliance Officer",
     "bio": "15+ years experience working with high-net-worth investors and supporting the raise of tens of millions of dollars across multifamily real estate acquisitions.",
     "image": "/img/team/alicia.webp",
     "linkedin": "https://www.linkedin.com/in/alicia-galloway/",

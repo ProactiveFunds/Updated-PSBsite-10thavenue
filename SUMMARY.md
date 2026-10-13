@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-10-09_
+_Last updated: 2026-10-13_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -79,7 +79,8 @@ or on the evergreen invest pages - shared chrome renders on every page and must 
 Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (two visible tabs —
 *Property Information* = owned, *In Contract* = under contract), imported 11 Aug 2026.
 
-- **22 communities · 810 units/pads · 8 states · $65M AUM · 27% occupancy · 15% annual interest.**
+- **25 communities · 810 units/pads (quoted) · 8 states · $65M AUM · 15% annual interest.** (Locations
+  moved from 22 to 25 on 13 Oct 2026, see the work log; units and $65M were not re-quoted.)
   Occupancy is still a data fact but is **no longer displayed on `/assets`** (client, 24 Sep 2026).
 - **Returns are contractual and net of fees, not targets** (Dr. Van to Sequence Financial
   Specialists, 28 Sep 2026). That covers the 15% rate and Bond Option 2. The site still calls them
@@ -95,8 +96,7 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
   (`QUOTED_UNITS = 810`, workbook total 842) so a change to either is deliberate. To close the
   gap, get the corrected per-property counts from the client (32 units, no single row matches),
   update the workbook, re-run `scripts/generate-assets.py`, and re-pin the test.
-- Split: **17 owned** (549 units, 5 states, $40.2M, 40% occupancy) + **5 under contract**
-  (293 units, 3 further states, $25.2M, not yet closed).
+- Split: **18 owned** + **7 under contract**; the location sheet sums to **1,012 units** (see work log).
 - "$65M" is the workbook's *Estimated Value* column, footnoted there as **based on 100% occupancy**
   — stabilised, not current market value. Purchase price across the 22 is $18.7M. Pages that quote
   the figure now carry that caveat; keep it attached if you move the number.
@@ -124,6 +124,20 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **13 Oct 2026: Alicia's title and the location list.**
+  - Alicia Galloway's title is now **Impact & Operations Compliance Officer** (`team.js`, `Q3SpecialPage`,
+    `SdiraWebinarPage`; a test pins all three).
+  - `src/data/assets.js` was reset from the client's `Updated_Locations_100726.xlsx` (25 rows):
+    **25 communities = 18 owned + 7 under contract, 8 states (AL AZ CA IL IN NV OH SC), 1,012 units.**
+    Addresses, cities, zips, unit counts, status and dates come from the sheet. Removed 2952 Alter Rd (MI).
+    Added 906 West Main (Peru IN, listed as plain Owned so it is no longer withheld), 5755 and 5865 Old Hwy 53
+    (Clearlake CA), 406 Malibu Dr (Orangeburg SC). 100 Banashee Cir replaces "Citrus Circle" (assumed the same
+    6-unit Orangeburg park). "Stilton" is "Silton" on the sheet. 7400 W Flamingo is now Spring Valley NV.
+  - Copy updated from 22/17/5 to **25/18/7** on `/`, `/OurProcess`, `/q3-special`, `/ira`, `/assets`.
+    The "22 Communities audited · Deloitte" stat in `HomeSections.jsx` was left alone (a verified claim).
+  - The four new rows have **no fund, purchase price, estimated value or occupancy** (the sheet lacks them), so
+    those are null and the tests tolerate it. `scripts/generate-assets.py` reads a workbook that is not in
+    this repo and is now stale; `assets.js` was edited from the sheet directly.
 
 **October 2026**
 - **Dr. Van profiles: 25 properties + Impact Management bio (9 Oct).** Jesse: count 25 properties (Stilton is
@@ -590,8 +604,9 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 ## Open items / known issues
 0. **Three commits are awaiting a Manual Deploy.** `7d9d294`, `37259c6`, `9b99edc`. Nothing from
    September is live yet. See "Deployment".
-0a. **Unit count split: copy says 810, data says 842.** See "Canonical numbers" above. `/assets`
-   shows 842 until the client supplies corrected per-property counts and the workbook is
+0aa. **Client to supply** fund, purchase price, estimated value and occupancy for 906 West Main, 5755 and 5865 Old Hwy 53, and 406 Malibu Dr; confirm the $65M figure now that Alter Rd (MI) is gone and four properties were added; confirm Banashee Cir is the old Citrus Circle.
+0a. **Unit count split: copy says 810, the location sheet sums to 1,012.** See "Canonical numbers" above. `/assets`
+   shows 1,012 until the client supplies corrected per-property counts and the workbook is
    regenerated. No single property accounts for the 32-unit difference, so it cannot be guessed.
 0b. **The fourth PAT is still live and must be rotated.** Pasted in chat on 11 Sep 2026 and
    confirmed still working on 25 Sep. Three earlier PATs were also pasted (17 Aug, 19 Aug).

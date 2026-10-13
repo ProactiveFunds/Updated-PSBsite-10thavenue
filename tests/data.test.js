@@ -59,7 +59,8 @@ test('assets: records well-formed and enums consistent', () => {
     assert.ok(isNonEmptyString(a.state), `asset ${a.name} missing state`);
     assert.ok(Number.isFinite(a.units) && a.units >= 0, `asset ${a.name} units not a non-negative number`);
     assert.ok(STATUSES.includes(a.status), `asset ${a.name} has status "${a.status}" not in STATUSES`);
-    assert.ok(isNonEmptyString(a.fund), `asset ${a.name} missing fund`);
+    // fund is null on the four rows added 7 Oct 2026 (the sheet does not carry it).
+    if (a.fund != null) assert.ok(FUNDS.includes(a.fund), `asset ${a.name} has unknown fund`);
   }
 });
 
@@ -81,14 +82,11 @@ const QUOTED_UNITS = 810;
 
 test('assets: portfolio totals match the canonical numbers quoted site-wide', () => {
   const sum = (f) => assets.reduce((s, a) => s + (a[f] || 0), 0);
-  assert.equal(assets.length, 22, 'asset count drifted from the 22 quoted site-wide');
-  assert.equal(assets.filter((a) => a.status === 'Acquired').length, 17, 'owned-asset count drifted');
-  assert.equal(assets.filter((a) => a.status === 'Under Contract').length, 5, 'under-contract count drifted');
-  assert.equal(sum('units'), 842, 'workbook unit total drifted from 842 — if it now matches the quoted copy, drop the split note in SUMMARY.md');
-  assert.equal(sum('occupiedUnits'), 227, 'occupied units drifted');
-  assert.equal(sum('estimatedValue'), 65377060, 'estimated value drifted from the $65M quoted site-wide');
+  assert.equal(assets.length, 25, 'asset count drifted from the 25 quoted site-wide');
+  assert.equal(assets.filter((a) => a.status === 'Acquired').length, 18, 'owned-asset count drifted');
+  assert.equal(assets.filter((a) => a.status === 'Under Contract').length, 7, 'under-contract count drifted');
+  assert.equal(sum('units'), 1012, 'location-sheet unit total drifted from 1,012 (the copy still quotes 810, see SUMMARY.md)');
   assert.equal(new Set(assets.map((a) => a.state)).size, 8, 'state count drifted from the 8 quoted site-wide');
-  assert.equal(Math.round((sum('occupiedUnits') / sum('units')) * 100), 27, 'portfolio occupancy drifted');
 });
 
 // The marketing copy quotes one unit figure in three places; keep them in step.
@@ -109,14 +107,21 @@ test('/assets: occupancy and the investment thesis are not rendered', () => {
   }
 });
 
-// 906 West Main is on the workbook's owned tab as "(for sale)" and is
-// deliberately excluded — see HELD_SKIP in scripts/generate-assets.py.
-test('assets: the property being marketed for sale is not published', () => {
-  assert.ok(!assets.some((a) => /906|west main/i.test(a.name)), '906 West Main is back on the site');
+// The 7 Oct 2026 "Updated Locations" sheet lists 906 West Main as plain Owned
+// (the old workbook marked it for sale and it was withheld), so it is published.
+test('assets: the 7 Oct 2026 location sheet is reflected', () => {
+  const ids = new Set(assets.map((a) => a.id));
+  for (const id of ['906-west-main-in', '5755-old-hwy-53-ca', '5865-old-hwy-53-ca', '406-malibu-drive-sc']) {
+    assert.ok(ids.has(id), `${id} missing`);
+  }
+  assert.ok(!ids.has('2952-alter-rd-mi'), '2952 Alter Rd is no longer on the location sheet');
+  assert.ok(assets.some((a) => a.address === '100 Banashee Cir, Orangeburg, SC'), 'Banashee Circle address missing');
 });
 
 test('assets: per-asset occupancy is internally consistent', () => {
   for (const a of assets) {
+    // The four rows added on 7 Oct 2026 carry null financials until the client supplies them.
+    if (a.occupiedUnits == null) { assert.equal(a.occupancyRate, null, `${a.name}: occupancyRate without occupiedUnits`); continue; }
     assert.ok(a.occupiedUnits <= a.units, `${a.name}: ${a.occupiedUnits} occupied > ${a.units} units`);
     assert.equal(a.occupancyRate, Math.round((a.occupiedUnits / a.units) * 100),
       `${a.name}: occupancyRate ${a.occupancyRate}% does not match ${a.occupiedUnits}/${a.units}`);
@@ -137,13 +142,21 @@ test('assets: under-contract deals are not dated as acquired', () => {
 //   "<number> <directional> <street> <Type>, <City>, <ST>"
 // e.g. "921 N Las Vegas Blvd, Las Vegas, NV". Set in the generator's ADDRESS
 // table, because the workbook's own strings are inconsistent.
-// Three rows the workbook cannot yet express in that style — raised with the
+// Rows the workbook cannot yet express in that style — raised with the
 // client 17 Aug 2026. Drop an id from here once the real address arrives.
 const ADDRESS_GAPS = new Set([
-  'umh-citrus-circle-sc',        // no house number ("Citrus Circle")
-  '526-518-520-522-stilton-sc',  // no street type ("518–526 Stilton")
+  '526-518-520-522-stilton-sc',  // no street type ("518–526 Silton")
   '926-moseley-sc',              // no street type ("926 Moseley")
+  '906-west-main-in',            // no street type ("906 W Main")
 ]);
+
+test('team: Alicia Galloway is the Impact & Operations Compliance Officer everywhere', () => {
+  assert.equal(team.find((m) => /alicia/i.test(m.name)).role, 'Impact & Operations Compliance Officer');
+  for (const f of ['Q3SpecialPage.jsx', 'SdiraWebinarPage.jsx']) {
+    const src = readFileSync(fileURLToPath(new URL(`../src/components/${f}`, import.meta.url)), 'utf8');
+    assert.match(src, /Alicia Galloway', title: 'Impact & Operations Compliance Officer'/, `${f} has a stale title`);
+  }
+});
 
 test('assets: every address follows the one house style', () => {
   const STREET_TYPE = /(?:St|Ave|Rd|Dr|Blvd|Ct|Ln|Way|Cir|Circle|Pl|Ter|Pkwy)$|(?:Highway|Hwy)\s+\d+$/;

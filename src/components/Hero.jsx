@@ -128,7 +128,7 @@ function ImpactBand() {
   const items = [
     ['sprout', '4,200', 'Homes funded'],
     ['users', '11,800', 'Residents housed'],
-    ['building', '22', 'Communities'],
+    ['building', '25', 'Communities'],
     ['map-pin', '8', 'States'],
   ];
   return (

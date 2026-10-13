@@ -364,7 +364,10 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
   and are not site inputs). `src/data/assets.js` is generated from it by
   `scripts/generate-assets.py` — **do not hand-edit that data file**; fix the workbook, or the
   carried-over prose tables in the generator, and re-run it.
-  - Current set: **22 communities / 842 units / 8 states / $65M / 27% occupancy** (17 owned +
+  - **As of 13 Oct 2026 the location list comes from the client's `Updated_Locations_100726.xlsx`**
+    (25 rows, 18 owned + 7 under contract, 8 states, 1,012 units) and `assets.js` was edited from it
+    directly. The figures in the next bullet are the superseded workbook's.
+  - Previous set: **22 communities / 842 units / 8 states / $65M / 27% occupancy** (17 owned +
     5 under contract). **Except units in copy: the client set the quoted figure to 810 on
     11 Sep 2026** without a new workbook, so `/`, `/OurProcess` and `/q3-special` say 810 while
     `/assets` (summed from the rows) says 842. `tests/data.test.js` pins both; reconcile via the

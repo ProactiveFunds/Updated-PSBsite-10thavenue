@@ -147,7 +147,7 @@ export default function AssetsExplorer() {
           Portfolio value is estimated at 100% occupancy.
         </p>
         {/* Stated once for the whole portfolio rather than badged on every row:
-            the alignment is the same for all 22 assets, so 22 identical badge
+            the alignment is the same for all 25 assets, so 25 identical badge
             rows would be noise — and a per-asset claim is a stronger one to
             have to evidence. See SUMMARY.md. */}
         <div className="asset-sdg-band">
