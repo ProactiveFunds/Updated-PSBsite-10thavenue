@@ -72,7 +72,7 @@ const TEAM = [
   { img: '/img/team/bob.webp', name: 'Bob Totaro', title: 'Vice President of Sales' },
   { img: '/img/team/tony.webp', name: 'Tony Lawrence', title: 'Director of Operations' },
   { img: '/img/team/jesse.webp', name: 'Jesse Hollander', title: 'Director' },
-  { img: '/img/team/alicia.webp', name: 'Alicia Galloway', title: 'Investor Relations Manager' },
+  { img: '/img/team/alicia.webp', name: 'Alicia Galloway', title: 'Impact & Operations Compliance Officer' },
 ];
 
 const FAQ = [

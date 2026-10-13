@@ -18,7 +18,7 @@ const TIERS = [
 ];
 
 const PERF = [
-  ['22', 'Communities', 'Across 8 states — 17 owned, 5 under contract'],
+  ['21', 'Communities', 'Across 7 states — 17 owned, 4 under contract'],
   ['5+', 'Years experience', 'Proven track record in affordable housing'],
   ['$65M', 'Assets under management', 'Portfolio value across all properties, at 100% occupancy'],
   ['20%+', 'Average annual return', 'Consistent performance for our investors'],
@@ -42,7 +42,7 @@ const TEAM = [
   { img: '/img/team/canaan.webp', name: 'Dr. Canaan Van Williams', title: 'Founder & Managing Partner', bio: '25+ years in real estate investment; an industry leader in sourcing, revitalizing, and managing Class B and C value-add properties. Author of Driving Social Impact Investment.' },
   { img: '/img/team/tony.webp', name: 'Tony Lawrence', title: 'Director of Operations', bio: 'Operations-focused leader managing investor relations, portfolio operations, and scalable systems that align financial returns with measurable outcomes.' },
   { img: '/img/team/jesse.webp', name: 'Jesse Hollander', title: 'Director', bio: '20+ years in financial services across private equity, venture capital, and mission-driven philanthropy, specializing in values-aligned fund structuring.' },
-  { img: '/img/team/alicia.webp', name: 'Alicia Galloway', title: 'Investor Relations Manager', bio: '15+ years working with high-net-worth investors, supporting the raise of tens of millions of dollars across multifamily real estate acquisitions.' },
+  { img: '/img/team/alicia.webp', name: 'Alicia Galloway', title: 'Impact & Operations Compliance Officer', bio: '15+ years working with high-net-worth investors, supporting the raise of tens of millions of dollars across multifamily real estate acquisitions.' },
 ];
 
 function scrollToOffering(e) {
@@ -135,7 +135,7 @@ function Performance() {
         <div style={{ position: 'relative', textAlign: 'center', maxWidth: '46rem', margin: '0 auto 42px' }}>
           <span className="eyebrow" style={{ color: 'var(--lime-300)' }}>Proven performance</span>
           <h2 style={{ margin: '14px 0 12px', color: '#fff', fontSize: 'clamp(1.7rem,3.2vw,2.4rem)', letterSpacing: '-0.02em', fontWeight: 700 }}>A track record you can verify.</h2>
-          <p style={{ margin: 0, color: 'rgba(234,243,226,.82)', lineHeight: 1.6, fontSize: 'var(--text-base)' }}>22 communities across 8 states — 810 units and pads — transformed with 20%+ average returns, consistent cash flow alongside lasting social impact across America.</p>
+          <p style={{ margin: 0, color: 'rgba(234,243,226,.82)', lineHeight: 1.6, fontSize: 'var(--text-base)' }}>21 communities across 7 states — 810 units and pads — transformed with 20%+ average returns, consistent cash flow alongside lasting social impact across America.</p>
         </div>
         <div className="q3-perf-grid">
           {PERF.map(([n, l, d]) => (

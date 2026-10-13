@@ -29,7 +29,7 @@ const HIGHLIGHTS = [
 
 // ── Proven performance stats (from the old "Track Record" section) ──
 const METRICS = [
-  { icon: 'building', value: '22', label: 'Communities', desc: 'Across 8 states — 17 owned, 5 under contract.' },
+  { icon: 'building', value: '21', label: 'Communities', desc: 'Across 7 states — 17 owned, 4 under contract.' },
   { icon: 'calendar', value: '5+', label: 'Years Experience', desc: 'Proven track record in affordable housing.' },
   { icon: 'dollar', value: '$65M', label: 'Assets Under Management', desc: 'Portfolio value across all properties, at 100% occupancy.' },
   { icon: 'trending-up', value: '20%+', label: 'Average Annual Return', desc: 'Consistent performance for our investors.' },
@@ -282,7 +282,7 @@ function ProvenPerformance() {
             Proven Performance You Can Trust
           </h2>
           <p style={{ margin: 0, fontSize: 'var(--text-base)', color: 'rgba(234,243,226,.82)', lineHeight: 1.6 }}>
-            22 communities across 8 states — 810 units and pads — transformed with 20%+ average returns, delivering consistent cash flow while creating lasting social impact across America.
+            21 communities across 7 states — 810 units and pads — transformed with 20%+ average returns, delivering consistent cash flow while creating lasting social impact across America.
           </p>
         </div>
 

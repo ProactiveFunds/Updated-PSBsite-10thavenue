@@ -152,7 +152,8 @@ platform used for the AlphaMaven campaign.
 - **Nav + footer:** `src/components/MktChrome.jsx` (`MktNav` uses the `NAV_LINKS` array;
   anchor links scroll on the home page and fall back to `/#id` off-page via `go()`). A link is
   marked current for its own path *and* its sub-paths, so `/events/<slug>` keeps *Events* lit.
-  The pill now carries nine links, so `responsive.css` collapses it to the burger at **1180px**.
+  The header is four dropdown groups plus Contact us, defined in `src/data/navLinks.js` (not in the component);
+  `responsive.css` collapses it to the burger at **980px**. Add pages to a group there, never as a new top-level link.
 - **Never put a backtick inside a component's `<style>{` … `}</style>` block** — not even in a
   CSS comment. It closes the template literal and the build dies with a misleading
   `Expected "}" but found …` pointing nowhere near the comment that caused it. Use plain quotes
@@ -364,7 +365,10 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
   and are not site inputs). `src/data/assets.js` is generated from it by
   `scripts/generate-assets.py` — **do not hand-edit that data file**; fix the workbook, or the
   carried-over prose tables in the generator, and re-run it.
-  - Current set: **22 communities / 842 units / 8 states / $65M / 27% occupancy** (17 owned +
+  - **As of 13 Oct 2026 the location list comes from the client's `Updated_Locations_100726.xlsx`**
+    (25 rows, 18 owned + 7 under contract, 8 states, 1,012 units) and `assets.js` was edited from it
+    directly. The figures in the next bullet are the superseded workbook's.
+  - Previous set: **22 communities / 842 units / 8 states / $65M / 27% occupancy** (17 owned +
     5 under contract). **Except units in copy: the client set the quoted figure to 810 on
     11 Sep 2026** without a new workbook, so `/`, `/OurProcess` and `/q3-special` say 810 while
     `/assets` (summed from the rows) says 842. `tests/data.test.js` pins both; reconcile via the
@@ -372,6 +376,9 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
     from the site — see `HELD_SKIP` in the generator. `tests/data.test.js` pins these, so a refresh that moves them fails the
     suite by design — that failure is the checklist of marketing copy to update
     (`/` hero + impact band, `/OurProcess`, `/q3-special`, `/ira`).
+  - **13 Oct 2026: no financial fields exist in `assets.js` at all** (purchase price, estimated value, rent,
+    occupancy, investment thesis were removed on client request). Units stay. The bullets below describe the
+    superseded display-only rule.
   - **Do not render `estimatedValue` or `avgRent` per property** (Dr. Van, 17 Aug 2026). Both stay
     in the data because the portfolio total and the AUM figure on four pages are summed from
     `estimatedValue` — the instruction is about display, not deletion.

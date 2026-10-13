@@ -5,29 +5,18 @@
 // every per-asset figure below; the earlier base44 export is superseded.
 //
 // Totals implied by this file — keep SUMMARY.md "Canonical numbers" in sync:
-//   22 assets (17 owned + 5 under contract)
-//   842 units / pads · 227 occupied (27%)
-//   $65,377,060 estimated value · 8 states (AL, AZ, IL, IN, MI, NV, OH, SC)
+//   21 assets (17 owned + 4 under contract)
+//   809 units / pads · 7 states (AL, AZ, IL, IN, NV, OH, SC)
 //
-// Estimated value is the workbook's "Estimated Value" column, footnoted there
-// as "based on 100% occupancy" — i.e. stabilised, not current market value.
-//
-// Narrative fields (investmentThesis, impactThesis, sdgs, avgRent) are not in
-// the workbook; they are carried over from the previous file and corrected
-// where the workbook contradicted them.
-//
-// To refresh: update the workbook, re-run `python3 scripts/generate-assets.py`,
-// then run `npm test` — tests/data.test.js pins the totals quoted on /,
-// /OurProcess, /q3-special and /ira, so it will tell you what copy to update.
-// `address` is the normalised street line /assets renders (one house style, set
-// in the generator's ADDRESS table — the workbook's own strings are
-// inconsistent). `avgRent` and `estimatedValue` are NOT shown per property
-// (client request, 17 Aug 2026); estimatedValue is kept because the portfolio
-// value and the AUM figure quoted on four other pages are summed from it.
+// Source: the client's "Updated Locations" sheet (7 Oct 2026) for address, city,
+// state, zip, units, status and acquisition date. Four rows on that sheet are
+// deliberately left out at the client's request (13 Oct 2026): 906 West Main,
+// 5755 and 5865 Old Hwy 53, and 406 Malibu Dr. Per client request NO financials
+// live here: no purchase price, estimated value, rent or occupancy, and no
+// investment thesis (it quoted prices) and no impact thesis (removed 13 Oct 2026).
 //
 // Fields: id, name, address, fund, status, city, state, zip, county, units,
-// occupiedUnits, occupancyRate, avgRent, purchasePrice, estimatedValue,
-// purchaseDate, yearAcquired, investmentThesis, impactThesis, sdgs[]
+// purchaseDate, yearAcquired, sdgs[]
 // ---------------------------------------------------------------------------
 
 export const assets = [
@@ -42,48 +31,11 @@ export const assets = [
     "zip": "46970",
     "county": "Miami County",
     "units": 66,
-    "occupiedUnits": 18,
-    "occupancyRate": 27,
-    "avgRent": 800.0,
-    "purchasePrice": 300000.0,
-    "estimatedValue": 4389560.0,
     "purchaseDate": "2026-01-16",
     "yearAcquired": 2026,
-    "investmentThesis": "",
-    "impactThesis": "",
     "sdgs": []
   },
-  {
-    "id": "921-las-vegas-blvd-nv",
-    "name": "921 Las Vegas Blvd",
-    "address": "921 N Las Vegas Blvd, Las Vegas, NV",
-    "fund": "Proactive Realty Income Fund II, LLC",
-    "status": "Acquired",
-    "city": "Las Vegas",
-    "state": "NV",
-    "zip": "89101",
-    "county": "Clark County",
-    "units": 43,
-    "occupiedUnits": 30,
-    "occupancyRate": 70,
-    "avgRent": 1050.0,
-    "purchasePrice": 3960000.0,
-    "estimatedValue": 6160000.0,
-    "purchaseDate": "2026-01-01",
-    "yearAcquired": 2026,
-    "investmentThesis": "",
-    "impactThesis": "",
-    "sdgs": [
-      1,
-      3,
-      5,
-      6,
-      7,
-      10,
-      11
-    ]
-  },
-  {
+{
     "id": "14437-45-s-halsted-street-il",
     "name": "14437-45 S. Halsted Street",
     "address": "14437–14445 S Halsted St, Harvey, IL",
@@ -94,18 +46,11 @@ export const assets = [
     "zip": "60426",
     "county": "Cook County",
     "units": 30,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 900.0,
-    "purchasePrice": 950000.0,
-    "estimatedValue": 3100000.0,
     "purchaseDate": "2025-06-13",
     "yearAcquired": 2025,
-    "investmentThesis": "",
-    "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "2405-2407-old-edisto-drive-sc",
     "name": "2405 & 2407 Old Edisto Drive",
     "address": "2405–2407 Old Edisto Dr, Orangeburg, SC",
@@ -115,19 +60,12 @@ export const assets = [
     "state": "SC",
     "zip": "29115",
     "county": "Orangeburg County",
-    "units": 4,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 950.0,
-    "purchasePrice": 120000.0,
-    "estimatedValue": 485000.0,
+    "units": 7,
     "purchaseDate": "2025-01-07",
     "yearAcquired": 2025,
-    "investmentThesis": "",
-    "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "6633-mccartney-road-oh",
     "name": "6633 McCartney Road",
     "address": "6633 McCartney Rd, Lowellville, OH",
@@ -138,62 +76,41 @@ export const assets = [
     "zip": "44436",
     "county": "Mahoning County",
     "units": 89,
-    "occupiedUnits": 25,
-    "occupancyRate": 28,
-    "avgRent": 381.0,
-    "purchasePrice": 642000.0,
-    "estimatedValue": 6023500.0,
     "purchaseDate": "2025-04-24",
     "yearAcquired": 2025,
-    "investmentThesis": "",
-    "impactThesis": "The Glen at Stateline features newly remodelled mobile homes on lease-to-own terms. One home has 3 bedrooms, 2 baths and about 980 sq ft with new flooring, deck and fresh paint.",
     "sdgs": []
   },
-  {
+{
     "id": "7400-west-flamingo-road-unit-1092-nv",
     "name": "7400 West Flamingo Road, Unit 1092",
-    "address": "7400 W Flamingo Rd, Unit 1092, Las Vegas, NV",
+    "address": "7400 W Flamingo Rd, Unit 1092, Spring Valley, NV",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
-    "city": "Las Vegas",
+    "city": "Spring Valley",
     "state": "NV",
-    "zip": "89417",
+    "zip": "89147",
     "county": "Clark County",
     "units": 1,
-    "occupiedUnits": 1,
-    "occupancyRate": 100,
-    "avgRent": 1620.0,
-    "purchasePrice": 275000.0,
-    "estimatedValue": 315000.0,
     "purchaseDate": "2025-03-01",
     "yearAcquired": 2025,
-    "investmentThesis": "",
-    "impactThesis": "Condominium unit acquired for $275K in March 2025; built in 1995 with 2 bedrooms and 2 bathrooms across 959 sq ft. The home features updated wood-tile floors and modernised kitchen and bathrooms.",
     "sdgs": []
   },
-  {
+{
     "id": "121-fountainevue-dr-in",
-    "name": "121 Fountainevue Dr",
-    "address": "121 Fountainevue Dr, LaFountaine, IN",
+    "name": "121 Fountainvue Dr",
+    "address": "121 Fountainvue Dr, La Fontaine, IN",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
-    "city": "LaFountaine",
+    "city": "La Fontaine",
     "state": "IN",
     "zip": "46940",
     "county": "Wabash County",
-    "units": 176,
-    "occupiedUnits": 59,
-    "occupancyRate": 34,
-    "avgRent": 563.0,
-    "purchasePrice": 2500000.0,
-    "estimatedValue": 11150000.0,
+    "units": 180,
     "purchaseDate": "2024-11-27",
     "yearAcquired": 2024,
-    "investmentThesis": "",
-    "impactThesis": "Fountainvue Mobile Home Park is anchored by a 1,599-sq-ft, 3-bed, 1.5-bath single-family home built in 1972 on 41.6 acres. The park provides a rural community setting.",
     "sdgs": []
   },
-  {
+{
     "id": "252-ceceile-st-sc",
     "name": "252 Ceceile St",
     "address": "252 Ceceile St, Denmark, SC",
@@ -204,18 +121,11 @@ export const assets = [
     "zip": "29042",
     "county": "Bamberg County",
     "units": 14,
-    "occupiedUnits": 12,
-    "occupancyRate": 86,
-    "avgRent": 783.0,
-    "purchasePrice": 105000.0,
-    "estimatedValue": 850000.0,
     "purchaseDate": "2024-01-08",
     "yearAcquired": 2024,
-    "investmentThesis": "This 14-unit property in Denmark, SC represents a strong value-add opportunity with significant income potential. Acquired at $105K against an estimated stabilised value of $850K, the property demonstrates strong cash-on-cash returns. Located in an underserved rural market, this investment provides quality affordable housing while generating consistent returns for investors.",
-    "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "50-old-train-road-sc",
     "name": "50 Old Train Road",
     "address": "50 Old Train Rd, Greeleyville, SC",
@@ -226,18 +136,11 @@ export const assets = [
     "zip": "29056",
     "county": "Williamsburg County",
     "units": 14,
-    "occupiedUnits": 12,
-    "occupancyRate": 86,
-    "avgRent": 1156.0,
-    "purchasePrice": 1400000.0,
-    "estimatedValue": 1780000.0,
     "purchaseDate": "2024-08-30",
     "yearAcquired": 2024,
-    "investmentThesis": "",
-    "impactThesis": "Mobile home property in Greeleyville, SC with multiple mobile home units on land. A 1979 manufactured home sits on the site.",
     "sdgs": []
   },
-  {
+{
     "id": "13845-s-atlantic-ave-il",
     "name": "13845 S. Atlantic Ave.",
     "address": "13845 S Atlantic Ave, Riverdale, IL",
@@ -248,21 +151,14 @@ export const assets = [
     "zip": "60827",
     "county": "Cook County",
     "units": 3,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 950.0,
-    "purchasePrice": 110000.0,
-    "estimatedValue": 348000.0,
     "purchaseDate": "2023-09-02",
     "yearAcquired": 2023,
-    "investmentThesis": "",
-    "impactThesis": "",
     "sdgs": []
   },
-  {
+{
     "id": "526-518-520-522-stilton-sc",
-    "name": "526, 518, 520, 522 Stilton",
-    "address": "518–526 Stilton, Orangeburg, SC",
+    "name": "518, 520, 522, 526 Silton",
+    "address": "518–526 Silton, Orangeburg, SC",
     "fund": "Proactive Realty Income Fund II, LLC",
     "status": "Acquired",
     "city": "Orangeburg",
@@ -270,106 +166,11 @@ export const assets = [
     "zip": "29115",
     "county": "Orangeburg County",
     "units": 4,
-    "occupiedUnits": 4,
-    "occupancyRate": 100,
-    "avgRent": 1156.0,
-    "purchasePrice": 80000.0,
-    "estimatedValue": 328000.0,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "investmentThesis": "",
-    "impactThesis": "Rental property that includes four addresses. 526 Stilton is a rented brick ranch home; 522 and 520 are new single-wide 2-bed, 1-bath homes; and 518 is a new 2-bed, 2-bath single-wide. The brick home has been remodelled with varnished pine floors and new ceiling fans. A fenced common area with picnic tables sits between the units.",
     "sdgs": []
   },
-  {
-    "id": "1905-ellis-ave-sc",
-    "name": "1905 Ellis Ave",
-    "address": "1905 Ellis Ave, Orangeburg, SC",
-    "fund": "Proactive Realty Income Fund",
-    "status": "Acquired",
-    "city": "Orangeburg",
-    "state": "SC",
-    "zip": "29118",
-    "county": "Orangeburg County",
-    "units": 46,
-    "occupiedUnits": 15,
-    "occupancyRate": 33,
-    "avgRent": 353.0,
-    "purchasePrice": 610000.0,
-    "estimatedValue": 1610000.0,
-    "purchaseDate": "2022-09-01",
-    "yearAcquired": 2022,
-    "investmentThesis": "Located in Orangeburg, SC, this 46-unit property offers exceptional value appreciation potential with an estimated value of $1.61M on a $610K acquisition. This investment targets economic revitalisation in underserved communities while delivering superior returns.",
-    "impactThesis": "",
-    "sdgs": []
-  },
-  {
-    "id": "926-moseley-sc",
-    "name": "926 Moseley",
-    "address": "926 Moseley, Orangeburg, SC",
-    "fund": "Proactive QOZ Fund I, LLC",
-    "status": "Acquired",
-    "city": "Orangeburg",
-    "state": "SC",
-    "zip": "29115",
-    "county": "Orangeburg County",
-    "units": 40,
-    "occupiedUnits": 36,
-    "occupancyRate": 90,
-    "avgRent": 500.0,
-    "purchasePrice": 1150000.0,
-    "estimatedValue": 2365000.0,
-    "purchaseDate": "2022-09-01",
-    "yearAcquired": 2022,
-    "investmentThesis": "This flagship 40-unit property in Orangeburg, SC represents the fund's largest single-asset investment. At 90% occupancy it demonstrates institutional-quality operations. The property serves as a cornerstone investment in the Qualified Opportunity Zone fund, providing both strong cash flow and long-term tax-advantaged appreciation.",
-    "impactThesis": "",
-    "sdgs": []
-  },
-  {
-    "id": "105-w-154-street-il",
-    "name": "105 W. 154 Street",
-    "address": "105 W 154th St, Harvey, IL",
-    "fund": "Proactive Realty Income Fund",
-    "status": "Acquired",
-    "city": "Harvey",
-    "state": "IL",
-    "zip": "60426",
-    "county": "Cook County",
-    "units": 6,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 900.0,
-    "purchasePrice": 40000.0,
-    "estimatedValue": 175000.0,
-    "purchaseDate": "2020-09-02",
-    "yearAcquired": 2020,
-    "investmentThesis": "This Harvey, IL property demonstrates the fund's commitment to neighbourhood stabilisation in challenged markets. Acquired at $40K with an estimated value of $175K, it offers both strong cash flow and appreciation potential. The investment supports community revitalisation while generating attractive risk-adjusted returns.",
-    "impactThesis": "",
-    "sdgs": []
-  },
-  {
-    "id": "113-w-154-street-il",
-    "name": "113 W. 154 Street",
-    "address": "113 W 154th St, Harvey, IL",
-    "fund": "Proactive Realty Income Fund",
-    "status": "Acquired",
-    "city": "Harvey",
-    "state": "IL",
-    "zip": "60426",
-    "county": "Cook County",
-    "units": 6,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 900.0,
-    "purchasePrice": 17800.0,
-    "estimatedValue": 175000.0,
-    "purchaseDate": "2020-08-19",
-    "yearAcquired": 2020,
-    "investmentThesis": "Adjacent acquisition to 105 W. 154 Street, this 6-unit property represents a strategic portfolio consolidation opportunity in Harvey, IL. Purchased at $17.8K with redevelopment potential, it offers significant value-add through unit improvements and occupancy stabilisation. The investment creates scale economies and enhances neighbourhood impact.",
-    "impactThesis": "",
-    "sdgs": []
-  },
-  {
+{
     "id": "715-e-155th-ct-il",
     "name": "715 E 155th Ct.",
     "address": "715 E 155th Ct, Phoenix, IL",
@@ -380,21 +181,97 @@ export const assets = [
     "zip": "60426",
     "county": "Cook County",
     "units": 1,
-    "occupiedUnits": 1,
-    "occupancyRate": 100,
-    "avgRent": 1450.0,
-    "purchasePrice": 81000.0,
-    "estimatedValue": 268000.0,
-    "purchaseDate": "2020-05-01",
-    "yearAcquired": 2020,
-    "investmentThesis": "",
-    "impactThesis": "Single-family home built in 1957 featuring three bedrooms, one bathroom and approximately 1,020 sq ft of living space. The house sits on a 4,440-sq-ft lot and has an attached garage and stone exterior.",
+    "purchaseDate": "2023-04-16",
+    "yearAcquired": 2023,
     "sdgs": []
   },
-  {
+{
+    "id": "921-las-vegas-blvd-nv",
+    "name": "921 N Las Vegas Blvd",
+    "address": "921 N Las Vegas Blvd, Las Vegas, NV",
+    "fund": "Proactive Realty Income Fund II, LLC",
+    "status": "Acquired",
+    "city": "Las Vegas",
+    "state": "NV",
+    "zip": "89101",
+    "county": "Clark County",
+    "units": 43,
+    "purchaseDate": "2023-04-16",
+    "yearAcquired": 2023,
+    "sdgs": [
+      1,
+      3,
+      5,
+      6,
+      7,
+      10,
+      11
+    ]
+  },
+{
+    "id": "1905-ellis-ave-sc",
+    "name": "1905 Ellis Ave",
+    "address": "1905 Ellis Ave, Orangeburg, SC",
+    "fund": "Proactive Realty Income Fund",
+    "status": "Acquired",
+    "city": "Orangeburg",
+    "state": "SC",
+    "zip": "29118",
+    "county": "Orangeburg County",
+    "units": 46,
+    "purchaseDate": "2022-09-01",
+    "yearAcquired": 2022,
+    "sdgs": []
+  },
+{
+    "id": "926-moseley-sc",
+    "name": "926 Moseley",
+    "address": "926 Moseley, Orangeburg, SC",
+    "fund": "Proactive QOZ Fund I, LLC",
+    "status": "Acquired",
+    "city": "Orangeburg",
+    "state": "SC",
+    "zip": "29115",
+    "county": "Orangeburg County",
+    "units": 40,
+    "purchaseDate": "2022-09-01",
+    "yearAcquired": 2022,
+    "sdgs": []
+  },
+{
+    "id": "105-w-154-street-il",
+    "name": "105 W. 154 Street",
+    "address": "105 W 154th St, Harvey, IL",
+    "fund": "Proactive Realty Income Fund",
+    "status": "Acquired",
+    "city": "Harvey",
+    "state": "IL",
+    "zip": "60426",
+    "county": "Cook County",
+    "units": 6,
+    "purchaseDate": "2020-09-02",
+    "yearAcquired": 2020,
+    "sdgs": []
+  },
+{
+    "id": "113-w-154-street-il",
+    "name": "113 W. 154 Street",
+    "address": "113 W 154th St, Harvey, IL",
+    "fund": "Proactive Realty Income Fund",
+    "status": "Acquired",
+    "city": "Harvey",
+    "state": "IL",
+    "zip": "60426",
+    "county": "Cook County",
+    "units": 6,
+    "purchaseDate": "2020-08-19",
+    "yearAcquired": 2020,
+    "sdgs": []
+  },
+{
     "id": "umh-citrus-circle-sc",
-    "name": "UMH (Citrus Circle)",
-    "address": "Citrus Circle, Orangeburg, SC",
+    "name": "100 Banashee Circle",
+    "address": "100 Banashee Cir, Orangeburg, SC",
     "fund": "Proactive Realty Income Fund",
     "status": "Acquired",
     "city": "Orangeburg",
@@ -402,18 +279,11 @@ export const assets = [
     "zip": "29115",
     "county": "Orangeburg County",
     "units": 6,
-    "occupiedUnits": 6,
-    "occupancyRate": 100,
-    "avgRent": 813.0,
-    "purchasePrice": 400000.0,
-    "estimatedValue": 700000.0,
-    "purchaseDate": "2020-05-01",
-    "yearAcquired": 2020,
-    "investmentThesis": "",
-    "impactThesis": "",
+    "purchaseDate": "2018-11-01",
+    "yearAcquired": 2018,
     "sdgs": []
   },
-  {
+{
     "id": "1508-s-las-vegas-blvd-nv",
     "name": "1508 S Las Vegas Blvd",
     "address": "1508 S Las Vegas Blvd, Las Vegas, NV",
@@ -424,15 +294,8 @@ export const assets = [
     "zip": "89104",
     "county": "Clark County",
     "units": 41,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 1050.0,
-    "purchasePrice": 4100000.0,
-    "estimatedValue": 7350000.0,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
-    "impactThesis": "",
     "sdgs": [
       1,
       3,
@@ -443,7 +306,7 @@ export const assets = [
       11
     ]
   },
-  {
+{
     "id": "1602-us-highway-93-nv",
     "name": "1602 US Highway 93",
     "address": "1602 US Highway 93, Jackpot, NV",
@@ -454,48 +317,11 @@ export const assets = [
     "zip": "89825",
     "county": "Elko County",
     "units": 113,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": null,
-    "purchasePrice": 305000.0,
-    "estimatedValue": 5265000.0,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
-    "impactThesis": "",
     "sdgs": []
   },
-  {
-    "id": "2952-alter-rd-mi",
-    "name": "2952 Alter Rd.",
-    "address": "2952 Alter Rd, Detroit, MI",
-    "fund": "Proactive Realty Income Fund II, LLC",
-    "status": "Under Contract",
-    "city": "Detroit",
-    "state": "MI",
-    "zip": "48215",
-    "county": "Wayne County",
-    "units": 40,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": 875.0,
-    "purchasePrice": 360000.0,
-    "estimatedValue": 3500000.0,
-    "purchaseDate": null,
-    "yearAcquired": null,
-    "investmentThesis": "",
-    "impactThesis": "",
-    "sdgs": [
-      1,
-      3,
-      5,
-      6,
-      7,
-      10,
-      11
-    ]
-  },
-  {
+{
     "id": "3203-water-ave-al",
     "name": "3203 Water Ave.",
     "address": "3203 Water Ave, Selma, AL",
@@ -506,15 +332,8 @@ export const assets = [
     "zip": "36703",
     "county": "Dallas County",
     "units": 53,
-    "occupiedUnits": 8,
-    "occupancyRate": 15,
-    "avgRent": 700.0,
-    "purchasePrice": 380000.0,
-    "estimatedValue": 4275000.0,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
-    "impactThesis": "",
     "sdgs": [
       1,
       3,
@@ -525,7 +344,7 @@ export const assets = [
       11
     ]
   },
-  {
+{
     "id": "909-e-andy-devine-avenue-az",
     "name": "909 E. Andy Devine Avenue",
     "address": "909 E Andy Devine Ave, Kingman, AZ",
@@ -536,15 +355,8 @@ export const assets = [
     "zip": "86401",
     "county": "Mohave County",
     "units": 46,
-    "occupiedUnits": 0,
-    "occupancyRate": 0,
-    "avgRent": null,
-    "purchasePrice": 825000.0,
-    "estimatedValue": 4765000.0,
     "purchaseDate": null,
     "yearAcquired": null,
-    "investmentThesis": "",
-    "impactThesis": "",
     "sdgs": []
   }
 ];

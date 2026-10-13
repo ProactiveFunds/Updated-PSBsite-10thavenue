@@ -5,12 +5,6 @@ import PortfolioMap from './PortfolioMap.jsx';
 
 const { useState, useMemo } = React;
 
-const moneyShort = (n) => {
-  if (n == null) return '—';
-  if (n >= 1e6) return '$' + (n / 1e6).toFixed(n % 1e6 ? 1 : 0) + 'M';
-  if (n >= 1e3) return '$' + Math.round(n / 1e3) + 'K';
-  return '$' + n;
-};
 // Dates arrive as plain "YYYY-MM-DD" from the workbook; render them without
 // letting the browser's timezone shift the day.
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -58,7 +52,7 @@ export default function AssetsExplorer() {
     const val = (a) => ({
       name: a.address || '', fund: a.fund || '', status: a.status || '',
       units: a.units || 0,
-      year: a.yearAcquired || 0, value: a.estimatedValue || 0,
+      year: a.yearAcquired || 0,
     }[sort.key]);
     return [...list].sort((a, b) => {
       const x = val(a), y = val(b);
@@ -70,10 +64,9 @@ export default function AssetsExplorer() {
   const kpis = useMemo(() => {
     const states = new Set(rows.map((r) => r.state).filter(Boolean));
     const units = rows.reduce((s, r) => s + (r.units || 0), 0);
-    const value = rows.reduce((s, r) => s + (r.estimatedValue || 0), 0);
     const uc = rows.filter((r) => r.status === 'Under Contract');
     return {
-      count: rows.length, states: states.size, units, value,
+      count: rows.length, states: states.size, units,
       ucCount: uc.length,
       ucUnits: uc.reduce((s, r) => s + (r.units || 0), 0),
     };
@@ -94,9 +87,8 @@ export default function AssetsExplorer() {
     return <span className="asset-pill" style={{ background: t.bg, color: t.fg }}>{s || '—'}</span>;
   };
 
-  // Occupancy and the investment thesis are deliberately not shown (client
-  // request, 24 Sep 2026). The fields stay in src/data/assets.js because the
-  // data tests pin them; this is about display only.
+  // No financials, occupancy, investment thesis or impact thesis anywhere (client requests,
+  // 24 Sep and 13 Oct 2026). The fields were removed from src/data/assets.js.
   const Detail = ({ a }) => {
     const facts = [
       ['Units / pads', a.units ?? '—'],
@@ -111,7 +103,6 @@ export default function AssetsExplorer() {
             <div key={l}><div className="data-label">{l}</div><div className="figure" style={{ marginTop: 6, fontWeight: 500 }}>{v}</div></div>
           ))}
         </div>
-        {a.impactThesis && (<div className="asset-thesis"><div className="data-label">Impact thesis</div><p>{a.impactThesis}</p></div>)}
       </div>
     );
   };
@@ -132,7 +123,6 @@ export default function AssetsExplorer() {
             ['Assets', kpis.count],
             ['States', kpis.states],
             ['Units / pads', kpis.units || '—'],
-            ['Portfolio value', kpis.value ? moneyShort(kpis.value) : '—'],
           ].map(([l, v]) => (
             <div key={l} className="asset-kpi"><div className="figure" style={{ fontSize: 'var(--text-2xl)', fontWeight: 600 }}>{v}</div><div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', marginTop: 2 }}>{l}</div></div>
           ))}
@@ -141,13 +131,12 @@ export default function AssetsExplorer() {
           {kpis.ucCount > 0 && (
             <>
               <strong>{kpis.ucCount}</strong> of these {kpis.ucCount === 1 ? 'assets is' : 'assets are'} <strong>under contract</strong>
-              {' '}({kpis.ucUnits.toLocaleString()} units / pads) and {kpis.ucCount === 1 ? 'has' : 'have'} not yet closed. ·{' '}
+              {' '}({kpis.ucUnits.toLocaleString()} units / pads) and {kpis.ucCount === 1 ? 'has' : 'have'} not yet closed.
             </>
           )}
-          Portfolio value is estimated at 100% occupancy.
         </p>
         {/* Stated once for the whole portfolio rather than badged on every row:
-            the alignment is the same for all 22 assets, so 22 identical badge
+            the alignment is the same for all 21 assets, so 21 identical badge
             rows would be noise — and a per-asset claim is a stronger one to
             have to evidence. See SUMMARY.md. */}
         <div className="asset-sdg-band">
@@ -289,8 +278,6 @@ export default function AssetsExplorer() {
         .asset-detail-row td { padding: 0; background: var(--surface-2); border-bottom: 1px solid var(--border); }
         .asset-detail { padding: 24px; }
         .asset-detail-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
-        .asset-thesis { margin-top: 18px; max-width: 70ch; }
-        .asset-thesis p { margin: 6px 0 0; color: var(--fg-2); font-size: var(--text-sm); line-height: 1.6; }
         .asset-sdg { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 500; color: var(--forest-700); background: var(--lime-100); border-radius: 999px; padding: 5px 11px; }
         [data-theme="dark"] .asset-sdg { color: var(--lime-300); background: color-mix(in srgb, var(--brand) 16%, transparent); }
         .asset-timeline { padding: 12px 22px 22px; }
