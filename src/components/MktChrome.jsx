@@ -21,9 +21,17 @@ function MktNav({ onInvest }) {
   const [active, setActive] = useState('opportunities');
   const [menuOpen, setMenuOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState(null);
+  const [atTop, setAtTop] = useState(true);
   const [path, setPath] = useState('/');
   const barRef = React.useRef(null);
   useEffect(() => { setPath(window.location.pathname); }, []);
+  // At the very top the pill drops its shadow, border and fill so it blends into the page.
+  useEffect(() => {
+    const onScroll = () => setAtTop(window.scrollY < 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Anchor links scroll on the home page; off-page they navigate to /#id.
   const go = (link) => (e) => {
@@ -70,11 +78,11 @@ function MktNav({ onInvest }) {
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 50, padding: '18px 22px' }}>
-      <div className="nav-pill glass lit" style={{ maxWidth: 1240, margin: '0 auto' }}>
+      <div className={'nav-pill glass lit' + (atTop ? ' nav-pill-top' : '')} style={{ maxWidth: 1240, margin: '0 auto' }}>
         <a href="/" onClick={(e) => { if (window.location.pathname === '/') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }} style={{ display: 'inline-flex', flex: 'none' }} aria-label="Proactive Sustainable Bonds home">
           <img src={"/img/logo.png"} alt="Proactive Sustainable Bonds" style={{ height: 30 }} />
         </a>
-        <nav className="nav-links" ref={barRef} style={{ marginLeft: 24 }} aria-label="Main">
+        <nav className="nav-links" ref={barRef} aria-label="Main">
           {NAV_GROUPS.map((g) => {
             const open = openGroup === g.label;
             return (
@@ -89,11 +97,13 @@ function MktNav({ onInvest }) {
               </div>
             );
           })}
-          {NAV_TOP.map((l) => renderLink(l, false))}
         </nav>
-        <div className="nav-actions" style={{ marginLeft: 'auto', display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div className="nav-actions" style={{ display: 'flex', gap: 10, alignItems: 'center', justifyContent: 'flex-end' }}>
           <ThemeToggle />
-          <button className="btn btn-accent btn-sm" onClick={goToCalculator}>Start investing</button>
+          {NAV_TOP.map((l) => (
+            <a key={l.label} href={l.href || ('#' + l.id)} className="btn nav-cta nav-cta-contact" onClick={go(l)}>{l.label}</a>
+          ))}
+          <button className="btn btn-accent nav-cta nav-cta-start" onClick={goToCalculator}>Start investing</button>
           <button className="btn btn-icon btn-glass nav-burger" aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                   aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>
             <Ic name={menuOpen ? 'x' : 'menu'} size={20} />

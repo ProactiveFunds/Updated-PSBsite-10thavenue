@@ -153,7 +153,7 @@ platform used for the AlphaMaven campaign.
   anchor links scroll on the home page and fall back to `/#id` off-page via `go()`). A link is
   marked current for its own path *and* its sub-paths, so `/events/<slug>` keeps *Events* lit.
   The header is four dropdown groups plus Contact us, defined in `src/data/navLinks.js` (not in the component);
-  `responsive.css` collapses it to the burger at **980px**. Add pages to a group there, never as a new top-level link.
+  `responsive.css` collapses it to the burger at **1080px**. Add pages to a group there, never as a new top-level link.
 - **Never put a backtick inside a component's `<style>{` … `}</style>` block** — not even in a
   CSS comment. It closes the template literal and the build dies with a misleading
   `Expected "}" but found …` pointing nowhere near the comment that caused it. Use plain quotes

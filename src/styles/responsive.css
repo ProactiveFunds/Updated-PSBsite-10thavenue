@@ -61,12 +61,15 @@ main { overflow-x: clip; }
 .nav-mobile-actions { display: flex; gap: 10px; margin-top: 10px; padding: 2px; }
 .nav-mobile-actions .btn { flex: 1; justify-content: center; }
 
-/* Nav: four dropdowns plus Contact us fit the pill down to about 980px, so
-   collapse to the hamburger just above the 900px tablet layout. */
-@media (max-width: 980px) {
+/* Nav: four dropdowns plus Contact us fit the pill down to about 1080px, so
+   collapse to the hamburger just above the 900px tablet layout. The two large
+   buttons need the room, so the break is 1080px. */
+@media (max-width: 1080px) {
+  .nav-pill { display: flex; }
+  .nav-actions { margin-left: auto; }
   .nav-links { display: none !important; }
   .nav-burger { display: inline-flex !important; }
-  .nav-actions > .btn-accent { display: none !important; }
+  .nav-actions > .nav-cta { display: none !important; }
   .nav-mobile { display: flex !important; }
 }
 
