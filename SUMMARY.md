@@ -124,6 +124,10 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **13 Oct 2026 (dark by default).** Every page now ships `data-theme="dark"` and an inline head script that
+  applies a saved `psb-theme` choice before first paint, so a returning visitor who chose light keeps light and
+  nobody sees a flash. The theme toggle starts as dark and syncs from the page after hydration. The header no
+  longer marks "Compare opportunities" as current at the top of the home page (the anchor starts inactive).
 - **13 Oct 2026 (dropdown polish).** Logo 30px to 42px; header links 14px to 16px with 30px gaps and lighter
   chevrons. Dropdown panels are now opaque 22px-radius cards with a green icon tile, semibold link name and a
   lighter description per row, a pale-green row hover with a 3px nudge, a green dot on the current page, and a
