@@ -124,6 +124,12 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **13 Oct 2026 (header polish).** The pill is now a three-column grid: logo left, the four dropdown groups
+  centred, and on the right the theme toggle plus two large rounded-rectangle buttons (**Contact us**,
+  **Start investing**, 48px tall, 14px radius). Contact us moved out of the link row into those buttons (it is
+  still a link inside the mobile menu). The burger breakpoint is now **1080px** so the big buttons fit.
+  At the very top of the page the pill drops its shadow, border and fill so it blends in
+  (`.nav-pill-top`, toggled by a scroll listener at 8px); it fades back in once scrolled.
 - **13 Oct 2026 (third follow-up): grouped header and impact thesis removed.**
   - Header is now **Invest ▾ · Impact ▾ · Learn ▾ · About ▾ · Contact us** plus "Start investing"
     (was nine flat links). Source of truth is `src/data/navLinks.js`; `tests/nav-links.test.js` checks every
