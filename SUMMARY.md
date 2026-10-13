@@ -124,6 +124,12 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **13 Oct 2026 (dropdown polish).** Logo 30px to 42px; header links 14px to 16px with 30px gaps and lighter
+  chevrons. Dropdown panels are now opaque 22px-radius cards with a green icon tile, semibold link name and a
+  lighter description per row, a pale-green row hover with a 3px nudge, a green dot on the current page, and a
+  160ms fade-and-slide entrance. Invest is a two-column panel with a dark-green "Q3 Special" feature card
+  (`feature` in `src/data/navLinks.js`; it links to `/q3-special` and carries no figures). Every item needs an
+  `icon` that exists in `icons.jsx` (tests enforce it). Layout audit passes.
 - **13 Oct 2026 (header polish).** The pill is now a three-column grid: logo left, the four dropdown groups
   centred, and on the right the theme toggle plus two large rounded-rectangle buttons (**Contact us**,
   **Start investing**, 48px tall, 14px radius). Contact us moved out of the link row into those buttons (it is

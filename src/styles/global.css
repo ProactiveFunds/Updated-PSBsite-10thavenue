@@ -697,7 +697,7 @@ small, .caption { font-size: var(--text-sm); color: var(--fg-2); }
   display: flex; align-items: center; gap: var(--space-5);
   padding: 0.65em 0.7em 0.65em 1.25em; border-radius: var(--radius-pill);
 }
-.nav-links { display: flex; gap: var(--space-5); font-size: var(--text-sm); font-weight: 500; color: var(--fg-2); }
+.nav-links { display: flex; gap: 30px; font-size: 16px; font-weight: 500; color: var(--fg-2); }
 .nav-links a { color: inherit; text-decoration: none; transition: color var(--dur-base); }
 .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--fg-1); }
 .nav-links { align-items: center; justify-content: center; }
@@ -724,21 +724,46 @@ small, .caption { font-size: var(--text-sm); color: var(--fg-2); }
   display: inline-flex; align-items: center; gap: 4px; padding: 0; background: none; border: 0;
   font: inherit; color: inherit; cursor: pointer; transition: color var(--dur-base);
 }
-.nav-trigger svg { transition: transform var(--dur-base); }
+.nav-trigger svg { transition: transform var(--dur-base); opacity: 0.55; }
 .nav-trigger:hover, .nav-trigger[aria-expanded="true"], .nav-trigger[aria-current="true"] { color: var(--fg-1); }
 .nav-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
 /* The panel starts flush under the trigger (padding-top bridges the gap) so the
    pointer never leaves the group while moving down to it. */
 .nav-panel {
-  position: absolute; top: 100%; left: -18px; min-width: 300px; margin-top: 14px; padding: 8px;
-  display: flex; flex-direction: column; gap: 2px; border-radius: var(--radius-xl, 18px);
-  background: var(--surface); box-shadow: 0 18px 50px rgba(8, 25, 14, 0.16); z-index: 60;
+  position: absolute; top: 100%; left: -18px; min-width: 340px; margin-top: 14px; padding: 10px;
+  display: flex; gap: 10px; border-radius: 22px; background: var(--surface);
+  border: 1px solid var(--border); box-shadow: 0 22px 60px rgba(8, 25, 14, 0.18); z-index: 60;
+  animation: nav-panel-in 160ms var(--ease-out) both;
 }
+.nav-panel-wide { min-width: 640px; }
+@keyframes nav-panel-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 .nav-panel::before { content: ''; position: absolute; left: 0; right: 0; top: -16px; height: 16px; }
-.nav-panel a { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; border-radius: 12px; color: var(--fg-1); }
-.nav-panel a:hover, .nav-panel a:focus-visible { background: var(--surface-2, rgba(0,0,0,0.04)); }
-.nav-panel a[aria-current="page"] { background: var(--lime-100); color: var(--forest-600); }
-.nav-panel small { font-size: var(--text-xs); font-weight: 400; color: var(--fg-3); }
+.nav-panel-links { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.nav-panel-links a {
+  position: relative; display: flex; align-items: center; gap: 14px; padding: 11px 14px; border-radius: 14px;
+  color: var(--fg-1); transition: background var(--dur-base), transform var(--dur-base);
+}
+.nav-panel-links a:hover, .nav-panel-links a:focus-visible { background: var(--lime-100); transform: translateX(3px); }
+[data-theme="dark"] .nav-panel-links a:hover, [data-theme="dark"] .nav-panel-links a:focus-visible { background: rgba(127, 178, 79, 0.16); }
+.nav-ico { flex: none; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; background: var(--lime-100); color: var(--forest-600); }
+[data-theme="dark"] .nav-ico { background: rgba(127, 178, 79, 0.16); color: var(--lime-300); }
+.nav-panel-links a:hover .nav-ico { background: #fff; }
+.nav-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.nav-name { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; }
+.nav-panel small { font-size: 13px; font-weight: 400; line-height: 1.35; color: var(--fg-3); }
+/* A small green dot marks the page you are on. */
+.nav-panel-links a[aria-current="page"] { background: transparent; color: var(--fg-1); }
+.nav-panel-links a[aria-current="page"]::after { content: ''; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--accent); }
+.nav-feature {
+  flex: 0 0 230px; display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 16px;
+  background: linear-gradient(155deg, var(--forest-600), var(--forest-800)); color: #eaf3e2; text-decoration: none;
+  transition: transform var(--dur-base), box-shadow var(--dur-base);
+}
+.nav-feature:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(13, 42, 23, 0.28); color: #fff; }
+.nav-feature-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lime-300); }
+.nav-feature-title { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
+.nav-feature-desc { font-size: 13.5px; line-height: 1.5; color: rgba(234, 243, 226, 0.82); }
+.nav-feature-cta { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--lime-300); }
 
 /* Footer links — they now go somewhere, so they should look like it. */
 .footer-link { transition: color var(--dur-base) var(--ease-out); }
