@@ -131,7 +131,8 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
   Kept from 13 Oct: no link is lit at the top of the home page until an anchor is clicked.
 - **14 Oct 2026 (light by default again).** Reverted the 13 Oct dark default: every page's `<html>` ships
   `data-theme="light"` and the theme toggle starts as light. The inline head script still applies a saved
-  `psb-theme` choice before first paint, so anyone who toggled to dark keeps it.
+  `psb-theme-v2` choice before first paint. The storage key was renamed from `psb-theme` so a "dark" saved during
+  the dark-default day (the client still saw dark after the change) no longer overrides the new light default.
 - **13 Oct 2026 (dark by default).** Every page now ships `data-theme="dark"` and an inline head script that
   applies a saved `psb-theme` choice before first paint, so a returning visitor who chose light keeps light and
   nobody sees a flash. The theme toggle starts as dark and syncs from the page after hydration. The header no
