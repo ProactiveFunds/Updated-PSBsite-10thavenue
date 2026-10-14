@@ -152,8 +152,9 @@ platform used for the AlphaMaven campaign.
 - **Nav + footer:** `src/components/MktChrome.jsx` (`MktNav` uses the `NAV_LINKS` array;
   anchor links scroll on the home page and fall back to `/#id` off-page via `go()`). A link is
   marked current for its own path *and* its sub-paths, so `/events/<slug>` keeps *Events* lit.
-  The header is four dropdown groups plus Contact us, defined in `src/data/navLinks.js` (not in the component);
-  `responsive.css` collapses it to the burger at **1080px**. Add pages to a group there, never as a new top-level link.
+  The header is the original nine flat links (no dropdowns), defined as `NAV_LINKS` in `src/data/navLinks.js`;
+  `responsive.css` collapses it to the burger at **1180px**. The 13 Oct four-dropdown header was reverted on
+  14 Oct 2026 at the client's request; do not reintroduce dropdowns without asking.
 - **Never put a backtick inside a component's `<style>{` … `}</style>` block** — not even in a
   CSS comment. It closes the template literal and the build dies with a misleading
   `Expected "}" but found …` pointing nowhere near the comment that caused it. Use plain quotes
@@ -220,7 +221,7 @@ platform used for the AlphaMaven campaign.
   (editorial serif), **Spline Sans Mono** (numbers/labels).
 - **Brand tokens** (in `global.css :root`): forest scale (primary `--forest-600 #1f5e2e`,
   deep `--forest-900 #0d2a17`), lime accent (`--lime-500 #7fb24f`, on-dark `--lime-300 #aed079`),
-  warm paper `--paper #f7f8f4`, ink `#1a1d18`. Light/dark theme via `data-theme` on `<html>`. **Dark is the default (13 Oct 2026):** every page's `<html>` tag says `data-theme="dark"`; a saved `psb-theme` choice overrides it through an inline head script.
+  warm paper `--paper #f7f8f4`, ink `#1a1d18`. Light/dark theme via `data-theme` on `<html>`. **Light is the default (14 Oct 2026, reverting the 13 Oct dark default):** every page's `<html>` tag says `data-theme="light"`; a saved `psb-theme-v2` choice overrides it through an inline head script. The key was renamed from `psb-theme` on 14 Oct 2026 so choices saved during the one-day dark default stop forcing dark; bump the suffix again if the default ever changes and stale choices must be dropped.
 - **Team photos** are **transparent cutout** `.webp` files in `public/img/team/` shared by
   the team page and the Q3 landing collage. A matching cutout can be produced from a
   white-background photo with Pillow flood-fill keying (threshold tuned per image, then a

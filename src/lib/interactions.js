@@ -42,7 +42,7 @@
   /* ---- 2. Theme toggle ----------------------------------------------- */
   PSB.setTheme = function (theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem('psb-theme', theme); } catch (e) {}
+    try { localStorage.setItem('psb-theme-v2', theme); } catch (e) {}
     document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
       b.setAttribute('aria-pressed', String(theme === 'dark'));
     });
@@ -53,7 +53,7 @@
   };
   function initTheme() {
     let saved = null;
-    try { saved = localStorage.getItem('psb-theme'); } catch (e) {}
+    try { saved = localStorage.getItem('psb-theme-v2'); } catch (e) {}
     if (saved) document.documentElement.setAttribute('data-theme', saved);
     document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
       b.addEventListener('click', PSB.toggleTheme);

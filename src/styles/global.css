@@ -697,73 +697,9 @@ small, .caption { font-size: var(--text-sm); color: var(--fg-2); }
   display: flex; align-items: center; gap: var(--space-5);
   padding: 0.65em 0.7em 0.65em 1.25em; border-radius: var(--radius-pill);
 }
-.nav-links { display: flex; gap: 30px; font-size: 16px; font-weight: 500; color: var(--fg-2); }
+.nav-links { display: flex; gap: var(--space-5); font-size: var(--text-sm); font-weight: 500; color: var(--fg-2); }
 .nav-links a { color: inherit; text-decoration: none; transition: color var(--dur-base); }
 .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--fg-1); }
-.nav-links { align-items: center; justify-content: center; }
-/* Three-column pill: logo left, the dropdown groups centred, actions right. */
-.nav-pill { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
-.nav-pill > a:first-child { justify-self: start; }
-/* Large rounded-rectangle buttons (not pills) for Contact us and Start investing. */
-.nav-cta { height: 48px; padding: 0 26px; border-radius: 14px; font-size: var(--text-sm); display: inline-flex; align-items: center; justify-content: center; text-decoration: none; white-space: nowrap; }
-.btn.nav-cta-contact {
-  background: transparent; color: var(--fg-1); border: 2px solid var(--brand); box-shadow: none;
-  transition: background var(--dur-base), color var(--dur-base), transform var(--dur-base), box-shadow var(--dur-base);
-}
-.btn.nav-cta-contact:hover, .btn.nav-cta-contact:focus-visible {
-  background: var(--brand); color: #fff; transform: translateY(-1px); box-shadow: var(--shadow-sm);
-}
-[data-theme="dark"] .btn.nav-cta-contact:hover, [data-theme="dark"] .btn.nav-cta-contact:focus-visible { color: var(--fg-on-accent); }
-/* Start investing: one flat, solid green rounded rectangle. */
-.btn.nav-cta-start { background: var(--accent); color: var(--fg-on-accent); box-shadow: none; }
-.btn.nav-cta-start:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-/* Symmetric padding so the centred groups sit on the pill's true centre. */
-@media (min-width: 1081px) { .nav-pill { padding-inline: 1em; } }
-.nav-group { position: relative; }
-.nav-trigger {
-  display: inline-flex; align-items: center; gap: 4px; padding: 0; background: none; border: 0;
-  font: inherit; color: inherit; cursor: pointer; transition: color var(--dur-base);
-}
-.nav-trigger svg { transition: transform var(--dur-base); opacity: 0.55; }
-.nav-trigger:hover, .nav-trigger[aria-expanded="true"], .nav-trigger[aria-current="true"] { color: var(--fg-1); }
-.nav-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
-/* The panel starts flush under the trigger (padding-top bridges the gap) so the
-   pointer never leaves the group while moving down to it. */
-.nav-panel {
-  position: absolute; top: 100%; left: -18px; min-width: 340px; margin-top: 14px; padding: 10px;
-  display: flex; gap: 10px; border-radius: 22px; background: var(--surface);
-  border: 1px solid var(--border); box-shadow: 0 22px 60px rgba(8, 25, 14, 0.18); z-index: 60;
-  animation: nav-panel-in 160ms var(--ease-out) both;
-}
-.nav-panel-wide { min-width: 640px; }
-@keyframes nav-panel-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
-.nav-panel::before { content: ''; position: absolute; left: 0; right: 0; top: -16px; height: 16px; }
-.nav-panel-links { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.nav-panel-links a {
-  position: relative; display: flex; align-items: center; gap: 14px; padding: 11px 14px; border-radius: 14px;
-  color: var(--fg-1); transition: background var(--dur-base), transform var(--dur-base);
-}
-.nav-panel-links a:hover, .nav-panel-links a:focus-visible { background: var(--lime-100); transform: translateX(3px); }
-[data-theme="dark"] .nav-panel-links a:hover, [data-theme="dark"] .nav-panel-links a:focus-visible { background: rgba(127, 178, 79, 0.16); }
-.nav-ico { flex: none; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; background: var(--lime-100); color: var(--forest-600); }
-[data-theme="dark"] .nav-ico { background: rgba(127, 178, 79, 0.16); color: var(--lime-300); }
-.nav-panel-links a:hover .nav-ico { background: #fff; }
-.nav-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.nav-name { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; }
-.nav-panel small { font-size: 13px; font-weight: 400; line-height: 1.35; color: var(--fg-3); }
-/* A small green dot marks the page you are on. */
-.nav-panel-links a[aria-current="page"] { background: transparent; color: var(--fg-1); }
-.nav-panel-links a[aria-current="page"]::after { content: ''; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--accent); }
-.nav-feature {
-  flex: 0 0 230px; display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 16px;
-  background: linear-gradient(155deg, var(--forest-600), var(--forest-800)); color: #eaf3e2; text-decoration: none;
-  transition: transform var(--dur-base), box-shadow var(--dur-base);
-}
-.nav-feature:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(13, 42, 23, 0.28); color: #fff; }
-.nav-feature-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lime-300); }
-.nav-feature-title { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
-.nav-feature-desc { font-size: 13.5px; line-height: 1.5; color: rgba(234, 243, 226, 0.82); }
-.nav-feature-cta { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--lime-300); }
 
 /* Footer links — they now go somewhere, so they should look like it. */
 .footer-link { transition: color var(--dur-base) var(--ease-out); }
@@ -823,15 +759,3 @@ small, .caption { font-size: var(--text-sm); color: var(--fg-2); }
       var(--bg);
     background-attachment: fixed; min-height: 100vh; color: var(--fg-1); }
   input[type=range] { height: 4px; border-radius: 4px; }
-
-/* The nav pill must not clip its dropdown panels; keep the lighting layer inside the pill's rounded edge instead. */
-.nav-pill.lit { overflow: visible; }
-.nav-pill.lit::before { border-radius: inherit; }
-
-/* At the top of the page the header blends in: no shadow, border or fill. */
-.nav-pill { transition: background var(--dur-base), box-shadow var(--dur-base), border-color var(--dur-base), backdrop-filter var(--dur-base); }
-.nav-pill.nav-pill-top {
-  box-shadow: none; background: transparent; border-color: transparent;
-  -webkit-backdrop-filter: none; backdrop-filter: none;
-}
-.nav-pill.nav-pill-top::before { display: none; }
