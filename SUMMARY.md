@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-10-13_
+_Last updated: 2026-10-14_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -124,6 +124,14 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **14 Oct 2026 (original header restored).** Reverted the 13 Oct four-dropdown header and its polish at the
+  client's request: back to the nine flat links, 30px logo, single "Start investing" button and the 1180px burger
+  break. `MktChrome.jsx`, `global.css` and `responsive.css` header code match the pre-dropdown version; the links
+  now live in `NAV_LINKS` (`src/data/navLinks.js`) so `tests/nav-links.test.js` still checks every destination.
+  Kept from 13 Oct: no link is lit at the top of the home page until an anchor is clicked.
+- **14 Oct 2026 (light by default again).** Reverted the 13 Oct dark default: every page's `<html>` ships
+  `data-theme="light"` and the theme toggle starts as light. The inline head script still applies a saved
+  `psb-theme` choice before first paint, so anyone who toggled to dark keeps it.
 - **13 Oct 2026 (dark by default).** Every page now ships `data-theme="dark"` and an inline head script that
   applies a saved `psb-theme` choice before first paint, so a returning visitor who chose light keeps light and
   nobody sees a flash. The theme toggle starts as dark and syncs from the page after hydration. The header no
