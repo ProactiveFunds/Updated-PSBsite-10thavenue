@@ -759,7 +759,7 @@ function Contact() {
               </div>
               <label className="ta-form__check">
                 <input type="checkbox" name="field_yapu2" />
-                <span>I consent to receive marketing and promotional messages from Proactive Sustainable Bonds at the phone number provided. Frequency may vary; message &amp; data rates may apply. Text HELP for help, STOP to opt out. <a href="https://tenthavenue.io/legal/proactive/privacy" target="_blank" rel="noreferrer">Privacy</a> · <a href="https://tenthavenue.io/legal/proactive/terms" target="_blank" rel="noreferrer">SMS Terms</a></span>
+                <span>I agree to receive text messages from Proactive Sustainable Bonds, a brand of PROACTIVE REALTY INCOME FUND II LLC at the phone number provided, including sign-up and account confirmations, appointment and meeting confirmations and reminders, service and account updates, and replies to my questions. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to unsubscribe, HELP for help. Consent is not a condition of purchase. No mobile information will be shared with third parties or affiliates for marketing purposes. <a href="https://tenthavenue.io/legal/proactive/privacy" target="_blank" rel="noreferrer">Privacy</a> · <a href="https://tenthavenue.io/legal/proactive/terms" target="_blank" rel="noreferrer">SMS Terms</a></span>
               </label>
               <button type="submit" className="ta-form__submit">Send it <Ic name="arrow-right" size={18} /></button>
             </form>

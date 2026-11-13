@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-10-14_
+_Last updated: 2026-11-13_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -124,6 +124,16 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
+- **13 Nov 2026 (home form is now the Tenth Avenue embed; new SMS consent wording).** The client changed the
+  SMS consent text in Tenth Avenue and it did not appear on the site, because every form here was a hand-built
+  copy. The home intake (`#get-started`) now embeds Tenth Avenue's own `webform` iframe (`TaFormEmbed.jsx`,
+  logic in `src/lib/taEmbed.js`, ported from Tenth Avenue's embed script: UTM/click-ID pass-through,
+  `ta_via` referrer, auto-height). Its fields, consent wording and thank-you state now follow Tenth Avenue with
+  no site change. The site keeps the green left panel; the right panel is `--surface-2` and the iframe is
+  transparent around Tenth Avenue's white card (white in dark mode too). `/ira` and the recording page still
+  post hand-built forms to `ira` (Tenth Avenue's `ira` form has only name and email), so their checkbox text
+  was replaced with the new wording by hand. `tests/ta-embed.test.js` covers the src builder, the height
+  message filter and the consent wording.
 - **14 Oct 2026 (original header restored).** Reverted the 13 Oct four-dropdown header and its polish at the
   client's request: back to the nine flat links, 30px logo, single "Start investing" button and the 1180px burger
   break. `MktChrome.jsx`, `global.css` and `responsive.css` header code match the pre-dropdown version; the links
@@ -653,6 +663,14 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 ---
 
 ## Open items / known issues
+0z. **Home form styling and defaults live in Tenth Avenue now** (13 Nov 2026). Inside the iframe the
+   button is Tenth Avenue green `#5cb85c` with "Submit", the font is Inter, and "Are you an Accredited
+   Investor?" **defaults to YES** with no "Select one" option, so anyone who skips it is recorded as
+   accredited (the old site form forced a choice). Set these in the form's settings in Tenth Avenue: button
+   `#7fb24f` (site lime) or `#1f5e2e` (forest), label "Request a conversation", a blank first option.
+   The TenthAvenue trademark line under the card cannot be hidden from the site.
+0y. **The webinar registration page (`/events/self-directed-ira`) still has its own short SMS line**
+   ("Text me the Zoom link as well…"). It lacks HELP and the brand/LLC name. Replace or retire it.
 0. **Three commits are awaiting a Manual Deploy.** `7d9d294`, `37259c6`, `9b99edc`. Nothing from
    September is live yet. See "Deployment".
 0aa. The $65M AUM copy is kept by client decision (13 Oct 2026) but has no data behind it.
