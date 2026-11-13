@@ -140,19 +140,16 @@ platform used for the AlphaMaven campaign.
   goes nowhere. Confirm the key exists before launching any page that introduces a new one.
 - Custom field names are per-form (`field_9zklv` = accredited status, `field_yapu2` = SMS consent
   on `webform`/`ira`). Do not assume they carry across to a new form key.
-- **The home intake is Tenth Avenue's own iframe, not site markup** (since 13 Nov 2026):
-  `<TaFormEmbed formKey="webform" />` (`src/components/TaFormEmbed.jsx`, logic in `src/lib/taEmbed.js`).
-  Edits made in Tenth Avenue (fields, SMS consent wording, button, thank-you) show up on the site with no
-  deploy; the site's CSS cannot style anything inside the iframe. The **hand-built** forms (`/ira`, the
-  recording page, the webinar page) do *not* follow Tenth Avenue: change their wording in the JSX. A
-  Tenth Avenue embed snippet uses `document.currentScript`, which does not work in a React island, so port
-  any new snippet into `taEmbed.js` rather than pasting the `<script>`.
-- **Current SMS consent wording** (client, 13 Nov 2026), verbatim: "I agree to receive text messages from
-  Proactive Sustainable Bonds, a brand of PROACTIVE REALTY INCOME FUND II LLC at the phone number provided,
-  including sign-up and account confirmations, appointment and meeting confirmations and reminders, service
-  and account updates, and replies to my questions. Message frequency varies. Msg & data rates may apply.
-  Reply STOP to unsubscribe, HELP for help. Consent is not a condition of purchase. No mobile information
-  will be shared with third parties or affiliates for marketing purposes." Followed by Privacy / SMS Terms links.
+- **The forms are our own markup, so edits made in Tenth Avenue do not reach the site.** Changing the
+  consent wording, a field or an option in Tenth Avenue needs the same change here. The SMS consent
+  wording lives in one place, `src/data/smsConsent.js`, rendered by `<SmsConsentCheck />`
+  (`src/components/SmsConsent.jsx`) on home, `/ira` and the recording page. The webinar registration page
+  still has its own short line. Current wording set by the client on 13 Nov 2026.
+- **Tenth Avenue's iframe embed was tried and dropped (13 Nov 2026).** It would follow Tenth Avenue edits
+  automatically, but nothing inside a cross-origin iframe can be styled from the site (button colour, font
+  and logo are set in Tenth Avenue), and the client wants the site's own styling. Its `<script>` also relies
+  on `document.currentScript`, which does not run inside a React island. The port is in commit `077d7ba`
+  if it is ever wanted again.
 
 ---
 

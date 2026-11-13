@@ -124,16 +124,14 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
 ---
 
 ## Recent work log
-- **13 Nov 2026 (home form is now the Tenth Avenue embed; new SMS consent wording).** The client changed the
-  SMS consent text in Tenth Avenue and it did not appear on the site, because every form here was a hand-built
-  copy. The home intake (`#get-started`) now embeds Tenth Avenue's own `webform` iframe (`TaFormEmbed.jsx`,
-  logic in `src/lib/taEmbed.js`, ported from Tenth Avenue's embed script: UTM/click-ID pass-through,
-  `ta_via` referrer, auto-height). Its fields, consent wording and thank-you state now follow Tenth Avenue with
-  no site change. The site keeps the green left panel; the right panel is `--surface-2` and the iframe is
-  transparent around Tenth Avenue's white card (white in dark mode too). `/ira` and the recording page still
-  post hand-built forms to `ira` (Tenth Avenue's `ira` form has only name and email), so their checkbox text
-  was replaced with the new wording by hand. `tests/ta-embed.test.js` covers the src builder, the height
-  message filter and the consent wording.
+- **13 Nov 2026 (new SMS consent wording on every site-built form).** The client changed the SMS consent
+  text in Tenth Avenue and it did not appear on the site, because the forms here are our own markup, not
+  Tenth Avenue's. The new wording now lives once in `src/data/smsConsent.js` and renders through
+  `<SmsConsentCheck />` on home (`#get-started`), `/ira` and the recording page; it must be edited there
+  whenever it changes in Tenth Avenue. The home form's fields and accredited options were checked
+  against the live Tenth Avenue `webform` and match. Briefly shipped the Tenth Avenue iframe embed instead
+  (`077d7ba`), then reverted at the client's request because the inside of the iframe cannot take the
+  site's styling. `tests/forms.test.js` covers the wording, the shared checkbox and the home form fields.
 - **14 Oct 2026 (original header restored).** Reverted the 13 Oct four-dropdown header and its polish at the
   client's request: back to the nine flat links, 30px logo, single "Start investing" button and the 1180px burger
   break. `MktChrome.jsx`, `global.css` and `responsive.css` header code match the pre-dropdown version; the links
@@ -663,12 +661,6 @@ Previously (checked 17 Aug 2026): production was live on **`6b7b521`**, verified
 ---
 
 ## Open items / known issues
-0z. **Home form styling and defaults live in Tenth Avenue now** (13 Nov 2026). Inside the iframe the
-   button is Tenth Avenue green `#5cb85c` with "Submit", the font is Inter, and "Are you an Accredited
-   Investor?" **defaults to YES** with no "Select one" option, so anyone who skips it is recorded as
-   accredited (the old site form forced a choice). Set these in the form's settings in Tenth Avenue: button
-   `#7fb24f` (site lime) or `#1f5e2e` (forest), label "Request a conversation", a blank first option.
-   The TenthAvenue trademark line under the card cannot be hidden from the site.
 0y. **The webinar registration page (`/events/self-directed-ira`) still has its own short SMS line**
    ("Text me the Zoom link as well…"). It lacks HELP and the brand/LLC name. Replace or retire it.
 0. **Three commits are awaiting a Manual Deploy.** `7d9d294`, `37259c6`, `9b99edc`. Nothing from

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MktNav, MktFooter } from './MktChrome.jsx';
 import { Ic } from './icons.jsx';
+import { SmsConsentCheck } from './SmsConsent.jsx';
 import { initInteractions } from '../lib/interactions.js';
 import { getEvent, formatEventDate, formatEventTime, formatRuntime } from '../data/events.js';
 
@@ -757,10 +758,7 @@ function Contact() {
                 <label className="ta-form__label" htmlFor="rc_acc">Are you an accredited investor? *</label>
                 <select id="rc_acc" name="field_9zklv" required defaultValue=""><option value="" disabled>Select one…</option><option value="Yes">Yes</option><option value="No">No</option><option value="Not sure">Not sure</option></select>
               </div>
-              <label className="ta-form__check">
-                <input type="checkbox" name="field_yapu2" />
-                <span>I agree to receive text messages from Proactive Sustainable Bonds, a brand of PROACTIVE REALTY INCOME FUND II LLC at the phone number provided, including sign-up and account confirmations, appointment and meeting confirmations and reminders, service and account updates, and replies to my questions. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to unsubscribe, HELP for help. Consent is not a condition of purchase. No mobile information will be shared with third parties or affiliates for marketing purposes. <a href="https://tenthavenue.io/legal/proactive/privacy" target="_blank" rel="noreferrer">Privacy</a> · <a href="https://tenthavenue.io/legal/proactive/terms" target="_blank" rel="noreferrer">SMS Terms</a></span>
-              </label>
+              <SmsConsentCheck />
               <button type="submit" className="ta-form__submit">Send it <Ic name="arrow-right" size={18} /></button>
             </form>
           )}
