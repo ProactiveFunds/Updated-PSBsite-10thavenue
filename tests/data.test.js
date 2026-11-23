@@ -236,3 +236,28 @@ test('digestNav: groups have items; DIGEST_ITEMS flattened, slugs unique', () =>
   const slugs = DIGEST_ITEMS.map((it) => it.slug);
   assert.deepEqual(dupes(slugs), [], `duplicate digest item slugs: ${dupes(slugs).join(', ')}`);
 });
+
+test('assets: every property carries the seven portfolio SDGs (client, 22 Nov 2026)', () => {
+  for (const a of assets) {
+    assert.deepEqual(a.sdgs, PORTFOLIO_SDGS, `${a.id} SDGs differ from the portfolio set`);
+  }
+});
+
+test('impact dashboard: the unsourced 4,200 / 11,800 / -22% stats stay off the site', async () => {
+  const { readFileSync } = await import('node:fs');
+  for (const f of ['HomeSections.jsx', 'Hero.jsx', 'Q3SpecialPage.jsx']) {
+    const src = readFileSync(new URL(`../src/components/${f}`, import.meta.url), 'utf8');
+    for (const bad of ["'4,200'", "'11,800'", "'−22%'", 'Verified · RSM US', 'Verified · CoStar']) {
+      assert.ok(!src.includes(bad), `${f} still shows ${bad}`);
+    }
+  }
+});
+
+test('impact dashboard: totals are computed from the property list', async () => {
+  const { portfolioTotals } = await import('../src/data/assets.js');
+  const t = portfolioTotals();
+  assert.equal(t.communities, assets.length);
+  assert.equal(t.units, assets.reduce((s, a) => s + (a.units || 0), 0));
+  assert.equal(t.owned + t.underContract, t.communities);
+  assert.equal(t.sdgs, 7);
+});

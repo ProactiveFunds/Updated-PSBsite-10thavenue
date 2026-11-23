@@ -96,12 +96,21 @@ export default function AssetsExplorer() {
       ['Acquired', a.status === 'Under Contract' ? 'Under contract (not yet closed)' : (fmtDate(a.purchaseDate) || a.yearAcquired || '—')],
       ['County', a.county || '—'],
     ];
+    const sdgs = a.sdgs && a.sdgs.length ? a.sdgs : PORTFOLIO_SDGS;
     return (
       <div className="asset-detail">
         <div className="asset-detail-grid">
           {facts.map(([l, v]) => (
             <div key={l}><div className="data-label">{l}</div><div className="figure" style={{ marginTop: 6, fontWeight: 500 }}>{v}</div></div>
           ))}
+        </div>
+        <div className="asset-sdg-band">
+          <span className="data-label">UN Sustainable Development Goals</span>
+          <div className="asset-sdg-list">
+            {sdgs.map((n) => (
+              <span key={n} className="asset-sdg"><Ic name="leaf" size={13} /> SDG {n} · {SDG_LABELS[n] || ''}</span>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -135,10 +144,8 @@ export default function AssetsExplorer() {
             </>
           )}
         </p>
-        {/* Stated once for the whole portfolio rather than badged on every row:
-            the alignment is the same for all 21 assets, so 21 identical badge
-            rows would be noise — and a per-asset claim is a stronger one to
-            have to evidence. See SUMMARY.md. */}
+        {/* Portfolio-level SDGs; each asset's detail row repeats its own set
+            (the same seven for every asset, client 22 Nov 2026). */}
         <div className="asset-sdg-band">
           <span className="data-label">Portfolio aligned to the UN Sustainable Development Goals</span>
           <div className="asset-sdg-list">

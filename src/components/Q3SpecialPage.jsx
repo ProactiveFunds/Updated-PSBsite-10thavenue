@@ -1,6 +1,7 @@
 import React from 'react';
 import { MktNav, MktFooter } from './MktChrome.jsx';
 import { Ic } from './icons.jsx';
+import { portfolioTotals } from '../data/assets.js';
 import { initInteractions } from '../lib/interactions.js';
 
 const { useEffect } = React;
@@ -24,10 +25,11 @@ const PERF = [
   ['20%+', 'Average annual return', 'Consistent performance for our investors'],
 ];
 
+const TOTALS = portfolioTotals();
 const IMPACT = [
-  ['sprout', '4,200', 'Homes funded'],
-  ['users', '11,800', 'Residents housed'],
-  ['home', '−22%', 'Rents below market'],
+  ['home', TOTALS.units.toLocaleString('en-US'), 'Units / pads'],
+  ['building', String(TOTALS.communities), 'Communities'],
+  ['sprout', String(TOTALS.sdgs), 'UN SDGs per property'],
 ];
 
 const TRUST = [

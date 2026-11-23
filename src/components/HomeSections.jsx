@@ -3,6 +3,7 @@ import { Ic } from './icons.jsx';
 import { SmsConsentCheck } from './SmsConsent.jsx';
 import { PSB } from '../lib/interactions.js';
 import { goToCalculator } from '../lib/cta.js';
+import { portfolioTotals, PORTFOLIO_SDGS, SDG_LABELS } from '../data/assets.js';
 // HomeSections.jsx — partners slider, before/after, return comparison (animated),
 // social proof, investment opportunities, intake form.
 const { useState: useH, useEffect: useHE, useRef: useHR } = React;
@@ -165,10 +166,13 @@ function ReturnComparison({ onInvest }) {
 
 /* ── Social proof: Third-party verified impact + Proven performance ── */
 function SocialProof() {
+  // Computed from the property list (src/data/assets.js), not typed in.
+  const t = portfolioTotals();
   const impact = [
-    ['sprout', '4,200', 'Homes funded', 'Verified · RSM US'],
-    ['users', '11,800', 'Residents housed', 'Verified · RSM US'],
-    ['home', '−22%', 'Rents below market', 'Verified · CoStar'],
+    ['home', t.units.toLocaleString('en-US'), 'Affordable units / pads', 'Across ' + t.communities + ' communities'],
+    ['building', String(t.communities), 'Communities', t.owned + ' owned · ' + t.underContract + ' under contract'],
+    ['map-pin', String(t.states), 'States', 'Property schedule'],
+    ['sprout', String(t.sdgs), 'UN SDGs per property', 'SDGs ' + PORTFOLIO_SDGS.join(', ')],
   ];
   const perf = [
     ['100%', 'Distributions paid on time'],
@@ -180,7 +184,7 @@ function SocialProof() {
     <section id="impact" style={{ maxWidth: 1240, margin: '110px auto 0', padding: '0 22px', scrollMarginTop: 100 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22 }}>
         <div className="glass lit" style={{ borderRadius: 'var(--radius-2xl)', padding: '36px 38px' }}>
-          <span className="eyebrow">Third-party verified</span>
+          <span className="eyebrow">Impact dashboard</span>
           <h3 style={{ margin: '12px 0 24px', fontSize: 'var(--text-2xl)', letterSpacing: '-0.02em' }}>Social impact you can audit</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
             {impact.map(([ic, n, l, v]) => (
@@ -190,6 +194,12 @@ function SocialProof() {
               </div>
             ))}
           </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 22 }}>
+            {PORTFOLIO_SDGS.map((n) => (
+              <span key={n} style={{ fontSize: 'var(--text-xs)', fontWeight: 500, color: 'var(--forest-700)', background: 'var(--lime-100)', borderRadius: 999, padding: '4px 10px' }}>SDG {n} · {SDG_LABELS[n]}</span>
+            ))}
+          </div>
+          <a href="/assets" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 16, fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--brand)' }}>See every property <Ic name="arrow-right" size={14} /></a>
         </div>
         <div style={{ borderRadius: 'var(--radius-2xl)', padding: '36px 38px', background: 'linear-gradient(155deg, var(--forest-600), var(--forest-800))', color: '#eaf3e2', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(120% 80% at 90% 0%, rgba(149,196,92,.18), transparent 55%)' }} />
