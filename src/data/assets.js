@@ -33,7 +33,7 @@ export const assets = [
     "units": 66,
     "purchaseDate": "2026-01-16",
     "yearAcquired": 2026,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "14437-45-s-halsted-street-il",
@@ -48,7 +48,7 @@ export const assets = [
     "units": 30,
     "purchaseDate": "2025-06-13",
     "yearAcquired": 2025,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "2405-2407-old-edisto-drive-sc",
@@ -63,7 +63,7 @@ export const assets = [
     "units": 7,
     "purchaseDate": "2025-01-07",
     "yearAcquired": 2025,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "6633-mccartney-road-oh",
@@ -78,7 +78,7 @@ export const assets = [
     "units": 89,
     "purchaseDate": "2025-04-24",
     "yearAcquired": 2025,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "7400-west-flamingo-road-unit-1092-nv",
@@ -93,7 +93,7 @@ export const assets = [
     "units": 1,
     "purchaseDate": "2025-03-01",
     "yearAcquired": 2025,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "121-fountainevue-dr-in",
@@ -108,7 +108,7 @@ export const assets = [
     "units": 180,
     "purchaseDate": "2024-11-27",
     "yearAcquired": 2024,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "252-ceceile-st-sc",
@@ -123,7 +123,7 @@ export const assets = [
     "units": 14,
     "purchaseDate": "2024-01-08",
     "yearAcquired": 2024,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "50-old-train-road-sc",
@@ -138,7 +138,7 @@ export const assets = [
     "units": 14,
     "purchaseDate": "2024-08-30",
     "yearAcquired": 2024,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "13845-s-atlantic-ave-il",
@@ -153,7 +153,7 @@ export const assets = [
     "units": 3,
     "purchaseDate": "2023-09-02",
     "yearAcquired": 2023,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "526-518-520-522-stilton-sc",
@@ -168,7 +168,7 @@ export const assets = [
     "units": 4,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "715-e-155th-ct-il",
@@ -183,7 +183,7 @@ export const assets = [
     "units": 1,
     "purchaseDate": "2023-04-16",
     "yearAcquired": 2023,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "921-las-vegas-blvd-nv",
@@ -221,7 +221,7 @@ export const assets = [
     "units": 46,
     "purchaseDate": "2022-09-01",
     "yearAcquired": 2022,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "926-moseley-sc",
@@ -236,7 +236,7 @@ export const assets = [
     "units": 40,
     "purchaseDate": "2022-09-01",
     "yearAcquired": 2022,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "105-w-154-street-il",
@@ -251,7 +251,7 @@ export const assets = [
     "units": 6,
     "purchaseDate": "2020-09-02",
     "yearAcquired": 2020,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "113-w-154-street-il",
@@ -266,7 +266,7 @@ export const assets = [
     "units": 6,
     "purchaseDate": "2020-08-19",
     "yearAcquired": 2020,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "umh-citrus-circle-sc",
@@ -281,7 +281,7 @@ export const assets = [
     "units": 6,
     "purchaseDate": "2018-11-01",
     "yearAcquired": 2018,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "1508-s-las-vegas-blvd-nv",
@@ -319,7 +319,7 @@ export const assets = [
     "units": 113,
     "purchaseDate": null,
     "yearAcquired": null,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   },
 {
     "id": "3203-water-ave-al",
@@ -357,11 +357,11 @@ export const assets = [
     "units": 46,
     "purchaseDate": null,
     "yearAcquired": null,
-    "sdgs": []
+    "sdgs": [1, 3, 5, 6, 7, 10, 11]
   }
 ];
 
-// Stated once for the whole portfolio on /assets, rather than badged per asset.
+// The portfolio's SDGs. Every asset above carries the same set (client, 22 Nov 2026).
 export const PORTFOLIO_SDGS = [1, 3, 5, 6, 7, 10, 11];
 
 export const SDG_LABELS = {
@@ -372,3 +372,18 @@ export const SDG_LABELS = {
 
 export const FUNDS = ["Proactive Realty Income Fund", "Proactive Realty Income Fund II, LLC", "Proactive QOZ Fund I, LLC"];
 export const STATUSES = ['In Review', 'Under Contract', 'Acquired', 'Sold'];
+
+// Portfolio totals, computed from the rows above so every page that quotes them
+// (home Impact Dashboard, hero band, /q3-special) moves with the data.
+export function portfolioTotals(list = assets) {
+  const units = list.reduce((s, a) => s + (a.units || 0), 0);
+  const uc = list.filter((a) => a.status === 'Under Contract');
+  return {
+    communities: list.length,
+    units,
+    states: new Set(list.map((a) => a.state).filter(Boolean)).size,
+    owned: list.length - uc.length,
+    underContract: uc.length,
+    sdgs: PORTFOLIO_SDGS.length,
+  };
+}

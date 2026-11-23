@@ -1,6 +1,6 @@
 # Proactive Sustainable Bonds - Website Summary
 
-_Last updated: 2026-11-13_
+_Last updated: 2026-11-23_
 
 A rebuild of the Proactive Sustainable Bonds marketing site as a fast, statically-generated
 **Astro + React** project. Replaces the original single-file runtime-Babel bundle (kept at
@@ -197,6 +197,22 @@ Source of truth: **`../Proactive Realty Group - Property Information.xlsx`** (tw
   - The four new rows have **no fund, purchase price, estimated value or occupancy** (the sheet lacks them), so
     those are null and the tests tolerate it. `scripts/generate-assets.py` reads a workbook that is not in
     this repo and is now stale; `assets.js` was edited from the sheet directly.
+
+**November 2026 (22–23 Nov): Impact Dashboard from the property list; per-property SDGs.**
+- Client: the home "Social impact you can audit" block (the Impact Dashboard) must **not** show
+  "4,200 Homes funded / 11,800 Residents housed (Verified · RSM US)" or "−22% Rents below market
+  (Verified · CoStar)". Those three are gone from `HomeSections.jsx`, the hero `ImpactBand`
+  (`Hero.jsx`) and `/q3-special` (`Q3SpecialPage.jsx`). A test keeps them out.
+- The block now shows units/pads, communities (owned / under contract), states and SDGs, all
+  computed by `portfolioTotals()` in `src/data/assets.js` (currently 809 / 21 = 17 + 4 / 7 / 7),
+  plus the seven SDG chips and a link to `/assets`. Eyebrow changed from "Third-party verified"
+  to "Impact dashboard" because the figures are portfolio data, not a third-party verification.
+- Client: apply SDGs 1, 3, 5, 6, 7, 10, 11 to **every property**. Each asset's `sdgs` is now that
+  set, and each expanded row on `/assets` shows it. This reverses the 17 Aug 2026 "portfolio-level
+  only" rule (rules.md updated). A test pins every asset to `PORTFOLIO_SDGS`.
+- Not changed: the blog teaser "Our 2025 Impact Report: 4,200 homes and counting" (`Sections.jsx`).
+- Open: the deck/offering site uses 25 properties / 1,012 units; this site's data has 21 / 809.
+  The client referred to an attachment that did not come through; confirm which list is current.
 
 **October 2026**
 - **Dr. Van profiles: 25 properties + Impact Management bio (9 Oct).** Jesse: count 25 properties (Stilton is

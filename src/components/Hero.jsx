@@ -1,6 +1,7 @@
 import React from 'react';
 import { Ic } from './icons.jsx';
 import { goToCalculator } from '../lib/cta.js';
+import { portfolioTotals } from '../data/assets.js';
 // MktHero.jsx — homepage hero (Direction A) + impact band
 const { useState, useEffect } = React;
 
@@ -125,11 +126,12 @@ function Hero({ onInvest }) {
 }
 
 function ImpactBand() {
+  const t = portfolioTotals();
   const items = [
-    ['sprout', '4,200', 'Homes funded'],
-    ['users', '11,800', 'Residents housed'],
-    ['building', '21', 'Communities'],
-    ['map-pin', '7', 'States'],
+    ['home', t.units.toLocaleString('en-US'), 'Units / pads'],
+    ['building', String(t.communities), 'Communities'],
+    ['map-pin', String(t.states), 'States'],
+    ['sprout', String(t.sdgs), 'UN SDGs per property'],
   ];
   return (
     <section style={{ maxWidth: 1240, margin: '64px auto 0', padding: '0 22px' }}>

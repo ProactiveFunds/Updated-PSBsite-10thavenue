@@ -407,17 +407,18 @@ For print-ready collateral (flyers, one-pagers) built to match the site:
     inconsistent and four rows are multi-parcel lists). `921 N Las Vegas Blvd` is a correction the
     workbook does **not** carry — a test guards it. Three rows still lack a house number or street
     type; they are listed in `ADDRESS_GAPS` in `tests/data.test.js`, pending the client.
-  - **SDGs are a portfolio-level statement (`PORTFOLIO_SDGS`), not a per-asset badge.** Do not
-    stamp the seven goals onto individual properties without per-asset evidence — the site badges
-    BlueMark, Sustainalytics, PRI and the ICMA Social Bond Principles, which makes a per-asset SDG
-    claim one a verifier can test. This was agreed with the client on 17 Aug 2026.
+  - **Every asset carries SDGs 1, 3, 5, 6, 7, 10, 11** (client, 22 Nov 2026; this replaces the
+    17 Aug 2026 "portfolio-level only" rule). `PORTFOLIO_SDGS` is still the one source; each asset's
+    `sdgs` must equal it (a test checks). Shown on each expanded row of `/assets` and in the home
+    Impact Dashboard. Keep the wording as "aligned with" the goals, not a verified outcome.
+  - **Impact Dashboard figures come from `portfolioTotals()`**, never typed in. The old
+    4,200 / 11,800 / −22% stats were removed at the client's request (22 Nov 2026); do not restore
+    them. A test fails if they reappear in `HomeSections.jsx`, `Hero.jsx` or `Q3SpecialPage.jsx`.
   - The workbook's *Estimated Value* column is **based on 100% occupancy** — stabilised, not
     current market value. Every page that quotes the $69M carries that caveat; keep it attached.
   - Off-site collateral (deck, cover letters, AlphaMaven email sequence) still carries the old
     **22 / 647 / $25–29M** (that 22 is a different set of properties, not this one). Align it before any big send.
-- Some homepage figures are **not** portfolio-derived and were deliberately left alone: "4,200 homes
-  funded" and "11,800 residents housed" are cumulative over the operating history (Verified · RSM US),
-  and the blog's "$23M portfolio from a single $50K note" is a quoted founder story. Do not
+- The blog's "$23M portfolio from a single $50K note" is a quoted founder story. Do not
   reconcile these against the workbook without asking.
 - The "See the IMPACT ... before/after" home section is intentionally **hidden** (commented
   out in `App.jsx`) until real before/after photos exist.
